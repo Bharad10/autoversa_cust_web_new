@@ -1,0 +1,223 @@
+.banner_section {
+    background-image: url('^assets/images/signup_banner.png');
+    width: 100%;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: inherit;
+    background-attachment: fixed;
+}
+
+.brands_section_area {
+    background: #F3F3F3;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
+
+.choose_car_box {
+    background: #fff;
+    padding: 50px;
+    border-radius: 20px;
+}
+
+.choose_car_box {
+    box-shadow: 0px 4px 18px 5px #0000002e;
+}
+
+h2 {
+    text-align: center;
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 40px;
+}
+
+p {
+    text-align: center;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 24px;
+}
+
+.button_country_code {
+    background-color: transparent;
+    height: 40px;
+    width: 50px;
+    border-radius: 5% 0px 0px 5%;
+}
+.countrycode_textfield{
+    text-align: center;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 18px;
+    height: 50px;
+    width: 80px;
+    border: 1px solid #999999;
+    border-radius:  10px 0 0 10px;
+}
+
+.mobilenumber_textfield{
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 18px;
+    height: 50px;
+    width: 90%;
+    border-top: 1px solid #999999;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    border-left: 1px solid transparent;
+    border-radius: 0 10px 10px 0;
+}
+
+.service-content {
+    margin-top: -18%;
+    z-index: 1;
+    width: 775px;
+    height: 834px;
+}
+.autoversa_icon {
+    text-align: center !important;
+}
+.autoversa_icon img {
+    width: 217px;
+}
+
+.fb_icon img{
+    float: right;
+    width: 90px;
+    height: 89px;
+}
+.g_icon img {
+    float: left;
+    width: 90px;
+    height: 89px;
+}
+
+.countrycode {
+    padding: 0% !important;
+    text-align: right;
+}
+
+.mobilenumber {
+    padding: 0% !important;
+    text-align: left;
+}
+
+.book_now_btn > button {
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    width: 110%;
+    padding: 10px;
+    margin-left: -5%;
+    border: none;
+    border-radius: 12px;
+    outline: none;
+    background-color: #F7941E;
+    color: #fff;
+    text-transform: uppercase;
+}
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .inner_service_image_section>img {
+        width: 100% !important;
+        position: unset !important;
+    }
+    .inner_service_image_section {
+        margin-bottom: 50px;
+    }
+    .choose_car_box {
+        margin-right: 0%;
+    }
+    .service-content {
+        margin-top: -18%;
+        z-index: 1;
+        height: auto;
+        padding-left: 8%;
+        padding-right: 8%;
+    }
+    h2 {
+    text-align: center;
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 30px;
+    }
+    .autoversa_icon img {
+        width: 100px;
+        height: 57px;
+    }
+
+    .fb_icon img,
+    .g_icon img {
+        width: 60px;
+        height: 59px;
+    }
+
+    .countrycode_textfield{
+        text-align: left;
+        font-family: 'Montserrat-Regular', sans-serif;
+        font-size: 10px;
+        height: 50px;
+        width: 44px;
+        border: 1px solid #999999;
+        border-radius:  10px 0 0 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .mobilenumber_textfield{
+        font-family: 'Montserrat-Regular', sans-serif;
+        font-size: 10px;
+        height: 50px;
+        width: 90%;
+        border-top: 1px solid #999999;
+        border-right: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+        border-left: 1px solid #999999 ;
+        border-radius: 0 10px 10px 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .book_now_btn>button {
+        font-family: 'Montserrat-Bold', sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+        width: 100%;
+        padding: 10px 10px;
+        border: none;
+        border-radius: 12px;
+        outline: none;
+        background-color: #F7941E;
+        color: #fff;
+        text-transform: uppercase;
+    }
+    
+    .main_brands_area {
+        margin-top: 0%;
+    }
+    .inner_card {
+        padding: 0px 0px !important;
+    }
+
+   
+}
+.brand_item>img {
+    width: 100%;
+}
+
+.brand_label>h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.inner_card {
+    padding: 40px 0px;
+}
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    } 
+

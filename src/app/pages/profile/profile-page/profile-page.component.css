@@ -1,0 +1,280 @@
+.banner_section {
+    background-image: url('^assets/images/signup_banner.png');
+    width: 100%;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: inherit;
+    background-attachment: fixed;
+}
+
+.profile_card {
+    border: 2px solid #CCCCCC;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: white;
+    display: inline-block;
+    width: 100%;
+    height: 530px;
+}
+
+.profile_card_vehlist{
+    border: 2px solid #CCCCCC;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: white;
+    display: inline-block;
+    width: 100%;
+    height: 530px;
+    overflow-x: scroll;  
+}
+
+.profile_card_vehlist::-webkit-scrollbar {
+    display: none;
+  }
+
+.list-group-item{
+    font-size: 20px;
+    font: bold;
+    cursor: pointer;
+    
+}
+.list-group-item:hover{
+    text-decoration: underline;
+}
+
+.fa,
+.fa-brands,
+.fa-classic,
+.fa-regular,
+.fa-sharp,
+.fa-solid,
+.fab,
+.far,
+.fas {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    color: #999999;
+}
+
+.outlinebutton>button {
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 50px;
+    outline: none;
+    background-color: white;
+    color: black;
+    text-transform: uppercase;
+}
+
+.viewdetails {
+    text-align: left;
+}
+
+.modal-title{
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.viewdetails>button {
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 50px;
+    outline: none;
+    background-color: #C4C4C4;
+    color: black;
+    text-transform: uppercase;
+}
+
+hr {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 2px solid;
+    opacity: 0.5;
+    color: #C4C4C4;
+}
+
+.card_image_section {
+    text-align: left;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.card_image_section img {
+    border-radius: 50%;
+}
+
+.card_content {
+    text-align: left;
+    margin-left: 15%;
+}
+
+.banner_section {
+    position: relative;
+}
+
+.banner_content {
+    position: absolute;
+    top: 30%;
+}
+
+.banner_content>h2 {
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.profile-content {
+    margin-top: -18%;
+    z-index: 1;
+}
+
+.choose_car_box {
+    background: #fff;
+    padding: 50px 35px;
+    border-radius: 20px;
+}
+
+.choose_car_box {
+    box-shadow: 0px 4px 18px 5px #0000002e;
+}
+
+.heading{
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 24px;
+}
+
+.add_new{
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 24px;
+    color: #999999;
+    text-align: right;
+}
+
+.status_heading{
+    text-align: left;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-size: 22px;
+}
+
+.profile-details {
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 22px; 
+}
+
+.form_heading>h3 {
+    font-size: 38px;
+    margin-bottom: 0px;
+    font-weight: 700;
+}
+
+.form_heading {
+    margin-bottom: 30px;
+}
+
+.brand_item>img {
+    width: 100%;
+}
+
+.brand_label>h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.inner_breand_logo {
+    padding: 40px 0px;
+}
+
+.brands_section_area {
+    background: #F3F3F3;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
+
+.edit_icon{
+    position: absolute;
+    
+}
+
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .choose_car_box {
+        margin-right: 0%;
+    }
+
+    .main_brands_area {
+        margin-top: 0%;
+    }
+
+    .inner_breand_logo {
+        padding: 0px 0px !important;
+    }
+
+    .card_image_section {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .card_content {
+        text-align: left;
+        margin-left: 0;
+    }
+
+    .profile_card {
+        border: 2px solid #CCCCCC;
+        border-radius: 15px;
+        padding: 20px;
+        background-color: white;
+        display: inline-block;
+        width: 100%;
+        height: auto;
+    }
+
+    .profile_card_vehlist{
+        border: 2px solid #CCCCCC;
+        border-radius: 15px;
+        padding: 20px;
+        background-color: white;
+        display: inline-block;
+        width: 100%;
+        height: auto;   
+    }
+
+    .col-xl-6{ 
+        margin-top: 2%;
+    }
+
+    .outlinebutton{
+        margin-bottom: 2%;
+    }
+
+    .viewdetails {
+        text-align: center;
+    }
+
+    .add_new{
+        font-family: 'Montserrat-Semibold', sans-serif;
+        font-size: 24px;
+        color: #999999;
+        text-align: center;
+        padding-bottom: 2%;
+    }
+
+    .heading{
+        text-align: center;
+    }
+}

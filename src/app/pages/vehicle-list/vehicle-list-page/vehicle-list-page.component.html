@@ -1,0 +1,111 @@
+<div class="banner_section">
+  <div class="inner_banner_section">
+  </div>
+</div>
+
+<div class="brands_section_area">
+  <div class="heading_section">
+    <div>
+      <h1>Vehicle List</h1>
+    </div>
+    <div>
+      <button (click)="openaddModal()" class="btn btn-warning text-white"> Add Vehicle </button>
+    </div>
+  </div>
+
+  <div class="vehicle_list">
+    <div *ngFor="let item of data " class="card">
+      <div class="card-body">
+        <div class="card-content">
+          <div>
+            <img src="https://www.shutterstock.com/image-vector/mercedez-benz-logo-sign-symbol-600nw-2269881673.jpg"
+              alt="" style="height: 100px;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;">
+            <span>{{item.cv_plate_number}}</span>
+            <span>{{item.cv_make}} {{item.cv_model}}</span>
+            <span>{{item.cv_year}}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;" class="card_buttons">
+            <div class="d-flex" style="gap: 5px;">
+              <button class="btn btn-danger">Delete</button>
+              <button (click)="openeditModal(item.cv_id)" class="btn btn-primary">Edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add modal content -->
+<div class="modal" tabindex="-1" id="addModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"
+          style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Add Vehicle</h1>
+        <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <select (change)="setVehicleBrand($event)" class="form-select" aria-label="Default select example">
+            <option selected>Make</option>
+            <option *ngFor="let i of vehicleBrand" [value]="i.veh_brand">{{i.veh_brand}}</option>
+          </select>
+          <select (change)="setVehicleModel($event)" class="form-select" aria-label="Default select example">
+            <option selected>Model</option>
+            <option *ngFor="let i of vehicle_models" [value]="i.veh_model">{{i.veh_model}}</option>
+          </select>
+          <select (change)="setVehicleVarient($event)" class="form-select" aria-label="Default select example">
+            <option selected>Varient</option>
+            <option *ngFor="let eachvariant of vehicle_variants;" [value]="eachvariant.veh_variant">
+              {{eachvariant.veh_variant}}</option>
+          </select>
+          <select (change)="setVehicleYear($event)" class="form-select" aria-label="Default select example">
+            <option selected>Year</option>
+            <option *ngFor="let eachYear of vehicle_years" [value]="eachYear">{{eachYear}}</option>
+          </select>
+          <input [(ngModel)]="vehicle_plate_number" class="form-control" type="text" placeholder="Plate Number"
+            aria-label="Plate Number">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()" >Close</button>
+        <button type="button" (click)="createModel()" class="btn btn-warning">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EditModal Content -->
+<div class="modal" tabindex="-1" id="editModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Edit Vehicle</h1>
+        <button (click)="closeeditModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <input class="form-control" disabled [(ngModel)]="selected_brand" [value]="selected_brand" type="text"
+            placeholder="Brand" aria-label="Brand">
+          <input class="form-control" disabled [(ngModel)]="selected_model" [value]="selected_model" type="text"
+            placeholder="Model" aria-label="Model">
+          <input class="form-control" disabled [(ngModel)]="selected_variant" [value]="selected_variant" type="text"
+            placeholder="Variant" aria-label="Variant">
+          <input class="form-control" disabled [(ngModel)]="selected_year" [value]="selected_year" type="text"
+            placeholder="Year" aria-label="Year">
+          <input class="form-control" [(ngModel)]="vehicle_plate_number" [value]="vehicle_plate_number" type="text"
+            placeholder="Plate Number" aria-label="Plate Number">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeeditModal()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button (click)="updateModal()" type="button" class="btn btn-warning">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

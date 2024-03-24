@@ -1,0 +1,20 @@
+.brand_item>img {
+    width: 100%;
+}
+
+.brand_label>h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.inner_breand_logo {
+    padding: 40px 0px;
+}
+
+.brands_section_area {
+    background: #F3F3F3;
+    /* padding: 30px; */
+    padding-top: 15px;
+    padding-bottom: 30px;
+}

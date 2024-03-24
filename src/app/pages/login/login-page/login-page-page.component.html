@@ -1,0 +1,74 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+<div class="brands_section_area">
+  <div class="row">
+    <div class="col-xl-3"></div>
+    <div class="col-xl-6 service-content">
+      <div class="main_brands_area">
+        <div class="inner_card">
+          <div class="choose_car_box">
+            <div class="inner_choose_car_box">
+              <div class="choose_car_box_main">
+                <div class="row">
+                  <div class="col-xl-3 col-3"></div>
+                  <div class="col-xl-6 col-6 autoversa_icon">
+                    <img src="./assets/images/av_ai_icon.png" alt="" srcset="" style="z-index: 1" />
+                  </div>
+                  <div class="col-xl-3 col-3"></div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-xl-12 col-12">
+                    <h2>Sign in to your account</h2>
+                    <br />
+                    <div class="row d-flex justify-content-center align-items-center">
+                      <div class="col-xl-2 col-2 countrycode" style="padding-right: 0% !important; font-size: small;">
+                        <input class="countrycode_textfield" type="text" value="AE +971" readonly />
+                      </div>
+                      <div class="col-xl-8 col-8 mobilenumber" style="padding-left: 0% !important; font-size: small;">
+                        <input maxlength="10" class="mobilenumber_textfield" type="number"
+                          onKeyPress="if(this.value.length==10) return false;" [(ngModel)]="auth_phone"
+                          name="cust_mobile" autocomplete="off" placeholder="Enter Mobile Number" [value]="auth_phone"
+                          #phone_number="ngModel" pattern="^((\\+91-?)|0)?[0-9]{10}$" />
+                      </div>
+                      <div class="text-danger text-center"
+                        *ngIf="phone_number.invalid && (phone_number.touched || phone_number.dirty)">
+                        <span *ngIf="phone_number.errors?.['pattern']">*Enter an valid Number</span>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-xl-2 col-2"></div>
+                      <div class="col-xl-8 col-8">
+                        <div class="book_now_btn">
+                          <button (click)="signin()" [disabled]="loading">
+                            <span *ngIf="!loading">Sign In</span>
+                            <span *ngIf="loading">Loading...</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col-xl-2 col-2"></div>
+                    </div>
+                    <br />
+                    <!-- <p>Sign in with</p> -->
+                    <!-- <br /> -->
+                    <!-- <div class="row">
+                      <div class="col-xl-6 col-6 fb_icon">
+                        <img src="./assets/images/fb_icon.png" alt="" srcset="" style="z-index: 1" />
+                      </div>
+                      <div class="col-xl-6 col-6 g_icon">
+                        <img src="./assets/images/g_icon.png" alt="" srcset="" style="z-index: 1" />
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3"></div>
+  </div>
+</div>

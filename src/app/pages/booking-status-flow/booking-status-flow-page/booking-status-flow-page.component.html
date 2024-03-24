@@ -1,0 +1,213 @@
+<div class="banner_section">
+    <div class="inner_banner_section">
+    </div>
+</div>
+<div class="brands_section_area">
+    <div class="inner_brands_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12 booking-status-content">
+                    <div class="main_brands_area">
+                        <div class="inner_breand_logo">
+                            <h2 class="heading">Booking</h2>
+                            <div class="choose_car_box">
+                                <div class="inner_choose_car_box">
+                                    <div class="choose_car_box_main">
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <div class="row">
+                                                    <h2 class="bodyheading">My Active booking</h2>
+                                                </div>
+                                                <div class="row card_section" [ngStyle]="{'background-color': bgColor1}" (click)="changeBackgroundColor(1)">
+                                                    <div class="col-md-4">
+                                                        <div class="card_image_section">
+                                                            <img src="./assets/images/cust_car.png" alt=""
+                                                                srcset="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <br>
+                                                        <p class="vehicle-details">DU 5566</p>
+                                                        <p class="vehicle-details">Mercedes Benz</p>
+                                                        <br>
+                                                        <p class="vehicle-details">Major Service(BK 100)</p>
+                                                        <p class="vehicle-details">Date: 10-10-2023</p>
+                                                        <p class="vehicle-details">Time: 03:00 PM - 04:00 PM</p>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row card_section" [ngStyle]="{'background-color': bgColor2}" (click)="changeBackgroundColor(2)">
+                                                    <div class="col-md-4">
+                                                        <div class="card_image_section">
+                                                            <img src="./assets/images/cust_car.png" alt=""
+                                                                srcset="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <br>
+                                                        <p class="vehicle-details">DU 5446</p>
+                                                        <p class="vehicle-details">Mercedes Benz</p>
+                                                        <br>
+                                                        <p class="vehicle-details">Major Service(BK 101)</p>
+                                                        <p class="vehicle-details">Date: 15-10-2023</p>
+                                                        <p class="vehicle-details">Time: 10:00 AM - 11:00 AM</p>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="col-xl-6">
+                                                <div class="row">
+                                                    <h2 class="bodyheading">Booking Status</h2>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/booking_icon.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details">Booking created</p>
+                                                        <p class="status-details">10-10-23 / 04:00 PM</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/hold_icon.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details">On Hold</p>
+                                                        <p class="status-details">Reason: Car not starting</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/driver_enrouted_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p class="status-details-inactive">Driver enroute to location</p>
+                                                    </div>
+                                                    <div class="col-md-4 status_btn">
+                                                        <button class="outline_btn">
+                                                            Call <i class="fa fa-phone" aria-hidden="true"></i> 
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/pickup_process_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Pickup in progress</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/pickup_enroute_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Pickup & enrouted to workshop</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/vehicle_wrkshp_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Vehicle at workshop</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/work_in_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <p class="status-details-inactive">Work in progress</p>
+                                                    </div>
+                                                    <div class="col-md-4 status_btn">
+                                                        <button class="outline_btn">
+                                                            WorkCard <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/confirm_drop_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <br>
+                                                        <p class="status-details-inactive">Confirm drop location</p>
+                                                    </div>
+                                                    <div class="col-md-4 status_btn">
+                                                        <button class="outline_btn">
+                                                            Select Location
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/ready_delivery_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Ready for delivery</p>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/drop_enrouted_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Driver enroute to delivery</p>
+                                                    </div>
+                                                </div><br>
+                                                <div class="row">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                                        <div class="status_image_section">
+                                                            <img src="./assets/images/delivery_inactive.png" style=" width: 74px; height: 74px;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="status-details-inactive">Delivery completed</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

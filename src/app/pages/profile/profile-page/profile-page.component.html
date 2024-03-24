@@ -1,0 +1,330 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+<div class="brands_section_area">
+  <div class="inner_brands_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 profile-content">
+          <div class="main_brands_area">
+            <div class="inner_breand_logo">
+              <div class="choose_car_box">
+                <div class="inner_choose_car_box">
+                  <div class="choose_car_box_main">
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="col-md-6">
+                          <h2 class="heading">Personal Details</h2>
+                        </div>
+                        <div class="profile_card">
+                          <div class="row picture">
+                            <div class="col-xl-4">
+                              <div class="card_image_section">
+                                <img src="./assets/images/default_profile.png" alt="" srcset=""
+                                  style="z-index: 1; width: 200px" />
+                              </div>
+                            </div>
+                            <div class="col-xl-8 align-self-center">
+                              <div class="card_content">
+                                <p class="profile-details">
+                                  <strong>Name:</strong> {{ custData.cust_fullname }}
+                                </p>
+                                <p class="profile-details">
+                                  <strong>State:</strong> {{ custData.state_name }}
+                                </p>
+                                <p class="profile-details">
+                                  <strong>Email:</strong> {{ custData.cust_email }}
+                                </p>
+                                <p class="profile-details">
+                                  <strong>Mobile:</strong> +971 {{ custData.cust_phone }}
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <ul class="list-group list-group-flush">
+                                <li (click)="openProfileEditModal()" class="list-group-item">
+                                  Edit Profile
+                                </li>
+                                <li routerLink="address" class="list-group-item">
+                                  Address
+                                </li>
+                                <li class="list-group-item" (click)="openDeactivateModal()">
+                                  Deactivate Account
+                                </li>
+                                <li class="list-group-item" (click)="openLanguageModal()">
+                                  Language
+                                </li>
+                                <li routerLink="/vehiclelist" class="list-group-item">Vehicle List</li>
+                                <li (click)="logout()" class="list-group-item">Log Out</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-6">
+                        <div class="col-md-6">
+                          <h2 class="heading">Ongoing Bookings</h2>
+                        </div>
+                        <div class="profile_card text-center">
+                          <div class="row" style="margin-bottom: 3%; border: 1px solid; border-radius: 16px;padding: 2%;">
+                            <div class="col-xl-4">
+                              <div class="card_image_section">
+                                <img src="./assets/icons/benz_icon.png" alt="" srcset=""
+                                  style="z-index: 1; border-radius: 12%" />
+                              </div>
+                            </div>
+                            <div class="col-xl-8 align-self-center">
+                              <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
+                                <div class="card_content" *ngFor="let book of bookingList">
+                                  <p class="profile-details">
+                                    <strong>{{book.cv_plate_number
+                                      }}</strong>
+                                  </p>
+                                  <p class="profile-details">{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}}
+                                    ({{book.cv_year}})</p>
+                                  <p class="profile-details">
+                                    {{ book.pkg_name }} ({{book.bk_number}})
+                                  </p>
+                                  <p class="profile-details">
+                                    <strong>Date: </strong>{{ book.formattedDate }}
+                                  </p>
+                                  <p class="profile-details">
+                                    <strong>Time: </strong>{{ book.formattedStartTime }} - {{ book.formattedEndTime }}
+                                  </p>
+                                </div>
+                              </ng-container>
+                              <ng-template #noBookings>
+                                <p style=" font-size: xx-large; font-weight: bold; ">No bookings</p>
+                              </ng-template>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <h2 class="heading">My Vehicles</h2>
+                          </div>
+                          <div class="col-md-6">
+                            <h2 class="add_new">
+                              Add New
+                              <i (click)="openaddModal()" class="fa fa-plus-circle"></i>
+                            </h2>
+                          </div>
+                        </div>
+                        <div class="col-xl-12">
+                          <div class="profile_card_vehlist text-center">
+                            <ng-container *ngIf="vehicleList && vehicleList.length > 0; else noVehicles">
+                              <div *ngFor="let car of vehicleList" class="row"
+                                style=" margin-bottom: 3%; border: 1px solid; border-radius: 16px; padding: 2%;">
+                                <div class="col-xl-4">
+                                  <div class="card_image_section">
+                                    <img src="./assets/icons/benz_icon.png" alt="" srcset=""
+                                      style="z-index: 1; border-radius: 12%" />
+                                  </div>
+                                </div>
+                                <div class="col-xl-8 align-self-center">
+                                  <div class="card_content">
+                                    <strong>
+                                      <p class="profile-details" style=" text-transform: capitalize;">{{
+                                        car.cv_plate_number }}</p>
+                                    </strong>
+                                    <p class="profile-details">{{ car.cv_make }}{{' '}}{{ car.cv_model }}{{' '}}{{
+                                      car.cv_variant }}{{' '}}({{ car.cv_year }})</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <ng-template #noVehicles>
+                              <p style=" font-size: xx-large; font-weight: bold; ">No saved vehicles</p>
+                            </ng-template>
+                            <br />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <h2 class="heading">My Previous Bookings</h2>
+                        </div>
+                        <div class="col-xl-12">
+                          <div class="profile_card text-center">
+                            <div class="row">
+                              <div class="col-xl-4">
+                                <div class="card_image_section">
+                                  <img src="./assets/images/cust_car.png" alt="" srcset=""
+                                    style="z-index: 1; border-radius: 12%" />
+                                </div>
+                              </div>
+                              <div class="col-xl-8 align-self-center">
+                                <div class="card_content">
+                                  <p class="profile-details">
+                                    <strong>DU 3455</strong>
+                                  </p>
+                                  <p class="profile-details">Mercedes Benz</p>
+                                  <p class="profile-details">
+                                    Regular Oil Service (BK 108)
+                                  </p>
+                                  <p class="profile-details">
+                                    <strong>Date of booking: </strong>03-10-2023
+                                  </p>
+                                  <p class="profile-details">
+                                    <strong>Date of delivery: </strong>05-10-2023
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- --------------------------------------------------------modals---------------------------------------------------------------- -->
+  <!-- Edit Profile Modal -->
+  <div class="modal" tabindex="-1" id="profileEditModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Profile</h5>
+          <button (click)="closeProfileEditModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <label for="">Add Your Profile Picture</label>
+            <input type="file" class="form-control" placeholder="Add your profile Picture"
+              (change)="pictureFile($event)" />
+            <input [(ngModel)]="custName" type="text" class="form-control" placeholder="Name" [value]="custName" />
+            <input [(ngModel)]="custEmail" type="email" class="form-control" placeholder="E-mail" [value]="custEmail"
+              #email="ngModel" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" />
+            <div class="text-danger" *ngIf="email.invalid && (email.touched || email.dirty)">
+              <span *ngIf="email.errors?.['pattern']">*Enter an Invalid Email</span>
+            </div>
+            <input [(ngModel)]="custState" type="text" class="form-control" placeholder="State" [value]="custState" />
+            <input [(ngModel)]="custNumber" type="number" class="form-control" placeholder="Number" [value]="custNumber"
+              onkeypress="if(this.value.length==10) return false" />
+            <input [(ngModel)]="custAltrenateNumber" type="number" class="form-control" placeholder="Alternate Number"
+              [value]="custAltrenateNumber" onkeypress="if(this.value.length==10) return false" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="closeProfileEditModal()" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button (click)="editProfile()" type="button" class="btn btn-primary">
+            Save changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Add Modal -->
+  <div class="modal" tabindex="-1" id="addModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title"
+            style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Add Vehicle
+          </h1>
+          <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <select (change)="setVehicleBrand($event)" class="form-select" aria-label="Default select example">
+              <option selected>Make</option>
+              <option *ngFor="let i of vehicleBrand" [value]="i.veh_brand">{{i.veh_brand}}</option>
+            </select>
+            <select (change)="setVehicleModel($event)" class="form-select" aria-label="Default select example">
+              <option selected>Model</option>
+              <option *ngFor="let i of vehicle_models" [value]="i.veh_model">{{i.veh_model}}</option>
+            </select>
+            <select (change)="setVehicleVarient($event)" class="form-select" aria-label="Default select example">
+              <option selected>Varient</option>
+              <option *ngFor="let eachvariant of vehicle_variants;" [value]="eachvariant.veh_variant">
+                {{eachvariant.veh_variant}}</option>
+            </select>
+            <select (change)="setVehicleYear($event)" class="form-select" aria-label="Default select example">
+              <option selected>Year</option>
+              <option *ngFor="let eachYear of vehicle_years" [value]="eachYear">{{eachYear}}</option>
+            </select>
+            <input [(ngModel)]="vehicle_plate_number" class="form-control" type="text" placeholder="Plate Number"
+              aria-label="Plate Number">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()">Close</button>
+          <button type="button" (click)="createModel()" class="btn btn-warning">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deactivate Modal -->
+  <div class="modal" tabindex="-1" id="deactivateModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Deactivate Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeDeactivateModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to deactivate your Account?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDeactivateModal()">
+            Close
+          </button>
+          <button type="button" class="btn btn-danger">
+            Deactivate Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Language Modal -->
+  <div class="modal" tabindex="-1" id="languageModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select Language</h5>
+          <button type="button" (click)="closeLanguageModal()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+            <label class="form-check-label" for="flexRadioDefault1">
+              English
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+            <label class="form-check-label" for="flexRadioDefault2">
+              Arabic
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="closeLanguageModal()" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

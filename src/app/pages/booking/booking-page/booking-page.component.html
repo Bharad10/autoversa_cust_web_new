@@ -1,0 +1,425 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+<div class="brands_section_area">
+  <div class="inner_brands_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 service-content">
+          <div class="main_brands_area">
+            <div class="inner_breand_logo">
+              <h2 class="heading">Booking</h2>
+              <div class="choose_car_box">
+                <mat-accordion>
+                  <mat-expansion-panel [expanded]="panelOpenState1" (opened)="panelOpenState1 = true"
+                    (closed)="panelOpenState1 = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="cardtitle" *ngIf="package_data">
+                        {{package_data.pkg_name}}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="inner_choose_car_box">
+                      <div class="choose_car_box_main">
+                        <div class="row">
+                          <div class="col-xl-3">
+                            <div class="service_image_section">
+                              <div class="inner_service_image_section" *ngIf="package_data">
+                                <img src="{{base_url+package_data.pkg_imageurl}}" alt="" srcset="" style="z-index: 1" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xl-9">
+                            <div class="vehicle_selection">
+                              <div class="col-xl-12">
+                                <p class="package-heading" style="color: black">
+                                  Choose Vehicle
+                                </p>
+                                <select class="form-select" aria-label="Default select example"
+                                  [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
+                                  selected="customerVehicleId">
+                                  <option [ngValue]="null" disabled selected>Choose Your Vehicle</option>
+                                  <option *ngFor="let eachveh of customerVehicleList" value="{{eachveh.cv_id}}">
+                                    {{eachveh.cv_make}} {{eachveh.cv_model}} {{eachveh.cv_variant}}
+                                    ({{eachveh.cv_plate_number}})</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form_heading" *ngIf="!customerVehicleId">
+                              <div class="mb-2 col-12">
+                                <p class="warning-heading" style="color: black">
+                                  Please select a vehicle.
+                                </p>
+                              </div>
+                            </div>
+                            <div class="form_heading" *ngIf="customerVehicleId">
+                              <div class="mb-2 col-12">
+                                <p class="package-heading" style="color: black">
+                                  What's Included
+                                </p>
+                              </div>
+                              <div *ngIf="servicesFromBackend &&  subpackage && sparesFromBackend">
+                                <div *ngFor="let  services of servicesFromBackend" class="col-12">
+                                  <span style="color: #31bbac; font-size: 30px">
+                                    ●
+                                  </span>
+                                  <span class="packagedetailslist">
+                                    {{ services.ser_display_name }}
+                                  </span>
+                                </div>
+                                <div *ngFor="let services of subpackage" class="col-12">
+                                  <div *ngFor="let i of services.operations">
+                                    <span style="color: #31bbac; font-size: 30px">
+                                      ●
+                                    </span>
+                                    <span class="packagedetailslist">
+                                      {{ i.op_display_name }}
+                                    </span>
+                                  </div>
+                                  <div *ngFor="let j of services.spares">
+                                    <span style="color: #31bbac; font-size: 30px">
+                                      ●
+                                    </span>
+                                    <span class="packagedetailslist">
+                                      {{ j.spc_displayname }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <br>
+                              <div *ngIf="sparesFromBackend && sparesFromBackend.length > 0">
+                                <div class="mb-2 col-12">
+                                  <p class="package-heading" style="color: black">
+                                    Parts Not Included
+                                  </p>
+                                </div>
+                                <div *ngFor="let spares of sparesFromBackend" class="col-12">
+                                  <span style="color: #ee0000; font-size: 30px">
+                                    ●
+                                  </span>
+                                  <span class="packagedetailslist">
+                                    {{ spares.psn_displayname }}
+                                  </span>
+                                </div>
+                              </div>
+                              <br />
+                              <div class="mb-2 col-12">
+                                <p class="package-heading" style="color: black">
+                                  Additional Queries
+                                </p>
+                              </div>
+                              <div class="col-4">
+                                <textarea style="width: 40rem; height: 10rem" maxlength="140" #description nbInput
+                                  [(ngModel)]="comments" placeholder="Your message here..." name="operationdescription"
+                                  class="major_service_textarea"></textarea>
+                              </div>
+                              <div class="audio-record-content" *ngIf="!url">
+                                <div class="audio-record" *ngIf="!recording">
+                                  <p class="audio-placeholder" style="color: green">
+                                    Click To Start Recording
+                                  </p>
+                                  <img src="./assets/images/mic_icon.png" (click)="startRecording()" class="mic-icon" />
+                                </div>
+                                <div class="audio-record" *ngIf="recording">
+                                  <p class="audio-placeholder" style="color: red">
+                                    Click To Stop Recording
+                                  </p>
+                                  <img src="./assets/images/stop_icon.png" (click)="stopRecording()" class="mic-icon" />
+                                </div>
+                                
+                              </div>
+                              <div class="audio-record-content" *ngIf="url">
+                                <div class="row">
+                                  <div class="col-xl-10 col-10">
+                                    <audio class="audio-file" controls *ngIf="url">
+                                      <source [src]="url" type="audio/wav" />
+                                    </audio>
+                                  </div>
+                                  <div class="col-xl-2 col-2" style="margin-top: 4%;">
+                                    <img src="./assets/images/delete_icon.png" alt="Delete" class="delete-icon" (click)="deleteAudio()" />
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="book_now_btn">
+                                <button (click)="openPickupsection(0);">PROCEED</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+                <br />
+                <mat-accordion>
+                  <mat-expansion-panel [expanded]="panelOpenState2" (opened)="panelOpenState2 = true"
+                    (closed)="panelOpenState2 = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="cardtitle">
+                        2. Pickup & Drop
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <br />
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <label style="margin-top: 5px" class="address_label">Pickup Location*</label>
+                          <div class="col-11">
+                            <ng-select [(ngModel)]="pickup_addressId" (change)="onSelectionChange($event)"
+                              selected="pickup_addressId">
+                              <ng-option [value]="0">Select Pickup Address</ng-option>
+                              <ng-option *ngFor="let eachaddress of pickup_address"
+                                [value]="eachaddress.cad_id">{{eachaddress.cad_address}}</ng-option>
+                            </ng-select>
+                          </div>
+                          <div style="
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                            " class="col-1">
+                            <i mat-raised-button matTooltip="Add Pickup Location"
+                              aria-label="Button that displays a tooltip when focused or hovered over"
+                              (click)="openAddressModal()" class="fa fa-plus"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <label style="margin-top: 5px" class="address_label">Drop Location*</label>
+                          <div class="col-11">
+                            <ng-select [(ngModel)]="drop_addressId" (change)="onSelectionChange($event)"
+                              selected="drop_addressId">
+                              <ng-option [value]="0">Select Drop Address</ng-option>
+                              <ng-option *ngFor="let eachaddress of drop_address"
+                                [value]="eachaddress.cad_id">{{eachaddress.cad_address}}</ng-option>
+                            </ng-select>
+                          </div>
+                          <div style="
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                            " class="col-1">
+                            <i mat-raised-button matTooltip="Add drop Location"
+                              aria-label="Button that displays a tooltip when focused or hovered over"
+                              class="fa fa-plus" (click)="openAddressModal()"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-check">
+                      <input mdbCheckbox class="form-check-input" [(ngModel)]="isChecked" type="checkbox" value=""
+                        id="flexCheckChecked" [checked]="true"
+                        [ngStyle]="{'background-color': '#3186ac', 'border-color': '#3186ac', 'margin-top' : '1.25%'}" />
+                      <label class="address_label" for="flexCheckChecked">
+                        Drop location same as pickup location
+                      </label>
+                    </div>
+                    <br />
+                    <div class="pickuptype_label">Pickup options</div>
+                    <br />
+                    <div class="row label" *ngFor="let eachpickup of pickup_options; let p = index">
+                      <div class="col-8">
+                        <label class="packagedetailslist">
+                          <input type="radio" [value]="eachpickup.pk_id" name="pickuptype_{{p}}"
+                            (click)="PickupOptionSelection(eachpickup);" [(ngModel)]="selectedPickupOption" />
+                          {{eachpickup.pk_name}}
+                        </label>
+                      </div>
+                      <div class="col-4">
+                        <p class="packagedetailslist" *ngIf="!eachpickup.cost" style="color: #26c20e">
+                          FREE
+                        </p>
+                        <p class="packagedetailslist" *ngIf="eachpickup.cost && eachpickup.cost!=0"
+                          style="color: #f7941e">
+                          AED {{eachpickup.cost}}
+                        </p>
+                      </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                      <div class="col-xl-6">
+                        <div class="pickuptype_label">Select Booking Date*</div>
+                        <div>
+                          <mat-form-field>
+                            <input matInput [matDatepicker]="picker" (dateChange)="ondateSelection();"
+                              placeholder="Choose a booking date" [(ngModel)]="bookingDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                      <div class="col-xl-6">
+                        <div class="pickuptype_label">Booking Time Slot*</div>
+                        <div>
+                          <ng-select [(ngModel)]="booking_slot" (change)="onSelectionChange($event)"
+                            selected="booking_slot">
+                            <ng-option [value]="0">Select Time slot</ng-option>
+                            <ng-option *ngFor="let eachslot of timeslots"
+                              [value]="eachslot.tm_id">{{eachslot.tm_start_time}} - {{eachslot.tm_end_time}}</ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <label class="warning_label">
+                        Drop location and type can be changed during drop
+                        schedule after work completion
+                      </label>
+                    </div>
+                    <br />
+                    <div class="proceed_to_pay_btn">
+                      <button (click)="openPickupsection(1);">PROCEED</button>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+                <br />
+                <mat-accordion>
+                  <mat-expansion-panel [expanded]="panelOpenState3" (opened)="panelOpenState3 = true"
+                    (closed)="panelOpenState3 = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="cardtitle">
+                        3. Payment method
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <br />
+                    <div class="row label">
+                      <div class="col-4">
+                        <label class="packagedetailslist">
+                          <input type="radio" name="pickuptype" /> Apple Pay
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row label">
+                      <div class="col-4">
+                        <label class="packagedetailslist">
+                          <input type="radio" name="pickuptype" /> xxxx 2441
+                        </label>
+                      </div>
+                      <div class="col-8">
+                        <p class="packagedetailslist">Expired in 11/22</p>
+                      </div>
+                    </div>
+                    <div class="row label">
+                      <div class="col-4">
+                        <label class="packagedetailslist">
+                          <input type="radio" name="pickuptype" /> xxxx 2661
+                        </label>
+                      </div>
+                      <div class="col-8">
+                        <p class="packagedetailslist">Expired in 01/23</p>
+                      </div>
+                    </div>
+                    <div class="row label">
+                      <div class="col-12">
+                        <label class="packagedetailslist">
+                          <input type="radio" name="pickuptype" /> Add Different
+                          Credit Card
+                        </label>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <p class="packagedetailslist">Payment Summary</p>
+                    </div>
+                    <br />
+                    <div class="row label">
+                      <div class="col-6" *ngIf="package_data">
+                        <label class="packagedetailslist">
+                          {{package_data.pkg_name}}
+                        </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="packagedetailslist"> AED {{tot_package_price}} </label>
+                      </div>
+                    </div>
+                    <div class="row label">
+                      <div class="col-6">
+                        <label class="packagedetailslist">
+                          {{pickup_name}}
+                        </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="packagedetailslist" style="color: #26c20e" *ngIf="this.pickup_cost==0"> FREE
+                        </label>
+                        <label class="packagedetailslist" *ngIf="this.pickup_cost!=0"> AED {{this.pickup_cost}} </label>
+                      </div>
+                    </div>
+                    <div class="row label">
+                      <div class="col-6">
+                        <label class="packagedetailslist"> Grand Total </label>
+                      </div>
+                      <div class="col-6">
+                        <label class="packagedetailslist">
+                          <strong>AED {{tot_package_price+this.pickup_cost | number: "1.2-2"}}</strong>
+                        </label>
+                      </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <span class="packagedetailslist" style="color: #31bbac">Read more about fees</span>
+                    </div>
+                    <br />
+                    <div class="row">
+                      <span class="packagedetailslist">Disclaimer</span>
+                    </div>
+                    <div class="row">
+                      <span class="packagedetailslist">Delivered by us, with live tracking</span>
+                    </div>
+                    <br />
+                    <div class="pay_btn">
+                      <button (click)="createBooking()">PAY</button>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------Modal-------------------------------------------- -->
+    <!-- Adress Modal -->
+    <div class="modal" id="addressModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title">Add Address</h1>
+            <button (click)="closeAddressModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-6">
+                  <select class="form-control" disabled name="" id="">
+                    <option class="form-control" value="">Selected Area</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <select class="form-control" disabled name="" id="">
+                    <option class="form-control" value="">Selected City</option>
+                  </select>
+                </div>
+                <div class="mt-2 col-12">
+                  <input type="text" class="form-control" placeholder="Enter Building" />
+                </div>
+                <div class="mt-2 col-12">
+                  <textarea placeholder="Enter Address" name="" id="" cols="30" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button (click)="closeAddressModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+.inner_team_image_section>img {
+    width: 120%;
+    height: 900px;
+    z-index: 9999;
+    position: relative;
+    border-radius: 20px;
+}
+.banner_section {
+    background-image: url('^assets/images/signup_banner.png');
+    width: 100%;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: inherit;
+    background-attachment: fixed;
+}
+.banner_section {
+    position: relative;
+}
+.aboutus-content {
+    margin-top: -18%;
+    z-index: 1;
+}
+.icon-container {
+    background-color: #ccc; /* Grey background color */
+    padding: 10px; /* Adjust padding as needed */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    display: inline-block; /* Ensure the container only takes up as much width as necessary */
+  }
+.heading {
+    color: white;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-size: 50px;
+}
+.h2content {
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-size: 26px;
+}
+.h2content2{
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 35px;
+    text-align: justify;
+}
+.bodycontent {
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 30px;
+    text-align: justify;
+}
+.aboutus_details {
+    padding-left: 8%;
+}
+.choose_car_box {
+    background: #fff;
+    padding: 50px 35px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 18px 5px #0000002e;
+}
+.form_heading {
+    margin-bottom: 30px;
+}
+.inner_breand_logo {
+    padding: 40px 0px;
+}
+.brands_section_area {
+    background: #F3F3F3;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
+
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .inner_team_image_section>img {
+        width: 100% !important;
+        height: 400px;
+        position: unset !important;
+    }
+    .inner_team_image_section {
+        margin-bottom: 50px;
+    }
+    .bodyapklink{
+        text-align: center;
+        margin-bottom: 5%;
+    }
+    .choose_car_box {
+        margin-right: 0%;
+    }
+    .main_brands_area {
+        margin-top: 0%;
+    }
+    .inner_breand_logo {
+        padding: 0px 0px !important;
+    }
+}

@@ -1,0 +1,12 @@
+.owl-stage {
+    width: 100% !important;
+}
+
+.owl-item {
+    width: 100% !important;
+}
+
+.owl-stage {
+    width: 100% !important;
+    transform: unset !important;
+}

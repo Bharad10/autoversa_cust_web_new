@@ -1,0 +1,239 @@
+<div class="banner_section">
+    <div class="inner_banner_section">
+    </div>
+</div>
+<div class="brands_section_area">
+    <div class="inner_brands_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12 service-content">
+                    <div class="main_brands_area">
+                        <div class="inner_breand_logo">
+                            <h2 style="color: white;">Services</h2>
+                            <div class="choose_car_box">
+                                <div class="inner_choose_car_box">
+                                    <div class="choose_car_box_main">
+                                        <div class="form_heading">
+                                            <p style="font-weight: 600;text-align: justify;">Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit. In diam elit,
+                                                vehicula eget ante eu, ultricies feu- giat arcu. Sed eget consectetur erat,
+                                                nec ornare tellus. Proin mattis porttitor dui.Lorem ipsum dolor sit amet,
+                                                consectetur adipiscing elit. In diam elit, vehicula eget ante eu, ultricies
+                                                feugiat arcu.</p>
+                                        </div>
+                                        <!-- <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="service_image_section">
+                                                    <div class="inner_service_image_section">
+                                                        <img src="./assets/images/oil_service.png" alt=""
+                                                            srcset="" style="z-index: 1;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9">
+                                                <h2>Oil Service</h2>
+                                                <div class="form_heading">
+                                                    <div class="about-service">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In diam
+                                                            elit,
+                                                            vehicula eget ante eu, ultricies feu- giat arcu. Sed eget
+                                                            consectetur erat,
+                                                            nec ornare tellus. Proin mattis porttitor dui.Lorem ipsum dolor
+                                                            sit
+                                                            amet,
+                                                            consectetur adipiscing elit. In diam elit, vehicula eget ante
+                                                            eu,
+                                                            ultricies
+                                                            feugiat arcu.</p>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <br>
+                                                    <div class="book_now_btn">
+                                                        <button (click)="bookNow()">Book Now</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div *ngFor="let package of packageList" class="row">
+                                            <div class="col-xl-3">
+                                                <div class="service_image_section">
+                                                    <div class="inner_service_image_section">
+                                                        <img [src]="base_url + package.package.pkg_imageurl" alt=""
+                                                            srcset="" style="z-index: 1;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9">
+                                                <h2>{{package.package.pkg_name}}</h2>
+                                                <div class="form_heading">
+                                                    <div class="about-service">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In diam
+                                                            elit,
+                                                            vehicula eget ante eu, ultricies feu- giat arcu. Sed eget
+                                                            consectetur erat,
+                                                            nec ornare tellus. Proin mattis porttitor dui.Lorem ipsum dolor
+                                                            sit
+                                                            amet,
+                                                            consectetur adipiscing elit. In diam elit, vehicula eget ante
+                                                            eu,
+                                                            ultricies
+                                                            feugiat arcu.</p>
+                                                    </div>
+                                                    <div *ngFor="let service of package.services">
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ●
+                                                        </span>
+                                                        <span>
+                                                            {{service.ser_display_name}}
+                                                        </span>
+                                                    </div>
+                                                  </div>
+                                                  <div *ngFor="let subpackage of package.subpackage" >
+                                                    <div *ngFor="let operations of subpackage.operations" class="col-12">
+                                                        <span>
+                                                            ●
+                                                        </span>
+                                                        <span>
+                                                            {{operations.op_display_name}}
+                                                        </span>
+                                                    </div>
+                                                    <div *ngFor="let services of subpackage.services" class="col-12">
+                                                        <span>
+                                                            ●
+                                                        </span>
+                                                        <span>
+                                                            {{services.spc_displayname}}
+                                                        </span>
+                                                    </div>
+                                                  </div>
+                                                    <br>
+                                                    <div class="book_now_btn">
+                                                        <button *ngIf="token && customerVehicleList.length > 0"  (click)="bookNow(package.package.pkg_id)">Book Now</button>
+                                                        <button *ngIf="!token" routerLink="/login/welcome" >Login</button>
+                                                        <button *ngIf="customerVehicleList.length < 0">Add Vehicle</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br> <br> <br>
+                                        <!-- <br><br>
+                                        <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="service_image_section">
+                                                    <div class="inner_service_image_section">
+                                                        <img src="./assets/images/major_service.png" alt=""
+                                                            srcset="" style="z-index: 1;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9">
+                                                <h2>Major Service</h2>
+                                                <div class="form_heading">
+                                                    <div class="about-service">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In diam
+                                                            elit,
+                                                            vehicula eget ante eu, ultricies feu- giat arcu. Sed eget
+                                                            consectetur erat,
+                                                            nec ornare tellus. Proin mattis porttitor dui.Lorem ipsum dolor
+                                                            sit
+                                                            amet,
+                                                            consectetur adipiscing elit. In diam elit, vehicula eget ante
+                                                            eu,
+                                                            ultricies
+                                                            feugiat arcu.</p>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <br>
+                                                    <div class="book_now_btn">
+                                                        <button>Book Now</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br><br>
+                                        <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="service_image_section">
+                                                    <div class="inner_service_image_section">
+                                                        <img src="./assets/images/car_service.png" alt=""
+                                                            srcset="" style="z-index: 1;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9">
+                                                <h2>Car Service</h2>
+                                                <div class="form_heading">
+                                                    <div class="about-service">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In diam
+                                                            elit,
+                                                            vehicula eget ante eu, ultricies feu- giat arcu. Sed eget
+                                                            consectetur erat,
+                                                            nec ornare tellus. Proin mattis porttitor dui.Lorem ipsum dolor
+                                                            sit
+                                                            amet,
+                                                            consectetur adipiscing elit. In diam elit, vehicula eget ante
+                                                            eu,
+                                                            ultricies
+                                                            feugiat arcu.</p>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <span>
+                                                            ● Lorem ipsum dolor sit amet
+                                                        </span>
+                                                    </div>
+                                                    <br>
+                                                    <div class="book_now_btn">
+                                                        <button>Book Now</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

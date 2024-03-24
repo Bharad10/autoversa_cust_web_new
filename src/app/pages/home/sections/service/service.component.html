@@ -1,0 +1,93 @@
+<div class="service">
+    <div class="service_inner_area">
+        <div class="service_heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section_heading center_text">
+                            <h3>Services</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lobortis diam a hendrerit<br>maximus. Vestibulum tincidunt gravida odio, sed facilisis odio lacinia in.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="service_section_content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-12 card_parent" *ngFor="let data of serviceData">
+                        <div class="service_card">
+                            <div class="inner_service_card" (click)="bookNow(data.package.pkg_id)">
+                                <div class="service_img">
+                                    <img [src]="base_url + data.package.pkg_imageurl" alt="Service Image" class="service_img" />
+                                </div>
+                                <div class="service_card_content">
+                                    <h4>{{data.package.pkg_name}} <span><i class="fa-solid fa-angle-right"></i></span></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hover_content">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. facilisis odio lacinia in.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <div class="col-xl-3 col-md-6 col-12 card_parent">
+                        <div class="service_card">
+                            <div class="inner_service_card">
+                                <div class="service_img">
+                                    <img src="./assets/images/minor_service.png" alt="" class="service_img" />
+                                </div>
+                                <div class="service_card_content">
+                                    <h4>Minor Service <span><i class="fa-solid fa-angle-right"></i></span></h4>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="hover_content">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. facilisis odio lacinia in.
+                            </p>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-xl-3 col-md-6 col-12 card_parent">
+                        <div class="service_card">
+                            <div class="inner_service_card">
+                                <div class="service_img">
+                                    <img src="./assets/images/major_service.png" alt="" class="service_img" />
+                                </div>
+                                <div class="service_card_content">
+                                    <h4>Major Service <span><i class="fa-solid fa-angle-right"></i></span></h4>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="hover_content">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. facilisis odio lacinia in.
+                            </p>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-xl-3 col-md-6 col-12 card_parent">
+                        <div class="service_card">
+                            <div class="inner_service_card">
+                                <div class="service_img">
+                                    <img src="./assets/images/car_service.png" alt="" class="service_img" />
+                                </div>
+                                <div class="service_card_content">
+                                    <h4>Car Service <span><i class="fa-solid fa-angle-right"></i></span></h4>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="hover_content">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. facilisis odio lacinia in.
+                            </p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+.main_menu_for_desk_top>ul {
+    padding-left: 0;
+    text-align: right;
+    margin-bottom: 0px;
+}
+
+.main_menu_for_desk_top>ul>li {
+    display: inline-block;
+}
+
+.main_header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: #ffffff05;
+    z-index: 999;
+}
+
+.logo_area {
+    display: block;
+    line-height: 90px;
+}
+
+.main_menu_for_desk_top>ul>li {
+    margin: 0px 15px;
+}
+
+.main_menu_for_desk_top>ul>li>a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.main_menu_for_desk_top {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 100%;
+}
+
+a.login_btn {
+    background-color: #F7941E;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+
+ul.action_nav>li:last-child {
+    margin-right: 0px;
+}
+
+.logo_area>a>img {
+    width: 86%;
+}
+
+
+/* mobile_menu */
+
+.mobile_menu_area {
+    position: fixed;
+    z-index: 99999999999;
+    background: #000000f5;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+ul.mobile_nav {
+    padding-left: 0;
+    list-style: none;
+    margin-top: 100px;
+    text-decoration: none;
+}
+
+ul.mobile_nav>li>a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+ul.mobile_nav>li {
+    margin-bottom: 20px;
+}
+
+.inner_mobile_area {
+    padding-left: 30px !important;
+}
+
+.mobile_menu_area>a {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    color: #fff;
+    font-size: 30px;
+}
+
+.menu_link.mobile_humberget {
+    display: none;
+    font-family: 'Montserrat-Bold', sans-serif !important;
+    font-size: 24px!important;
+}
+
+.main_header.scrolled {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: #2b6e74eb;
+    top: 0;
+    z-index: 9;
+}
+
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .logo_area>a>img {
+        width: 100%;
+    }
+    .banner_section {
+        height: unset !important;
+    }
+    .banner_content>h2 {
+        font-size: 30px !important;
+    }
+    .main_header {
+        position: static !important;
+        height: 90px;
+        background: #053c43 !important;
+        z-index: 999;
+    }
+    .menu_link.mobile_humberget {
+        display: block !important;
+    }
+    .main_menu_for_desk_top>ul>li {
+        margin: 0px 10px !important;
+    }
+    a.login_btn {
+        background-color: #F7941E;
+        color: #fff;
+        font-size: 16px;
+        padding: 8px 20px;
+        font-size: 14px !important;
+        border-radius: 8px;
+    }
+    .inner_mobile_screen_con {
+        position: relative !important;
+        right: 0;
+        top: 50px !important;
+    }
+    .main_header.scrolled {
+        position: fixed !important;
+        z-index: 999 !important;
+    }
+}

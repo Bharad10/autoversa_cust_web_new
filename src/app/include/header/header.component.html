@@ -1,0 +1,84 @@
+<div class="main_header" id="menu_desk">
+    <div class="inner_main_header">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-5">
+                    <div class="logo_area">
+                        <a href="">
+                            <img src="./assets/images/logo.png" alt="" srcset="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-7">
+                    <div class="main_menu_for_desk_top">
+                        <ul class="menu_nav">
+                            <li><a href="" class="menu_link">Home</a></li>
+                            <li>
+                                <a routerLink="services" class="menu_link">Services</a>
+                            </li>
+                            <li>
+                                <a routerLink="offers" class="menu_link">Offers</a>
+                            </li>
+                            <!-- <li *ngIf="user_auth==true">
+                                <a routerLink="vehiclelist" class="menu_link">Vehicle List</a>
+                            </li> -->
+                            <li>
+                                <a routerLink="faq" class="menu_link">FAQ</a>
+                            </li>
+                            <li>
+                                <a routerLink="blog" class="menu_link">Blog</a>
+                            </li>
+                            <li>
+                                <a routerLink="contact" class="menu_link">Contact Us</a>
+                            </li>
+
+                        </ul>
+
+                        <ul class="action_nav">
+                            <li>
+                                <a href="" class="menu_link">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </a>
+                            </li>
+                            <li *ngIf="user_auth==true">
+                                <a routerLink="profile" class="login_btn">Profile</a>
+                            </li>
+                            <li *ngIf="user_auth==false">
+                                <a routerLink="login/welcome" class="login_btn">Login</a>
+                            </li>
+                            <li>
+                                <a class="menu_link mobile_humberget" (click)="mobile_menu()">
+                                    <i class="fa-solid fa-bars"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mobile_menu_area" *ngIf="hide_mobile_menu">
+    <a (click)="menu_close()"><i class="fa-solid fa-xmark"></i></a>
+    <div class="inner_mobile_area">
+        <ul class="mobile_nav">
+            <li><a href="" class="menu_link">Home</a></li>
+            <li>
+                <a routerLink="services" class="menu_link">Services</a>
+            </li>
+            <li>
+                <a routerLink="offers" class="menu_link">Offers</a>
+            </li>
+            <li>
+                <a routerLink="faq" class="menu_link">FAQ</a>
+            </li>
+            <li>
+                <a routerLink="blog" class="menu_link">Blog</a>
+            </li>
+            <li>
+                <a routerLink="contact" class="menu_link">Contact Us</a>
+            </li>
+
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,127 @@
+.full_txt>h2 {
+    font-size: 45px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.happy_clients {
+    padding-top: 100px;
+}
+
+.top_slide>h3 {
+    font-size: 55px;
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+.clients_profile {
+    width: 200px;
+    margin: 0px auto;
+    overflow: hidden;
+    border-radius: 500px;
+    height: 200px;
+}
+
+.clients_profile>img {
+    width: 100%;
+}
+
+.testint>p {
+    font-size: 24px;
+    color: #666666;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.user_name>h4 {
+    font-weight: 600;
+    color: #666666;
+}
+
+.sliding_item_container {
+    padding: 0px 50px;
+}
+
+.owl-item {
+    width: 100% !important;
+}
+
+.owl-stage {
+    width: 100% !important;
+    transform: unset !important;
+}
+
+.owl-theme {
+    display: block !important;
+}
+
+.owl-item.active {
+    display: block !important;
+}
+
+.owl-stage {
+    width: 100% !important;
+    transform: unset !important;
+}
+
+.id_count>h4 {
+    font-size: 20px;
+}
+
+.id_count>h4>span {
+    color: #999999;
+}
+
+.quate_area {
+    width: 100px;
+    position: absolute;
+    left: -54px;
+}
+
+.testimonial_sliding_content {
+    position: relative;
+}
+
+.testimonial_sliding_content {
+    padding-left: 80px;
+}
+
+.sliding_item_container {
+    position: relative;
+}
+
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .top_slide>h3 {
+        font-size: 30px;
+        margin-bottom: 35px;
+    }
+    .sliding_item_container {
+        padding: 0px 20px;
+    }
+    .testimonial_sliding_content {
+        padding-left: 15px;
+    }
+    .testint>p {
+        font-size: 18px;
+        color: #666666;
+        margin-bottom: 30px;
+        font-weight: 400;
+    }
+    .clients_profile {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 40px;
+    }
+    .owl-prev>.prev-icon {
+        background: #ff000000;
+        width: 25px !important;
+        height: 25px !important;
+        font-size: 22px;
+    }
+    .owl-next>.next-icon {
+        background: #ff000000;
+        width: 25px !important;
+        height: 25px !important;
+    }
+}

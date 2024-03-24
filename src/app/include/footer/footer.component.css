@@ -1,0 +1,70 @@
+.footer_area {
+    background-image: url('^assets/images/Vector.png');
+    padding-top: 80px;
+    padding-bottom: 120px;
+    z-index: 999;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.footer_heading>h4 {
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: #fff;
+}
+
+.footer_heading {
+    margin-bottom: 26px;
+}
+
+.footer_column_content>ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.footer_column_content>ul>li>a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+}
+
+.footer_column_content>ul>li {
+    margin-bottom: 12px;
+}
+
+.footer_column_content>ul>li:last-child {
+    margin-bottom: 0px;
+}
+
+ul.social_icon_area>li {
+    display: inline-block;
+}
+
+ul.social_icon_area>li>a {
+    color: #32BCAD !important;
+    font-size: 28px !important;
+}
+
+ul.social_icon_area>li {
+    margin-left: 30px;
+}
+
+.footer_play_store_inner>a>img {
+    width: 200px;
+    border-radius: 14px;
+}
+
+.footer_play_store_inner>a {
+    display: block;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+ul.social_icon_area {
+    text-align: right;
+    margin-bottom: 25px !important;
+}

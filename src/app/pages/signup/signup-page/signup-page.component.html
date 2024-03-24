@@ -1,0 +1,140 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+<div class="brands_section_area">
+  <div class="row">
+    <div class="col-xl-3"></div>
+    <div class="col-xl-6 page-content">
+      <div class="main_brands_area">
+        <div class="inner_card">
+          <div class="choose_car_box">
+            <div class="inner_choose_car_box">
+              <div class="choose_car_box_main">
+                <div class="row">
+                  <div class="col-xl-3 col-3"></div>
+                  <div class="col-xl-6 col-6 signup_icon">
+                    <img
+                      src="./assets/images/signup_icon.png"
+                      alt=""
+                      srcset=""
+                      style="z-index: 1"
+                    />
+                  </div>
+                  <div class="col-xl-3 col-3"></div>
+                </div>
+                <br />
+                <div class="row">
+                  <div class="col-xl-12 col-12">
+                    <h2>Register New Account</h2>
+                    <br />
+                    <div
+                      class="row d-flex justify-content-center align-items-center"
+                    >
+                      <div class="col-xl-10 col-12 emirates">
+                        <!-- <ng-select [items]="emiratesList"
+                                                        bindLabel="state_name"
+                                                        autofocus
+                                                        bindValue="state_id"
+                                                        [(ngModel)]="emiratesId">
+                                                </ng-select> -->
+                        <ng-select [(ngModel)]="emiratesId">
+                          <ng-option [value]="0">Select Emirate</ng-option>
+                          <ng-option
+                            *ngFor="let emirate of emiratesList"
+                            [value]="emirate.state_id"
+                            >{{ emirate.state_name }}</ng-option
+                          >
+                        </ng-select>
+                      </div>
+                    </div>
+                    <br />
+                    <div
+                      class="row d-flex justify-content-center align-items-center"
+                    >
+                      <div class="col-xl-10 col-12 fullname">
+                        <input
+                          maxlength="80"
+                          class="textfield"
+                          [(ngModel)]="cust_name"
+                          type="text"
+                          placeholder="Full Name*"
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <div
+                      class="row d-flex justify-content-center align-items-center"
+                    >
+                      <div class="col-xl-10 col-12 email">
+                        <input
+                          maxlength="80"
+                          [(ngModel)]="cust_email"
+                          class="textfield"
+                          type="email"
+                          placeholder="Email Id"
+                          #email="ngModel"
+                          pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+                        />
+                      </div>
+                      <div
+                        class="text-danger"
+                        *ngIf="email.invalid && (email.touched || email.dirty)"
+                      >
+                        <span *ngIf="email.errors?.['pattern']"
+                          >*Enter a valid Email</span
+                        >
+                      </div>
+                      <br />
+                      <div
+                        class="row d-flex justify-content-center align-items-center"
+                      >
+                        <div
+                          class="col-xl-2 col-4 countrycode"
+                          style="padding-right: 0% !important"
+                        >
+                          <input
+                            class="countrycode_textfield"
+                            type="text"
+                            value="AE +971"
+                            readonly
+                          />
+                        </div>
+                        <div
+                          class="col-xl-8 col-8 mobilenumber"
+                          style="padding-left: 0% !important"
+                        >
+                          <input
+                            maxlength="10"
+                            class="mobilenumber_textfield"
+                            type="text"
+                            name="cust_mobile"
+                            [(ngModel)]="mobileNumber"
+                            disabled="true"
+                            autocomplete="off"
+                            placeholder="Enter Mobile Number"
+                          />
+                        </div>
+                      </div>
+                      <br />
+                      <br />
+                      <div class="row">
+                        <div class="col-xl-2 col-2"></div>
+                        <div class="col-xl-8 col-8">
+                          <div class="book_now_btn">
+                            <button (click)="customer_signup()">Sign Up</button>
+                          </div>
+                        </div>
+                        <div class="col-xl-2 col-2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3"></div>
+    </div>
+  </div>
+</div>
