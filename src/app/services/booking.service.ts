@@ -40,9 +40,14 @@ export class BookingService {
   allServicesListedForLandingPage():Observable<any>{
     return this.http.get(environment.base_url + `get_services`, {headers: this.reqHeader})
   }
-
-  getCustomerBookings(data:any):Observable<any>{
-    return this.http.post(environment.base_url + 'getCustomerBookings',data, {headers: this.reqHeader})
+  GetbookingdetailsbyId(data: any) {
+    return this.http.post(environment.base_url + 'Booking/BookingController/getbookingdetails_forcustomer', data, {headers : this.reqHeader});
+  }
+  GetCustomerbookings(data: any) {
+    return this.http.post(environment.base_url + 'Booking/BookingController/getCustomerBookings', data, {headers : this.reqHeader});
+  }
+  GetBookingJobDetails(data: any) {
+    return this.http.post(environment.base_url + 'Booking/BookingController/Get_jobdetails_bybkid', data, {headers : this.reqHeader});
   }
 
 }
