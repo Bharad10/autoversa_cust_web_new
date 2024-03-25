@@ -50,4 +50,20 @@ export class BookingService {
     return this.http.post(environment.base_url + 'Booking/BookingController/Get_jobdetails_bybkid', data, {headers : this.reqHeader});
   }
 
+  getCustomerBookings(data:any):Observable<any>{
+    return this.http.post(environment.base_url + 'getCustomerBookings',data, {headers: this.reqHeader})
+  }
+
+  getbookingDetails():Observable<any>{
+    return this.http.get(environment.base_url + 'System/PickupTypeController', {headers:this.reqHeader})
+  }
+
+  getbookingTime(data:any):Observable<any>{
+    return this.http.post(environment.base_url + 'Get_availabletimeslotby_id',data,{headers:this.reqHeader})
+  }
+
+  getCouponsForCustomer(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'get_couponsforcustomer',data, {headers : this.reqHeader});
+  }
+
 }

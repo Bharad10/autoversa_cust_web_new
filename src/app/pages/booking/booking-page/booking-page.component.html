@@ -216,6 +216,8 @@
                     <br />
                     <div class="pickuptype_label">Pickup options</div>
                     <br />
+
+                    <div *ngIf="pickup_addressId&&drop_addressId" >
                     <div class="row label" *ngFor="let eachpickup of pickup_options; let p = index">
                       <div class="col-8">
                         <label class="packagedetailslist">
@@ -234,6 +236,7 @@
                         </p>
                       </div>
                     </div>
+                  </div>
 
                     <br />
                     <div class="row">
@@ -242,7 +245,7 @@
                         <div>
                           <mat-form-field>
                             <input matInput [matDatepicker]="picker" (dateChange)="ondateSelection();"
-                              placeholder="Choose a booking date" [(ngModel)]="bookingDate">
+                              placeholder="Choose a booking date" [(ngModel)]="bookingDate" [min]="minSelectableDate" [max]="maxSelectableDate" >
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
@@ -256,7 +259,7 @@
                             selected="booking_slot">
                             <ng-option [value]="0">Select Time slot</ng-option>
                             <ng-option *ngFor="let eachslot of timeslots"
-                              [value]="eachslot.tm_id">{{eachslot.tm_start_time}} - {{eachslot.tm_end_time}}</ng-option>
+                              [value]="eachslot.tm_id">{{eachslot.startTime}} - {{eachslot.endTime}}</ng-option>
                           </ng-select>
                         </div>
                       </div>
@@ -319,6 +322,180 @@
                         </label>
                       </div>
                     </div>
+                    <div *ngIf="allCoupons && !appliedCoupon && allCoupons.length > 0" class="row">
+                      <div class="col-xl-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <div>
+                              <div
+                                style="display: flex; justify-content: center"
+                              >
+                                <div
+                                  style="display: flex; justify-content: center"
+                                >
+                                  <img
+                                    style="height: 100px; width: 100px"
+                                    src="https://png.pngtree.com/png-vector/20221024/ourmid/pngtree-ticket-template-mega-sale-advertising-discount-coupon-png-image_6385825.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div
+                                  style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    justify-content: center;
+                                  "
+                                >
+                                  <span style="font-weight: bold"
+                                    >{{allCoupons[0].coupon_description}}</span
+                                  >
+                                  <span style="font-weight: 100"
+                                    >code: {{allCoupons[0].coupon_code}}</span
+                                  >
+                                </div>
+                                <div
+                                  style="
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                  "
+                                  class="ms-5"
+                                >
+                                  <span *ngIf="!isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f7941e"
+                                    >Apply</span
+                                  >
+                                  <span *ngIf="isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f71e1e"
+                                    >Remove</span
+                                  >
+                                  
+                                </div>
+                              </div>
+                              <div>
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item">
+                                    <div
+                                      (click)="openCopounModal()"
+                                      style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                      "
+                                    >
+                                      <div
+                                        style="
+                                          display: flex;
+                                          justify-content: center;
+                                          align-items: center;
+                                        "
+                                      >
+                                        See More Copouns
+                                      </div>
+
+                                      <div
+                                        style="
+                                          display: flex;
+                                          justify-content: center;
+                                          align-items: center;
+                                        "
+                                      >
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="appliedCoupon" class="row">
+                      <div class="col-xl-4">
+                        <div class="card">
+                          <div class="card-body">
+                            <div>
+                              <div
+                                style="display: flex; justify-content: center"
+                              >
+                                <div
+                                  style="display: flex; justify-content: center"
+                                >
+                                  <img
+                                    style="height: 100px; width: 100px"
+                                    src="https://png.pngtree.com/png-vector/20221024/ourmid/pngtree-ticket-template-mega-sale-advertising-discount-coupon-png-image_6385825.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div
+                                  style="
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    justify-content: center;
+                                  "
+                                >
+                                  <span style="font-weight: bold"
+                                    >{{allCoupons[0].coupon_description}}</span
+                                  >
+                                  <span style="font-weight: 100"
+                                    >code: {{allCoupons[0].coupon_code}}</span
+                                  >
+                                </div>
+                                <div
+                                  style="
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                  "
+                                  class="ms-5"
+                                >
+                                  <span *ngIf="!isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f7941e"
+                                    >Apply</span
+                                  >
+                                  <span *ngIf="isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f71e1e"
+                                    >Remove</span
+                                  >
+                                  
+                                </div>
+                              </div>
+                              <div>
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item">
+                                    <div
+                                      (click)="openCopounModal()"
+                                      style="
+                                        display: flex;
+                                        justify-content: space-between;
+                                      "
+                                    >
+                                      <div
+                                        style="
+                                          display: flex;
+                                          justify-content: center;
+                                          align-items: center;
+                                        "
+                                      >
+                                        See More Copouns
+                                      </div>
+
+                                      <div
+                                        style="
+                                          display: flex;
+                                          justify-content: center;
+                                          align-items: center;
+                                        "
+                                      >
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <hr />
                     <div class="row">
                       <p class="packagedetailslist">Payment Summary</p>
@@ -352,7 +529,8 @@
                       </div>
                       <div class="col-6">
                         <label class="packagedetailslist">
-                          <strong>AED {{tot_package_price+this.pickup_cost | number: "1.2-2"}}</strong>
+                          <strong *ngIf="!isCouponApplied">AED {{tot_package_price+this.pickup_cost | number: "1.2-2"}}</strong>
+                          <strong *ngIf="isCouponApplied">AED {{ totPriceAfterApplyingCoupon| number: "1.2-2"}}</strong>
                         </label>
                       </div>
                     </div>
@@ -421,5 +599,122 @@
         </div>
       </div>
     </div>
+
+  <!-- Coupoun Modal -->
+  <div class="modal" tabindex="-1" id="copounModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Copouns</h5>
+          <button
+            (click)="closeCopounModalModal()"
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div *ngFor="let coupon of allCoupons" class="m-2 row">
+          <div class="col-12">
+            <div class="card">
+              <div style="display: flex; justify-content: center">
+                <div style="display: flex; justify-content: center">
+                  <img
+                    style="height: 100px; width: 100px"
+                    src="https://png.pngtree.com/png-vector/20221024/ourmid/pngtree-ticket-template-mega-sale-advertising-discount-coupon-png-image_6385825.png"
+                    alt=""
+                  />
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <span style="font-weight: bold"
+                    >{{coupon.coupon_description}}</span
+                  >
+                  <span style="font-weight: 100">code: {{coupon.coupon_code}}</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                  class="ms-5"
+                >
+                <span *ngIf="!isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f7941e"
+                >Apply</span
+              >
+              <span *ngIf="isCouponApplied" (click)="applyCoupon(allCoupons[0])" style="font-weight: 300; color: #f71e1e"
+                >Remove</span
+              >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            (click)="closeCopounModalModal()"
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" id="couponAppliedModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button (click)="closeMessageModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img style="height: 100px;" src="https://cdn.icon-icons.com/icons2/2346/PNG/512/checkmark_check_apply_done_accept_icon_142904.png" alt="">
+          </div>
+
+          <div *ngIf="appliedCoupon" class="text-center text-success mt-4"  >
+            Applied {{appliedCoupon.coupon_code}} 
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeMessageModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <div class="modal" tabindex="-1" id="termsModal" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Please read before proceeding <br>
+          Registration card should not be expired <br>
+          Be careful not to keep anything illicit inside the car 
+        </div>
+        <div class="modal-footer">
+          <button (click)="closetermsModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 </div>
