@@ -27,7 +27,7 @@ export class ProfilePageComponent implements OnInit {
   // Booking List
   bookingList: any;
   bookingHistoryList: any;
-  
+
   //Vehicle List
   data: any
   vehicleList: any;
@@ -236,8 +236,8 @@ export class ProfilePageComponent implements OnInit {
       varient: this.selected_variant,
     };
     this.authService.vehicleYear(variantData).subscribe((data) => {
-      let startDate = data.year[0].from_year;
-      let endDate = data.year[0].to_year
+      let startDate = data.years[0].from_year;
+      let endDate = data.years[0].to_year
       if (endDate == '9999') {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();

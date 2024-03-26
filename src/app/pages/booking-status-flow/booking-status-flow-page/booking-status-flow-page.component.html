@@ -18,7 +18,7 @@
                                                 <div class="row">
                                                     <h2 class="bodyheading">My Active booking</h2>
                                                 </div>
-                                                <div class="row card_section" [ngStyle]="{'background-color': bgColor1}" (click)="changeBackgroundColor(1)">
+                                                <div class="row card_section" *ngFor="let eachbookingData of activeBookings" [ngStyle]="{'background-color': bgColor1}" (click)="changeBackgroundColor(1)">
                                                     <div class="col-md-4">
                                                         <div class="card_image_section">
                                                             <img src="./assets/images/cust_car.png" alt=""
@@ -27,177 +27,89 @@
                                                     </div>
                                                     <div class="col-md-8">
                                                         <br>
-                                                        <p class="vehicle-details">DU 5566</p>
-                                                        <p class="vehicle-details">Mercedes Benz</p>
+                                                        <p class="vehicle-details">{{eachbookingData.cv_plate_number}}</p>
+                                                        <p class="vehicle-details">{{eachbookingData.cv_make}} {{eachbookingData.cv_model}} {{eachbookingData.cv_variant}}</p>
                                                         <br>
-                                                        <p class="vehicle-details">Major Service(BK 100)</p>
-                                                        <p class="vehicle-details">Date: 10-10-2023</p>
-                                                        <p class="vehicle-details">Time: 03:00 PM - 04:00 PM</p>
+                                                        <p class="vehicle-details">{{eachbookingData.pkg_name}}({{eachbookingData.bk_number}})</p>
+                                                        <p class="vehicle-details">Date: {{eachbookingData.bk_booking_date | date : 'dd-MM-yyyy'}}</p>
+                                                        <p class="vehicle-details">Time: {{ formatTime(eachbookingData.tm_start_time) }} - {{ formatTime(eachbookingData.tm_end_time) }}</p>
                                                         <br>
                                                     </div>
                                                 </div>
                                                 <br>
-                                                <div class="row card_section" [ngStyle]="{'background-color': bgColor2}" (click)="changeBackgroundColor(2)">
-                                                    <div class="col-md-4">
-                                                        <div class="card_image_section">
-                                                            <img src="./assets/images/cust_car.png" alt=""
-                                                                srcset="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <br>
-                                                        <p class="vehicle-details">DU 5446</p>
-                                                        <p class="vehicle-details">Mercedes Benz</p>
-                                                        <br>
-                                                        <p class="vehicle-details">Major Service(BK 101)</p>
-                                                        <p class="vehicle-details">Date: 15-10-2023</p>
-                                                        <p class="vehicle-details">Time: 10:00 AM - 11:00 AM</p>
-                                                        <br>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <br>
-                                            <div class="col-xl-6">
+                                            <div class="col-xl-6" *ngIf="workcard_showFlag==0">
+                                                <br>
                                                 <div class="row">
                                                     <h2 class="bodyheading">Booking Status</h2>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row" *ngFor="let eachdata of statusFlow">
                                                     <div class="col-md-4 d-flex justify-content-center align-items-center">
                                                         <div class="status_image_section">
-                                                            <img src="./assets/images/booking_icon.png" style=" width: 74px; height: 74px;">
+                                                            <img src="{{eachdata.icon}}" style=" width: 74px; height: 74px;">
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details">Booking created</p>
-                                                        <p class="status-details">10-10-23 / 04:00 PM</p>
-                                                    </div>
+                                                      </div>
+                                                      <div class="col-md-6">
+                                                        <p class="status-details">{{eachdata.status}}</p>
+                                                        <p class="status-details">{{eachdata.dateandtime}}</p>
+                                                      </div>
+                                                      <div class="col-md-2">
+                                                        <button status="primary" (click)="onWorkcardSelection(1);" *ngIf="eachdata.code=='WIPC'">Workcard</button>
+                                                      </div>
+                                                    <br>
                                                 </div>
+                                                
+                                            </div>
+                                            <div class="col-xl-6" *ngIf="workcard_showFlag==1">
                                                 <br>
                                                 <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/hold_icon.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details">On Hold</p>
-                                                        <p class="status-details">Reason: Car not starting</p>
-                                                    </div>
+                                                    <h2 class="bodyheading">Workcard</h2>
                                                 </div>
-                                                <br>
                                                 <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/driver_enrouted_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p class="status-details-inactive">Driver enroute to location</p>
-                                                    </div>
-                                                    <div class="col-md-4 status_btn">
-                                                        <button class="outline_btn">
-                                                            Call <i class="fa fa-phone" aria-hidden="true"></i> 
-                                                        </button>
-                                                    </div>
+                                                    <table id="package_table">
+                                                        <thead>
+                                                          <tr>
+                                                            <th
+                                                              colspan="9"
+                                                              style="text-align: center; background-color: #eee; font-size: 1rem"
+                                                            >
+                                                              Package & Additional Jobs
+                                                            </th>
+                                                          </tr>
+                                                          <tr>
+                                                            <th >No</th>
+                                                            <th>Job Name</th>
+                                                            <th>Amount.</th>
+                                                            <th>Status</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let eachjob of booing_jobs; let i=index;">
+                                                            <td>#{{i+1}}</td>
+                                                            <td style="text-align: center;">{{eachjob.bkj_jobname}}</td>
+                                                            <td>AED {{eachjob.bkj_cust_cost}}</td>
+                                                            <td class="amount" style=" color: red;" *ngIf="eachjob.bkj_status==1">Pending</td>
+                                                            <td class="amount" style=" color: green;" *ngIf="eachjob.bkj_status==2">Approved</td>
+                                                          </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                          <!-- <tr *ngFor="let eachextra of bookingData.controls['additional_labourandsparecost'].value;let z = index">
+                                                            <td colspan="3"  style="font-size: .7vw;" *ngIf="eachextra.type=='Service'">Total labour cost<label style=" font-size: 8px; ">({{eachextra.vendor_name}})</label></td>
+                                                            <td colspan="3"  style="font-size: .7vw;" *ngIf="eachextra.type=='Spare'">Total spare cost<label style=" font-size: 8px; ">({{eachextra.vendor_name}})</label></td>
+                                                            <td class="amount" style="font-size: .7vw;"> {{ eachextra.total_cost * 1 / 1.05 | number : "1.2-2"}}</td>
+                                                            <td class="amount" style="font-size: .7vw;">{{ eachextra.total_cost*1 - eachextra.total_cost * 1 / 1.05 | number: "1.2-2" }}</td>
+                                                            <td class="amount" style="font-size: .7vw;">{{ eachextra.total_cost | number: "1.2-2" }}</td>
+                                                            <td class="amount"></td>
+                                                            <td colspan="2" class="amount">
+                                                            </td>
+                                                          </tr> -->
+                                                        </tfoot>
+                                                      </table>
+                                                    
+                                                    <br>
                                                 </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/pickup_process_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Pickup in progress</p>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/pickup_enroute_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Pickup & enrouted to workshop</p>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/vehicle_wrkshp_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Vehicle at workshop</p>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/work_in_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <p class="status-details-inactive">Work in progress</p>
-                                                    </div>
-                                                    <div class="col-md-4 status_btn">
-                                                        <button class="outline_btn">
-                                                            WorkCard <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/confirm_drop_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <br>
-                                                        <p class="status-details-inactive">Confirm drop location</p>
-                                                    </div>
-                                                    <div class="col-md-4 status_btn">
-                                                        <button class="outline_btn">
-                                                            Select Location
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/ready_delivery_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Ready for delivery</p>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/drop_enrouted_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Driver enroute to delivery</p>
-                                                    </div>
-                                                </div><br>
-                                                <div class="row">
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-center">
-                                                        <div class="status_image_section">
-                                                            <img src="./assets/images/delivery_inactive.png" style=" width: 74px; height: 74px;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <p class="status-details-inactive">Delivery completed</p>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <br>
