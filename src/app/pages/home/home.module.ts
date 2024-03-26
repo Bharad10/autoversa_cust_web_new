@@ -12,6 +12,7 @@ import { HappyClientsComponent } from './sections/happy-clients/happy-clients.co
 import { YellowSectionComponent } from './sections/yellow-section/yellow-section.component';
 
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { BookingListComponent } from './sections/bookinglist/booking-list/booking-list.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -20,7 +21,8 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     ServiceComponent,
     HowItWorksComponent,
     HappyClientsComponent,
-    YellowSectionComponent
+    YellowSectionComponent,
+    BookingListComponent
   ],
   imports: [
     CommonModule,

@@ -125,4 +125,12 @@ export class AuthService {
       { headers: this.reqHeader1 }
     );
   }
+
+  getBookingHistoryList(data: any): Observable<any> {
+    return this.http.post(
+      environment.base_url + 'Booking/BookingController/getCustomerBookinghistory',
+      data,
+      { headers: this.reqHeader1 }
+    );
+  }
 }

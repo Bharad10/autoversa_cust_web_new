@@ -1,0 +1,81 @@
+<div class="service">
+    <div class="service_inner_area">
+        <div class="service_heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section_heading center_text">
+                            <h3>Ongoing Bookings</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="service_section_content">
+            <div class="container">
+                <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
+                    <div class="row" *ngFor="let book of bookingList">
+                        <div class="col-xl-3">
+                            <div class="card_image_section">
+                                <img src="./assets/icons/benz_icon.png" alt="" srcset=""
+                                    style="z-index: 1;border-radius: 12%;">
+                            </div>
+                        </div>
+                        <div class="col-xl-9">
+                            <div class="card_content">
+                                <p class="profile-details"><strong>{{book.cv_plate_number
+                                }}</strong></p>
+                                <p class="profile-details">{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}}
+                                    ({{book.cv_year}})</p>
+                                <p class="profile-details">{{ book.pkg_name }} ({{book.bk_number}})
+                                </p>
+                                <p class="profile-details"><strong>Date:
+                                    </strong>{{ book.formattedDate }}</p>
+                                <p class="profile-details"><strong>Time: </strong>{{ book.formattedStartTime }} - {{ book.formattedEndTime }}</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-4" style="padding: 0% !important;">
+                                    <div class="outlinebutton">
+                                        <button>Cancel</button>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
+                                    <div class="outlinebutton">
+                                        <button>Hold</button>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
+                                    <div class="outlinebutton">
+                                        <button>Reschedule</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <h2 class="status_heading"> Current Order Status</h2>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-2" style="text-align: center; margin-top: 1%;">
+                                    <img *ngIf="book.st_code === 'BKCC'" src="./assets/images/booking_icon.png" alt="" srcset="" style="height: 60px; width: 60px;">
+                                    <img *ngIf="book.st_code === 'DRPC'" src="./assets/images/driver_enroute_icon.png" alt="" srcset="" style="height: 60px; width: 60px;">
+                                </div>
+                                <div class="col-xl-10" style=" margin-top: 2%; ">
+                                    <p class="profile-details"><strong>{{book.custstatus}}</strong></p>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="viewdetails">
+                                <button>View Details</button>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #noBookings>
+                    <p style=" font-size: xx-large; font-weight: bold; ">No Ongoing Bookings</p>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
