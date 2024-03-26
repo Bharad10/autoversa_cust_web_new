@@ -259,7 +259,12 @@
                             selected="booking_slot">
                             <ng-option [value]="0">Select Time slot</ng-option>
                             <ng-option *ngFor="let eachslot of timeslots"
-                              [value]="eachslot.tm_id">{{eachslot.startTime}} - {{eachslot.endTime}}</ng-option>
+                              [value]="eachslot.tm_id" [disabled]="eachslot.isTimeSlotFilled">
+                              <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>{{eachslot.startTime}} - {{eachslot.endTime}}</span>
+                                <span *ngIf="eachslot.isTimeSlotFilled" class="badge">Slot Full</span>
+                              </div>
+                            </ng-option>
                           </ng-select>
                         </div>
                       </div>

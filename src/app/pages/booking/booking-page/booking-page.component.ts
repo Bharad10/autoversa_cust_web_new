@@ -309,10 +309,11 @@ export class BookingPageComponent {
     const month = ('0' + (this.bookingDate.getMonth() + 1)).slice(-2);
     const year = this.bookingDate.getFullYear();
 
-    const formattedDate = `${day}/${month}/${year}`;
+    const formattedDate = `${day}-${month}-${year}`;
     let inputData = {
       day: dayName,
       date: formattedDate,
+      branch_id:1
     };
     this.booking_service
       .gettimeslotsbyDate(inputData)
@@ -369,7 +370,17 @@ export class BookingPageComponent {
                 hour12: true,
               });
 
-              let timeData = { startTime: startTime12hr, endTime: endTime12hr, tm_id:data.tm_id };
+              let driversAlredayAssigned = rdata.assigned_emp.filter((item:any)=>{
+                return data.tm_id == item.tem_slotid
+              })
+
+              let timeData 
+
+              if (driversAlredayAssigned.length >= Number(data.driver_count)){
+                timeData = { startTime: startTime12hr, endTime: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:true };
+              }else{
+                timeData = { startTime: startTime12hr, endTime: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:false };
+              }
 
               this.timeslots.push(timeData);
             }
