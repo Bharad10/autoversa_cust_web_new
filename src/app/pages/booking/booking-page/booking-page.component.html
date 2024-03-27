@@ -261,7 +261,7 @@
                             <ng-option *ngFor="let eachslot of timeslots"
                               [value]="eachslot.tm_id" [disabled]="eachslot.isTimeSlotFilled">
                               <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span>{{eachslot.startTime}} - {{eachslot.endTime}}</span>
+                                <span>{{eachslot.tm_start_time}} - {{eachslot.tm_end_time}}</span>
                                 <span *ngIf="eachslot.isTimeSlotFilled" class="badge">Slot Full</span>
                               </div>
                             </ng-option>

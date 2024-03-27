@@ -65,4 +65,7 @@ export class BookingListComponent {
   bookNow(package_id: any) {
     this.router.navigateByUrl('booking/' + btoa(package_id));
   }
+  navigateBookingDetails(book_id: any){
+    this.router.navigateByUrl('booking-status-flow/' + btoa(book_id));
+  }
 }
