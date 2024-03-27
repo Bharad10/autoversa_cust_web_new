@@ -1,7 +1,6 @@
 <div class="banner_section">
   <div class="inner_banner_section"></div>
 </div>
-
 <div class="brands_section_area">
   <div class="inner_brands_section">
     <div class="container">
@@ -13,32 +12,32 @@
               <div class="choose_car_box">
                 <div class="choose_car_box_main">
                   <div class="heading_section">
-                
-                    <div>
-                      <button (click)="openAddAddressModal()" class="btn btn-warning">
-                        Add New Address
-                      </button>
+                    <div class="row">
+                      <div class="col-4">
+
+                      </div>
+                      <div class="col-4">
+                        
+                      </div>
+                      <div class="col-4" style="text-align: right;">
+                        <button (click)="openAddAddressModal()" class="btn btn-warning" style="color: white;">
+                          Add New Address
+                        </button>
+                      </div>
+                      
                     </div>
                   </div>
-                  
                   <div class="Address_Display">
                     <div *ngFor="let address of customerAddress" class="card">
                       <div class="card-body">
                         <div class="card_content">
-                          <div
-                            style="display: flex; justify-content: center; align-items: center"
-                          >
-                            <img
-                              style="height: 100px; width: auto"
+                          <div style="display: flex; justify-content: center; align-items: center">
+                            <img style="height: 100px; width: auto"
                               src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Location_icon_from_Noun_Project.png/640px-Location_icon_from_Noun_Project.png"
-                              alt=""
-                            />
+                              alt="" />
                           </div>
-                
                           <div style="display: flex; flex-direction: column; gap: 7px; width:70%">
-                            <span
-                              >{{address.cad_address}}</span
-                            >
+                            <span>{{address.cad_address}}</span>
                             <span>City : {{address.cad_state}}</span>
                             <span>Area: {{address.cad_city}}</span>
                             <span>Building Name/Flat No: {{address.cad_landmark}}</span>
@@ -52,324 +51,157 @@
                       </div>
                     </div>
                   </div>
-                  </div>
-                  </div>  
-                  </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-                  
+<!-- __________________________________________Address Add & Edit_________________________________________________ -->
 
-                  <!-- __________________________________________Modal Content_________________________________________________ -->
+<div class="modal" tabindex="-1" id="addressModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Address</h5>
+        <button type="button" (click)="closeAddAddressModal()" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="Address_Display">
+          <div class="form_display">
+            <input #inputField type="text" class="form-control" [placeholder]="placeholder" />
+            <div>
+              <google-map height="400px" width="400px" [zoom]="15" (mapClick)="clickEvent($event)" [center]="position">
+                <map-marker [position]="position"></map-marker>
+              </google-map>
+            </div>
+            <div style="display: flex; gap: 2px">
+              <input type="text" [value]="placeDetails.city" class="form-control" placeholder="city" disabled
+                [(ngModel)]="placeDetails.city" />
+              <input type="text" [value]="placeDetails.area" class="form-control" placeholder="area" disabled
+                [(ngModel)]="placeDetails.area" />
+            </div>
+            <div>
+              <textarea name="" id="" [(ngModel)]="custAddressData" style="width: 100%" class="form-control" [value]=""
+                placeholder="Address"></textarea>
+            </div>
+            <div>
+              <textarea name="" id="" style="width: 100%" class="form-control" [(ngModel)]="address"
+                placeholder="Building/Flat No"></textarea>
+            </div>
+            <div>
+              <span>Address Type</span>
+              <div class="d-flex gap-2">
+                <div class="form-check">
+                  <input class="form-check-input" (change)="onRadioChange($event)" value="home" type="radio"
+                    name="flexRadioDefault" id="flexRadioDefault1" />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Home
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" (change)="onRadioChange($event)" value="work" type="radio"
+                    name="flexRadioDefault" id="flexRadioDefault2" />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Work
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" (change)="onRadioChange($event)" value="other" type="radio"
+                    name="flexRadioDefault" id="flexRadioDefault2" />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Other
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="closeAddAddressModal()" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" (click)="addAddress()" class="btn btn-primary">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-                  <div class="modal" tabindex="-1" id="addressModal">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Modal title</h5>
-                          <button
-                            type="button"
-                            (click)="closeAddAddressModal()"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                          ></button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="Address_Display">
-                            <div class="form_display">
-                              <input
-                                #inputField
-                                type="text"
-                                class="form-control"
-                                [placeholder]="placeholder"
-                              />
-                              <div>
-                                <google-map
-                                  height="400px"
-                                  width="400px"
-                                  [zoom]="15"
-                                  (mapClick)="clickEvent($event)"
-                                  [center]="position"
-                                >
-                                  <map-marker
-                                    [position]="position"
-                                  ></map-marker>
-                                </google-map>
-                              </div>
-
-                              <div style="display: flex; gap: 2px">
-                                <input
-                                  type="text"
-                                  [value]="placeDetails.city"
-                                  class="form-control"
-                                  placeholder="city"
-                                  disabled
-                                  [(ngModel)]="placeDetails.city"
-                                />
-                                <input
-                                  type="text"
-                                  [value]="placeDetails.area"
-                                  class="form-control"
-                                  placeholder="area"
-                                  disabled
-                                  [(ngModel)]="placeDetails.area"
-                                />
-                              </div>
-
-                              <div>
-                                <textarea
-                                  name=""
-                                  id=""
-                                  [(ngModel)]="custAddressData"
-                                  style="width: 100%"
-                                  class="form-control"
-                                  [value]=""
-                                  placeholder="Address"
-                                ></textarea>
-                              </div>
-
-                              <div>
-                                <textarea
-                                  name=""
-                                  id=""
-                                  style="width: 100%"
-                                  class="form-control"
-                                  [(ngModel)]="address"
-                                  placeholder="Building/Flat No"
-                                ></textarea>
-                              </div>
-
-                              <div>
-                                <span>Address Type</span>
-                                <div class="d-flex gap-2">
-                                  <div class="form-check">
-                                    <input
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="home"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault1"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault1"
-                                    >
-                                      Home
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="work"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault2"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault2"
-                                    >
-                                      Work
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="other"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault2"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault2"
-                                    >
-                                      Other
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button
-                            type="button"
-                            (click)="closeAddAddressModal()"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                          >
-                            Close
-                          </button>
-                          <button
-                            type="button"
-                            (click)="addAddress()"
-                            class="btn btn-primary"
-                          >
-                            Save changes
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="modal" tabindex="-1" id="editAddressModal">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Modal title</h5>
-                          <button
-                            (click)="closeEditAddressModal()"
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                          ></button>
-                        </div>
-                        <div class="modal-body">
-                          <div class="Address_Display">
-                            <div class="form_display">
-                              <div>
-                                <google-map
-                                  height="400px"
-                                  width="400px"
-                                  [zoom]="15"
-                                  [center]="position"
-                                >
-                                  <map-marker
-                                    [position]="position"
-                                  ></map-marker>
-                                </google-map>
-                              </div>
-
-                              <div style="display: flex; gap: 2px">
-                                <input
-                                  type="text"
-                                  [value]="placeDetails.city"
-                                  class="form-control"
-                                  placeholder="city"
-                                  disabled
-                                  [(ngModel)]="placeDetails.city"
-                                />
-                                <input
-                                  type="text"
-                                  [value]="placeDetails.area"
-                                  class="form-control"
-                                  placeholder="area"
-                                  disabled
-                                  [(ngModel)]="placeDetails.area"
-                                />
-                              </div>
-
-                              <div>
-                                <textarea
-                                  name=""
-                                  id=""
-                                  [(ngModel)]="custAddressData"
-                                  style="width: 100%"
-                                  class="form-control"
-                                  [value]=""
-                                  placeholder="Address"
-                                ></textarea>
-                              </div>
-
-                              <div>
-                                <textarea
-                                  name=""
-                                  id=""
-                                  style="width: 100%"
-                                  class="form-control"
-                                  [(ngModel)]="address"
-                                  placeholder="Building/Flat No"
-                                ></textarea>
-                              </div>
-
-                              <div>
-                                <span>Address Type</span>
-                                <div class="d-flex gap-2">
-                                  <div class="form-check">
-                                    <input
-                                      [(ngModel)]="addressType"
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="home"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault1"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault1"
-                                    >
-                                      Home
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input
-                                      [(ngModel)]="addressType"
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="work"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault2"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault2"
-                                    >
-                                      Work
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input
-                                      [(ngModel)]="addressType"
-                                      class="form-check-input"
-                                      (change)="onRadioChange($event)"
-                                      value="other"
-                                      type="radio"
-                                      name="flexRadioDefault"
-                                      id="flexRadioDefault2"
-                                    />
-                                    <label
-                                      class="form-check-label"
-                                      for="flexRadioDefault2"
-                                    >
-                                      Other
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button
-                            (click)="closeEditAddressModal()"
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                          >
-                            Close
-                          </button>
-                          <button
-                            type="button"
-                            (click)="updateCustomerAddress()"
-                            class="btn btn-primary"
-                          >
-                            Save changes
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-   
+<div class="modal" tabindex="-1" id="editAddressModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Address</h5>
+        <button (click)="closeEditAddressModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="Address_Display">
+          <div class="form_display">
+            <div>
+              <google-map height="400px" width="400px" [zoom]="15" [center]="position">
+                <map-marker [position]="position"></map-marker>
+              </google-map>
+            </div>
+            <div style="display: flex; gap: 2px">
+              <input type="text" [value]="placeDetails.city" class="form-control" placeholder="city" disabled
+                [(ngModel)]="placeDetails.city" />
+              <input type="text" [value]="placeDetails.area" class="form-control" placeholder="area" disabled
+                [(ngModel)]="placeDetails.area" />
+            </div>
+            <div>
+              <textarea name="" id="" [(ngModel)]="custAddressData" style="width: 100%" class="form-control" [value]=""
+                placeholder="Address"></textarea>
+            </div>
+            <div>
+              <textarea name="" id="" style="width: 100%" class="form-control" [(ngModel)]="address"
+                placeholder="Building/Flat No"></textarea>
+            </div>
+            <div>
+              <span>Address Type</span>
+              <div class="d-flex gap-2">
+                <div class="form-check">
+                  <input [(ngModel)]="addressType" class="form-check-input" (change)="onRadioChange($event)"
+                    value="home" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Home
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input [(ngModel)]="addressType" class="form-check-input" (change)="onRadioChange($event)"
+                    value="work" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Work
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input [(ngModel)]="addressType" class="form-check-input" (change)="onRadioChange($event)"
+                    value="other" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Other
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeEditAddressModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" (click)="updateCustomerAddress()" class="btn btn-primary">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
