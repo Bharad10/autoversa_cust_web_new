@@ -1,0 +1,260 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+
+<div class="brands_section_area">
+  <div class="inner_brands_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 service-content">
+          <div class="main_brands_area">
+            <div class="inner_breand_logo">
+              <h2 class="heading">Schedule Drop</h2>
+              <div class="choose_car_box">
+                <div class="choose_car_box_main">
+                  <div class="heading_section">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-xl-6 col-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="d-flex" style="gap: 15px">
+                                <div>
+                                  <img
+                                    style="height: 152px"
+                                    src="https://www.freepnglogos.com/uploads/mercedes-logo-png/mercedes-logo-mercedes-benz-logo-png-transparent-svg-vector-bie-13.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div style="display: flex; align-items: center">
+                                  <div class="booking_details">
+                                    <span
+                                      ><b
+                                        >{{
+                                          bookingData?.booking?.booking_package
+                                            ?.pkg_name
+                                        }}
+                                        ({{
+                                          bookingData?.booking?.bk_number
+                                        }})</b
+                                      ></span
+                                    >
+                                    <br />
+                                    <span>Booking Date : </span>
+                                    <span>{{
+                                      bookingData?.booking?.bk_booking_date
+                                    }}</span>
+                                    <br />
+                                    <span
+                                      >{{
+                                        bookingData?.booking?.vehicle?.cv_make
+                                      }}
+                                      {{
+                                        bookingData?.booking?.vehicle.cv_model
+                                      }}
+                                      {{
+                                        bookingData?.booking?.vehicle.cv_year
+                                      }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-6 col-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div
+                                style="
+                                  display: flex;
+                                  justify-content: space-between;
+                                  margin-top: 20px;
+                                "
+                                class="p-2"
+                              >
+                                <div>
+                                  <h5>Current Drop Location</h5>
+                                </div>
+
+                                <div>
+                                  <h5 class="add_new">
+                                    Add New
+                                    <i class="fa fa-plus-circle"></i>
+                                  </h5>
+                                </div>
+                              </div>
+
+                              <div class="p-4">
+                                <ng-select
+                                  [(ngModel)]="dropAddressId"
+                                  (change)="selectAddress($event)"
+                                  selected="dropAddressId"
+                                >
+                                  <ng-option aria-selected="true">
+                                    Selected Location
+                                  </ng-option>
+                                  <ng-option
+                                    *ngFor="let address of custAdresses"
+                                    [value]="address.cad_id"
+                                    >{{ address.cad_address }}</ng-option
+                                  >
+                                </ng-select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 mt-3">
+                          <div class="card">
+                            <div class="card-body p-5">
+                              <div class="row">
+                                <div class="col-9">
+                                  <div>
+                                    <h5 class="mb-4">Drop Type*</h5>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-8">
+                                      <label class="pickupdetails_list">
+                                        <input type="radio" />
+                                        Drive Drop
+                                      </label>
+                                    </div>
+                                    <div class="col-4">
+                                      <p class="pickupdetails_list">FREE</p>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-8">
+                                      <label class="pickupdetails_list">
+                                        <input type="radio" />
+                                        Open Recovery
+                                      </label>
+                                    </div>
+                                    <div class="col-4">
+                                      <p class="pickupdetails_list">456</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-3">
+                                  <div>
+                                    <google-map
+                                      height="230px"
+                                      width="230px"
+                                      [zoom]="10"
+                                      [center]="position"
+                                    >
+                                      <map-marker
+                                        [position]="position"
+                                      ></map-marker>
+                                    </google-map>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12 mt-3">
+                          <div class="row">
+                            <div class="col-xl-6 col-12">
+                              <div class="card">
+                                <div class="card-body">
+                                  <div class="p-2">
+                                    <h5>Select Drop Date</h5>
+                                  </div>
+
+                                  <div class="py-4">
+                                    <div>
+                                      <mat-form-field>
+                                        <input
+                                          matInput
+                                          [matDatepicker]="picker"
+                                          (dateChange)="ondateSelection()"
+                                          placeholder="Choose a booking date"
+                                          [(ngModel)]="bookingDate"
+                                          [min]="minSelectableDate"
+                                          [max]="maxSelectableDate"
+                                        />
+                                        <mat-datepicker-toggle
+                                          matSuffix
+                                          [for]="picker"
+                                        ></mat-datepicker-toggle>
+                                        <mat-datepicker
+                                          #picker
+                                        ></mat-datepicker>
+                                      </mat-form-field>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-xl-6 col-12">
+                              <div class="card">
+                                <div class="card-body">
+                                  <div class="p-2">
+                                    <h5>Select Drop Time Slot</h5>
+                                  </div>
+
+                                  <div class="py-4">
+                                    <ng-select
+                                      [(ngModel)]="booking_slot"
+                                      selected="booking_slot"
+                                    >
+                                      <ng-option [value]="0"
+                                        >Select Time slot</ng-option
+                                      >
+                                      <ng-option
+                                        *ngFor="let eachslot of timeslots"
+                                        [value]="eachslot.tm_id"
+                                        [disabled]="eachslot.isTimeSlotFilled"
+                                      >
+                                        <div
+                                          style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                          "
+                                        >
+                                          <span
+                                            >{{ eachslot.startTime }} -
+                                            {{ eachslot.endTime }}</span
+                                          >
+                                          <span
+                                            *ngIf="eachslot.isTimeSlotFilled"
+                                            class="badge"
+                                            >Slot Full</span
+                                          >
+                                        </div>
+                                      </ng-option>
+                                    </ng-select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="pay_btn mt-3">
+                        <button>Schedule</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

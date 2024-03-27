@@ -1,5 +1,8 @@
 <app-banner></app-banner>
 <app-brands></app-brands>
+<ng-container *ngIf="bookingList && bookingList.length > 0">
+    <app-booking-list></app-booking-list>
+</ng-container>
 <app-service></app-service>
 <app-how-it-works></app-how-it-works>
 <app-happy-clients></app-happy-clients>
