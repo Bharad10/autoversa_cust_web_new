@@ -360,46 +360,42 @@ export class BookingStatusFlowPageComponent {
         const updatedBookingJobs = bookingJobs.map((job: any) => {
           return { ...job, iselected: true };
         });
+
+
         this.selected_jobs = bookingJobs;
+        this.booing_jobs = updatedBookingJobs;
       } else {
         console.error("Booking jobs data is not an array or does not exist");
       }
       console.log("----------------jjj", this.selected_jobs)
+    } else {
+      this.selected_jobs = [];
+      const bookingJobs = this.booing_jobs;
+
+      if (Array.isArray(bookingJobs)) {
+        const updatedBookingJobs = bookingJobs.map((job: any) => {
+          return { ...job, iselected: false };
+        });
+
+
+        this.selected_jobs = [];
+        this.booing_jobs = updatedBookingJobs;
+      } else {
+        console.error("Booking jobs data is not an array or does not exist");
+      }
     }
   }
   jobsel(iselected: any, job: any) {
-    console.log(
-      "booking jobs-1--->>>", job);
-    console.log("iselected--->>>", iselected);
-    // if (!iselected) {
-    //   if (
-    //     this.selected_jobs.length > 0 &&
-    //     job.bkj_status == this.selected_jobs[0].bkj_status
-    //   ) {
-    //     this.selected_jobs.push(job);
-    //   } else if (this.selected_jobs.length == 0) {
-    //     this.selected_jobs.push(job);
-    //   } else {
-    //     this.showToast(
-    //       "warning",
-    //       "Please select the jobs with same status",
-    //       "Please select jobs with similar status"
-    //     );
-    //     const index1 = this.selected_jobs.findIndex(
-    //       (x) => x.bkj_id === job.bkj_id
-    //     );
-    //     this.selected_jobs[index1].iselected.value = false;
-    //   }
-    // } else {
-    //   this.isselectalljobs = false;
-    //   const index2 = this.selected_jobs.findIndex(
-    //     (x) => x.bkj_id === job.bkj_id
-    //   );
-    //   this.selected_jobs.splice(index2, 1);
-    // }
-    // console.log(
-    //   "booking jobs--2-->>>",
-    //   this.bookingData.controls["booking_jobs"].value
-    // );
+
+    if (!iselected) {
+      this.selected_jobs.push(job);
+    } else {
+      const index2 = this.selected_jobs.findIndex((x) => x.bkj_id === job.bkj_id);
+      this.selected_jobs.splice(index2, 1);
+    }
+
+  }
+  approveSelectedJobs() {
+
   }
 }
