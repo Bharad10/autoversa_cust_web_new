@@ -304,7 +304,7 @@
                                   colspan="4"
                                   style="
                                     text-align: center;
-                                    background-color: #eee;
+                                    background-color: #F7941E;
                                     font-size: 1rem;
                                   "
                                 >
@@ -315,7 +315,7 @@
                                 <th>
                                   <input type="checkbox" [(ngModel)]="selectAll" (click)="Selectalljobs()" name="select_alljobs">
                                  </th>
-                                <th>No</th>
+                                <!-- <th>No</th> -->
                                 <th>Job Name</th>
                                 <th>Cost.</th>
                               </tr>
@@ -336,24 +336,38 @@
                                   {{ eachjob.bkj_jobname | titlecase }}
                                 </td>
                                 <td>AED {{ eachjob.bkj_cust_cost }}</td>
-                                <td
-                                  class="amount"
-                                  style="color: red"
-                                  *ngIf="eachjob.bkj_status == 1"
-                                >
-                                  Pending
-                                </td>
-                                <td
-                                  class="amount"
-                                  style="color: green"
-                                  *ngIf="eachjob.bkj_status == 2"
-                                >
-                                  Approved
-                                </td>
                               </ng-container>
                               </tr>
                             </tbody>
                           </table>
+                          <hr>
+                          <div class="row">
+                              <div class="col-4">
+
+                              </div>
+                              <div class="col-4">
+                                <button
+                                type="button"
+                                class="btn btn-success"
+                                (click)="approveSelectedJobs();"
+                                *ngIf="selected_jobs.length>0"
+                                mdbRipple
+                              >
+                                Reject
+                              </button> 
+                              </div>
+                              <div class="col-4" style=" text-align: center;">
+                                <button
+                                type="button"
+                                class="btn btn-success"
+                                (click)="approveSelectedJobs();"
+                                *ngIf="selected_jobs.length>0"
+                                mdbRipple
+                              >
+                                Approve
+                              </button>
+                              </div>
+                          </div>
                           <br />
                         </div>
                       </div>
