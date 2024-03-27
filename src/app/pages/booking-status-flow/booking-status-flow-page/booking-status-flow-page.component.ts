@@ -16,6 +16,9 @@ export class BookingStatusFlowPageComponent {
   bgColor2: string = '';
   statusFlow: any[] = [];
   activeBookings: any[] = [];
+  Booking_payments: any[] = [];
+  selectAll=false;
+  selected_jobs:any[] = [];
   cust_status_master = [
     'BKCC',
     'DRPC',
@@ -46,7 +49,8 @@ export class BookingStatusFlowPageComponent {
       if (rdata.ret_data == "success") {
         this.position= this.cust_status_master.indexOf(rdata.booking.cust_status.st_code);
         this.booking_details = rdata.booking;
-        console.log("booking_details---->",this.booking_details);
+        console.log("rdata.booking details--->",rdata.booking);
+        console.log("bookin details--->",this.booking_details.bk_consumcost);
         const created_date: Date = new Date(this.booking_details.bk_created_on);
         const day: number = created_date.getDate();
         const month: number = created_date.getMonth() + 1;
@@ -299,8 +303,103 @@ export class BookingStatusFlowPageComponent {
     }
     this.booking_service.GetBookingJobDetails(input_data).subscribe((rdata: any) => {
       if(rdata.ret_data=="success"){
+        this.booking_details = rdata.booking;
+        this.booking_details.bk_consumcost = parseFloat(this.booking_details.bk_consumcost)+parseFloat(this.booking_details.bk_consumvat);
         this.booing_jobs =rdata.jobs;
+        this.Booking_payments = rdata.payments;
+       this.calculateTotal();
       }
     });
+  }
+  calculateTotal() {
+    console.log("jjjjjiiiiiii-----k-->");
+    this.booking_details.total_cost = 0.0;
+    this.booking_details.grand_total = 0.0;
+    this.booking_details.paid_total = 0.0;
+    if (parseFloat(this.booking_details.booking_package.bkp_cust_amount ) > 0) {
+      this.booking_details.total_cost = Math.round(this.booking_details.total_cost + parseFloat(this.booking_details.booking_package.bkp_cust_amount)+parseFloat(this.booking_details.booking_package.bkp_vat));
+    }
+    this.booing_jobs.forEach((element) => {
+      let eachjobcost = 0.00;
+      element.bkj_vat = 0.00;
+      if (
+        parseFloat(element.bkj_cust_cost) > 0 &&
+        (element.bkj_status == "2" || element.bkj_status == "4")
+      ) {
+        this.booking_details.total_cost = this.booking_details.total_cost + parseFloat(element.bkj_cust_cost);
+      } 
+
+    });
+    this.booking_details.grand_total = parseFloat(
+      (this.booking_details.total_cost + parseFloat(this.booking_details.bk_pickup_cost)).toFixed(2)
+    );
+
+    if (this.booking_details.bk_consumcost != 0.00) {
+      this.booking_details.total_cost = this.booking_details.total_cost + parseFloat(this.booking_details.bk_consumcost);
+
+
+    }
+    this.Booking_payments.forEach((element) => {
+      if (parseFloat(element.bpt_amount) > 0) {
+        this.booking_details.paid_total = this.booking_details.paid_total + parseFloat(element.bpt_amount);
+      }
+
+    });
+    this.booking_details.grand_total = this.booking_details.total_cost - parseFloat(this.booking_details.bk_discount);
+    this.booking_details.grand_total = (this.booking_details.grand_total - parseFloat(this.booking_details.bk_coupondiscount));
+    console.log("grand total---->",this.booking_details.grand_total);
+
+  }
+  Selectalljobs() {
+    console.log("----------------selectAll-----",this.selectAll)
+    if (!this.selectAll) {
+      this.selected_jobs = [];
+      const bookingJobs = this.booing_jobs;
+
+      if (Array.isArray(bookingJobs)) {
+        const updatedBookingJobs = bookingJobs.map((job: any) => {
+          return { ...job, iselected: true };
+        });
+        this.selected_jobs = bookingJobs;
+      } else {
+        console.error("Booking jobs data is not an array or does not exist");
+      }
+      console.log("----------------jjj",this.selected_jobs)
+    }
+  }
+  jobsel(iselected:any, job:any) {
+    console.log(
+      "booking jobs-1--->>>",job);
+    console.log("iselected--->>>", iselected);
+    // if (!iselected) {
+    //   if (
+    //     this.selected_jobs.length > 0 &&
+    //     job.bkj_status == this.selected_jobs[0].bkj_status
+    //   ) {
+    //     this.selected_jobs.push(job);
+    //   } else if (this.selected_jobs.length == 0) {
+    //     this.selected_jobs.push(job);
+    //   } else {
+    //     this.showToast(
+    //       "warning",
+    //       "Please select the jobs with same status",
+    //       "Please select jobs with similar status"
+    //     );
+    //     const index1 = this.selected_jobs.findIndex(
+    //       (x) => x.bkj_id === job.bkj_id
+    //     );
+    //     this.selected_jobs[index1].iselected.value = false;
+    //   }
+    // } else {
+    //   this.isselectalljobs = false;
+    //   const index2 = this.selected_jobs.findIndex(
+    //     (x) => x.bkj_id === job.bkj_id
+    //   );
+    //   this.selected_jobs.splice(index2, 1);
+    // }
+    // console.log(
+    //   "booking jobs--2-->>>",
+    //   this.bookingData.controls["booking_jobs"].value
+    // );
   }
 }

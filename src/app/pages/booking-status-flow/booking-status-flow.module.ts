@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { BookingStatusFlowRoutingModule } from './booking-status-flow-routing.module';
 import { BookingStatusFlowPageComponent } from './booking-status-flow-page/booking-status-flow-page.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { BookingStatusFlowPageComponent } from './booking-status-flow-page/booki
   ],
   imports: [
     CommonModule,
-    BookingStatusFlowRoutingModule
+    BookingStatusFlowRoutingModule,
+    FormsModule
   ]
 })
 export class BookingStatusFlowModule { }

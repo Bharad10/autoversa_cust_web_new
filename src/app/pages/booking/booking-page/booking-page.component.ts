@@ -75,6 +75,7 @@ export class BookingPageComponent {
   numberOfDaysfrmBackend: any;
   minSelectableDate: any;
   maxSelectableDate: any;
+  loading =false;
   constructor(
     private domSanitizer: DomSanitizer,
     private router: Router,
@@ -229,17 +230,7 @@ export class BookingPageComponent {
     this.booking_service.getpickupOptions().subscribe((rdata: any) => {
       if (rdata.ret_data == 'success') {
         if (this.total_distance != 0) {
-          rdata.active_pickuptype_list.forEach(
-            (element: {
-              pk_freeFlag: any;
-              cost: any;
-              vat: any;
-              pk_cost: any;
-            }) => {
-              console.log(
-                '----------drop element.pk_freeFlag----->',
-                element.pk_freeFlag
-              );
+          rdata.active_pickuptype_list.forEach((element: {pk_freeFlag: any;cost: any;vat: any;pk_cost: any;}) => {
               if (element.pk_freeFlag !== '1') {
                 element.cost =
                   parseFloat(element.pk_cost) * parseFloat(this.total_distance);
@@ -288,64 +279,15 @@ export class BookingPageComponent {
       .gettimeslotsbyDate(inputData)
       .subscribe((rdata: any) => {
         if (rdata.ret_data == 'success') {
-          const currentTime = new Date();
-          let bufferTime = parseInt(rdata.settings.gs_bookingbuffer_time);
-
-          console.log('Buffer Time: ' + bufferTime);
-
-          // Create a new Date object for the buffer time
-          const bufferDate = new Date(currentTime);
-          bufferDate.setMinutes(bufferDate.getMinutes() + bufferTime);
-
-          console.log(
-            'Before buffer time addition: ' + currentTime.getMinutes()
-          );
-
-          console.log('After buffer time addition: ' + bufferDate.getMinutes());
-
-          // Continue with your logic using the updated date
-
-          rdata.time_slots.forEach((data: any, index: any) => {
-            let time = data.tm_start_time;
-            const [hoursStr, minutesStr] = time.split(':');
-            const targetHours = parseInt(hoursStr);
-            const targetMinutes = parseInt(minutesStr);
-
-            // Convert target time to minutes since midnight for comparison
-            const targetTimeInMinutes = targetHours * 60 + targetMinutes;
-
-            // Convert buffer time to minutes since midnight for comparison
-            const bufferTimeInMinutes =
-              bufferDate.getHours() * 60 + bufferDate.getMinutes();
-
-            // Compare the target time with the buffer time
-            if (targetTimeInMinutes > bufferTimeInMinutes) {
-              let startTime = data.tm_start_time;
-              let endTime = data.tm_end_time;
-
-              // Convert start time to 12-hour format
-              let startDate = new Date('2000-01-01 ' + startTime);
-              let startTime12hr = startDate.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-              });
-
-              // Convert end time to 12-hour format
-              let endDate = new Date('2000-01-01 ' + endTime);
-              let endTime12hr = endDate.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: 'numeric',
-                hour12: true,
-              });
-
-              let timeData = { startTime: startTime12hr, endTime: endTime12hr };
-
-              this.timeslots.push(timeData);
-            }
+          rdata.time_slots.forEach((element: { tm_id: any; tm_start_time: string; tm_end_time: string; }) => {
+            let slots = {
+              tm_id: element.tm_id,
+              tm_start_time: (((Number(element.tm_start_time.slice(0, 2))) + 11) % 12 + 1) + ":" + element.tm_start_time.slice(3, 5) + " " + (Number(element.tm_start_time.slice(0, 2)) > 12 ? "PM" : "AM"),
+              tm_end_time: (((Number(element.tm_end_time.slice(0, 2))) + 11) % 12 + 1) + ":" + element.tm_end_time.slice(3, 5) + " " + (Number(element.tm_end_time.slice(0, 2)) > 12 ? "PM" : "AM")
+            };
+            console.log("each slot------>", slots);
+            this.timeslots.push(slots);
           });
-
-         console.log(this.timeslots);
           
         }
       });
@@ -411,55 +353,53 @@ export class BookingPageComponent {
     this.pickup_cost = eachpickup.cost;
   }
   createBooking() {
+    this.loading = true;
     this.panelOpenState1 = false;
     this.panelOpenState2 = false;
     this.panelOpenState3 = true;
     this.custId = localStorage.getItem('id');
     this.custName = localStorage.getItem('name');
     let bookingData = {
-      bookingattachment: this.url,
-      custId: atob(this.custId),
-      cust_name: atob(this.custName),
-      vehId: this.customerVehicleId,
-      brand: this.brand,
-      model: this.model,
-      variant: this.variant,
-      bkurl: '',
-      pickupaddress: this.pickup_addressId,
-      dropaddress: this.drop_addressId,
-      bookingdate: this.bookingDate,
-      operationlabourrate: 5,
-      sub_packages: this.subpackages,
-      services: this.services,
-      expenses: [],
-      packid: this.package_id,
-      packtype: this.package_data.pkg_type,
-      packprice: this.tot_package_price,
-      pack_vat: this.tot_package_vat,
-      pickup_vat: this.pickup_vat,
-      gs_vat: this.gs_vat,
-      veh_groupid: this.vehicle_groupid,
-      vgm_labour_rate: this.labour_rate,
-      total_amount: this.tot_package_price,
-      advance: '0',
-      discount: this.discount ? this.discount : '0',
-      bk_branchid: 1,
-      complaint: this.comments,
-      slot: this.booking_slot,
-      pickuptype: this.selectedPickupOption,
-      sourcetype: 'WEB',
-      pack_extra_details: this.pack_extra,
-      bk_pickup_cost: (
-        parseFloat(this.pickup_cost) - parseFloat(this.pickup_vat)
-      ).toFixed(2),
-      coupon_id: this.coupon_id != 0 ? this.coupon_id : null,
-      gs_ispayment: this.gs_ispayment,
-    };
+      'bookingattachment': this.url,
+      "custId": atob(this.custId),
+      "cust_name": atob(this.custName),
+      "vehId": this.customerVehicleId,
+      "brand": this.brand,
+      "model": this.model,
+      "variant": this.variant,
+      "bkurl": "",
+      "pickupaddress": this.pickup_addressId,
+      "dropaddress": this.drop_addressId,
+      "bookingdate": this.bookingDate,
+      "operationlabourrate": 5,
+      "sub_packages": this.subpackages,
+      "services": this.services,
+      "expenses": [],
+      "packid": this.package_id,
+      "packtype": this.package_data.pkg_type,
+      "packprice": this.tot_package_price,
+      "pack_vat": this.tot_package_vat,
+      "pickup_vat": this.pickup_vat,
+      "gs_vat": this.gs_vat,
+      "veh_groupid": this.vehicle_groupid,
+      "vgm_labour_rate": this.labour_rate,
+      "total_amount": this.tot_package_price,
+      "advance": "0",
+      "discount": this.discount ? this.discount : "0",
+      "bk_branchid": 1,
+      'complaint': this.comments,
+      "slot": this.booking_slot,
+      "pickuptype": this.selectedPickupOption,
+      "sourcetype": "WEB",
+      "pack_extra_details": this.pack_extra,
+      "bk_pickup_cost": (parseFloat(this.pickup_cost) - parseFloat(this.pickup_vat)).toFixed(2),
+      "coupon_id": this.coupon_id != 0 ? this.coupon_id : null,
+      "gs_ispayment": this.gs_ispayment
+    }
     this.booking_service.create_booking(bookingData).subscribe((rdata: any) => {
-      if (rdata.ret_data == 'success') {
-        this.router.navigateByUrl(
-          'booking-status-flow/' + btoa(rdata.booking_id)
-        );
+      if (rdata.ret_data == "success"||rdata.ret_data == "paylater") {
+        this.router.navigateByUrl('booking-status-flow/' + btoa(rdata.booking_id));
+        this.loading = false;
       }
     });
   }
@@ -497,208 +437,132 @@ export class BookingPageComponent {
         year: this.year,
         package: atob(this.package_id),
       };
-      this.booking_service
-        .getVehiclePackageInfo(data)
-        .subscribe((rdata: any) => {
-          if (rdata.ret_data == 'success') {
-            this.tot_package_price = 0.0;
-            this.vehicle_groupid = rdata.veh_group.vgm_id;
-            this.labour_rate = rdata.veh_group.vgm_labour_rate;
-            this.gs_ispayment = rdata.settings.gs_ispayment;
-            this.subpackage = rdata.sub_packages;
-            this.servicesFromBackend = rdata.services;
-            this.sparesFromBackend = rdata.spares;
-            if (this.subpackage && this.servicesFromBackend) {
-              let filterdData: any[] = [];
-              this.subpackage.forEach((data: any) => {
-                data.operations.forEach((operation: any) => {
-                  if (
-                    operation.opvm_pack_timeunit == null ||
-                    operation.opvm_billexclusion == null
-                  ) {
-                    filterdData.push(operation);
-                  }
-                });
-                data.spares.forEach((spares: any) => {
-                  if (spares.spares_used == null) {
-                    filterdData.push(spares);
-                  }
-                });
-              });
-              this.servicesFromBackend.forEach((service: any) => {
-                if (service.sevm_cost == 0) {
-                  filterdData.push(service);
-                }
-              });
-              if (filterdData.length > 0) {
-                this.toast.error(
-                  'Sorry, currently we cannot service this model'
-                );
+      this.booking_service.getVehiclePackageInfo(data).subscribe((rdata: any) => {
+        if (rdata.ret_data == "success") {
+          this.tot_package_price = 0.00;
+          this.vehicle_groupid = rdata.veh_group.vgm_id;
+          this.labour_rate = rdata.veh_group.vgm_labour_rate;
+          this.gs_ispayment = rdata.settings.gs_ispayment;
+          this.subpackage = rdata.sub_packages;
+          this.servicesFromBackend = rdata.services;
+          this.sparesFromBackend = rdata.spares;
+          let filterdData: any[] = [];
+          rdata.services.forEach((element: any) => {
+            if (element.pse_billexclusion == "0") {
+              if (element.sevm_cost != "" && element.sevm_cost != null) {
+                if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat) element.sevm_vat = (parseFloat(element.sevm_cost) * parseFloat(rdata.settings.gs_vat) / 100).toFixed(2);
+                else element.sevm_vat = 0.00;
+                element.sevm_price = (parseFloat(element.sevm_cost) + parseFloat(element.sevm_vat)).toFixed(2);
+                element.tot_cost = parseFloat(element.sevm_cost).toFixed(2);
+                this.tot_package_price = this.tot_package_price + parseFloat(element.sevm_cost);
+              } else {
+                filterdData.push(element);
+                element.tot_cost = 0.00;
+                element.sevm_cost = 0.00;
+                element.sevm_vat = 0.00;
+                element.sevm_price = 0.00;
               }
-              console.log('This is Something Else', filterdData);
-              filterdData = [];
-              return;
+            } else {
+              element.tot_cost = element.sevm_cost != null ? "cost excluded flag false" : 0.00;
+              element.sevm_cost = 0.00;
+              element.sevm_vat = 0.00;
+              element.sevm_price = 0.00;
+
             }
-            rdata.services.forEach((element: any) => {
-              if (element.pse_billexclusion == '0') {
-                if (element.sevm_cost != '' && element.sevm_cost != null) {
-                  if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat)
-                    element.sevm_vat = (
-                      (parseFloat(element.sevm_cost) *
-                        parseFloat(rdata.settings.gs_vat)) /
-                      100
-                    ).toFixed(2);
-                  else element.sevm_vat = 0.0;
-                  element.sevm_price = (
-                    parseFloat(element.sevm_cost) + parseFloat(element.sevm_vat)
-                  ).toFixed(2);
-                  element.tot_cost = parseFloat(element.sevm_cost).toFixed(2);
-                  this.tot_package_price =
-                    this.tot_package_price + parseFloat(element.sevm_cost);
+          });
+          rdata.sub_packages.forEach((element: any) => {
+            let pack_cost = 0;
+            element.operations.forEach((element2: any) => {
+              if (element2.opvm_billexclusion == "0" && element2.spo_billexclusion == "0") {
+
+                if (element2.opvm_pack_timeunit != null && element2.opvm_pack_timeunit != "") {
+                  element2.op_cost = (parseFloat(rdata.veh_group.vgm_labour_rate) * parseFloat(element2.opvm_pack_timeunit)).toFixed(2);
+                  if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat) element2.op_vat = (parseFloat(element2.op_cost) * parseFloat(rdata.settings.gs_vat) / 100).toFixed(2);
+                  else element2.op_vat = 0.00;
+                  element2.op_total = (parseFloat(element2.op_cost) + parseFloat(element2.op_vat)).toFixed(2);
+                  pack_cost = pack_cost + (parseFloat(rdata.veh_group.vgm_labour_rate) * parseFloat(element2.opvm_pack_timeunit));
                 } else {
-                  element.tot_cost = 0.0;
-                  element.sevm_cost = 0.0;
-                  element.sevm_vat = 0.0;
-                  element.sevm_price = 0.0;
+                filterdData.push(element2);
+                  element2.op_cost = 0.00;
+                  element2.op_vat = 0.00;
+                  element2.op_total = 0.00;
                 }
               } else {
-                element.tot_cost =
-                  element.sevm_cost != null ? 'cost excluded flag false' : 0.0;
-                element.sevm_cost = 0.0;
-                element.sevm_vat = 0.0;
-                element.sevm_price = 0.0;
+                element2.op_cost = element2.opvm_pack_timeunit != null ? "cost excluded flag false" : "0.00";
+                element2.op_vat = element2.opvm_pack_timeunit != null ? "cost excluded flag false" : "0.00";
+                element2.op_total = element2.opvm_pack_timeunit != null ? "cost excluded flag false" : "0.00";
+
               }
             });
-            rdata.sub_packages.forEach((element: any) => {
-              let pack_cost = 0;
-              element.operations.forEach((element2: any) => {
-                if (
-                  element2.opvm_billexclusion == '0' &&
-                  element2.spo_billexclusion == '0'
-                ) {
-                  if (
-                    element2.opvm_pack_timeunit != null &&
-                    element2.opvm_pack_timeunit != ''
-                  ) {
-                    element2.op_cost = (
-                      parseFloat(rdata.veh_group.vgm_labour_rate) *
-                      parseFloat(element2.opvm_pack_timeunit)
-                    ).toFixed(2);
-                    if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat)
-                      element2.op_vat = (
-                        (parseFloat(element2.op_cost) *
-                          parseFloat(rdata.settings.gs_vat)) /
-                        100
-                      ).toFixed(2);
-                    else element2.op_vat = 0.0;
-                    element2.op_total = (
-                      parseFloat(element2.op_cost) + parseFloat(element2.op_vat)
-                    ).toFixed(2);
-                    pack_cost =
-                      pack_cost +
-                      parseFloat(rdata.veh_group.vgm_labour_rate) *
-                        parseFloat(element2.opvm_pack_timeunit);
-                  } else {
-                    element2.op_cost = 0.0;
-                    element2.op_vat = 0.0;
-                    element2.op_total = 0.0;
+            element.spares.forEach((element3: any) => {
+              let spare_cost = 0;
+              if (element3.spp_billexclusion == "0") {
+                element3.spares_used.forEach((element4: any) => {
+                  if (element4.scvm_price != "" && element4.scvm_price != null) {
+                    spare_cost = spare_cost + (parseFloat(element4.scvm_price) * parseFloat(element4.scvm_quantity));
+
+                  }else{
+                filterdData.push(element3);
                   }
-                } else {
-                  element2.op_cost =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
-                  element2.op_vat =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
-                  element2.op_total =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
-                }
-              });
-              element.spares.forEach((element3: any) => {
-                let spare_cost = 0;
-                if (element3.spp_billexclusion == '0') {
-                  element3.spares_used.forEach((element4: any) => {
-                    if (
-                      element4.scvm_price != '' &&
-                      element4.scvm_price != null
-                    ) {
-                      spare_cost =
-                        spare_cost +
-                        parseFloat(element4.scvm_price) *
-                          parseFloat(element4.scvm_quantity);
-                    }
-                  });
-                  element3.sp_price = spare_cost.toFixed(2);
-                  element3.sp_vat = (
-                    (parseFloat(element3.sp_price) *
-                      parseFloat(rdata.settings.gs_vat)) /
-                    100
-                  ).toFixed(2);
-                  element3.sp_cost = (
-                    parseFloat(element3.sp_price) + parseFloat(element3.sp_vat)
-                  ).toFixed(2);
-                  pack_cost = pack_cost + spare_cost;
-                } else {
-                  element3.sp_price = 'cost excluded flag false';
-                  element3.sp_vat = 'cost excluded flag false';
-                  element3.sp_cost = 'cost excluded flag false';
-                }
-              });
-              element.pack_cost = pack_cost.toFixed(2);
-              this.tot_package_price = this.tot_package_price + pack_cost;
-            });
-            rdata.pack_extra_details.forEach((element4: any) => {
-              if (element4.pe_cost != null && element4.pe_cost != '') {
-                this.tot_package_price =
-                  this.tot_package_price + parseFloat(element4.pe_cost);
-                element4.pe_price = element4.pe_cost;
-                element4.pe_vat = (
-                  (parseFloat(element4.pe_cost) *
-                    parseFloat(rdata.settings.gs_vat)) /
-                  100
-                ).toFixed(2);
-                element4.pe_cost =
-                  parseFloat(element4.pe_cost) +
-                  (parseFloat(element4.pe_cost) *
-                    parseFloat(rdata.settings.gs_vat)) /
-                    100;
-                element4.pe_cost = element4.pe_cost.toFixed(2);
+                });
+                element3.sp_price = spare_cost.toFixed(2);
+                element3.sp_vat = (parseFloat(element3.sp_price) * parseFloat(rdata.settings.gs_vat) / 100).toFixed(2);
+                element3.sp_cost = (parseFloat(element3.sp_price) + parseFloat(element3.sp_vat)).toFixed(2);
+                pack_cost = pack_cost + spare_cost;
               } else {
-                element4.pe_price = 0.0;
-                element4.pe_vat = 0.0;
-                element4.pe_cost = 0.0;
+                element3.sp_price = "cost excluded flag false";
+                element3.sp_vat = "cost excluded flag false";
+                element3.sp_cost = "cost excluded flag false";
+
               }
             });
-            // if(rdata.pack_factor&&rdata.pack_factor.pvg_factor){
-            //   this.tot_package_price = Math.round(this.tot_package_price * parseFloat(rdata.pack_factor.pvg_factor));
-            // }
-
-            if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat) {
-              this.tot_package_vat =
-                (this.tot_package_price * parseFloat(rdata.settings.gs_vat)) /
-                100;
+            element.pack_cost = pack_cost.toFixed(2);
+            this.tot_package_price = this.tot_package_price + pack_cost;
+          });
+          rdata.pack_extra_details.forEach((element4: any) => {
+            if (element4.pe_cost != null && element4.pe_cost != "") {
+              this.tot_package_price = this.tot_package_price + (parseFloat(element4.pe_cost));
+              element4.pe_price = element4.pe_cost;
+              element4.pe_vat = (parseFloat(element4.pe_cost) * parseFloat(rdata.settings.gs_vat) / 100).toFixed(2);
+              element4.pe_cost = parseFloat(element4.pe_cost) + (parseFloat(element4.pe_cost) * parseFloat(rdata.settings.gs_vat) / 100);
+              element4.pe_cost = element4.pe_cost.toFixed(2);
+            } else {
+              filterdData.push(element4);
+              element4.pe_price = 0.00;
+              element4.pe_vat = 0.00;
+              element4.pe_cost = 0.00;
             }
+          });
+          // if(rdata.pack_factor&&rdata.pack_factor.pvg_factor){
+          //   this.tot_package_price = Math.round(this.tot_package_price * parseFloat(rdata.pack_factor.pvg_factor));
+          // }
 
-            // this.detailedPackage = {
-            //   "labourrate": rdata.veh_group.vgm_labour_rate,
-            //   "veh_group": rdata.veh_group.vgm_code,
-            //   // "group_start_year": rdata.veh_group.vgroup_start_year,
-            //   // "group_end_year": rdata.veh_group.vgroup_end_year,
-            //   "group_id": rdata.veh_group.vgm_id,
-            //   "subpackages": rdata.sub_packages,
-            //   "services": rdata.services,
-            //   "extracharges":rdata.pack_extra_details,
-            //   "service_vehgroup":rdata.service_veh_group,
-            //   "gs_vat":rdata.settings.gs_vat
-            // }
-            this.tot_package_price = Math.round(this.tot_package_price);
+          if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat) {
+            this.tot_package_vat = (this.tot_package_price * parseFloat(rdata.settings.gs_vat) / 100);
           }
-        });
+          if (filterdData.length > 0) {
+            this.toast.error(
+              'Sorry, currently we cannot service this model'
+            );
+          }
+          // this.detailedPackage = {
+          //   "labourrate": rdata.veh_group.vgm_labour_rate,
+          //   "veh_group": rdata.veh_group.vgm_code,
+          //   // "group_start_year": rdata.veh_group.vgroup_start_year,
+          //   // "group_end_year": rdata.veh_group.vgroup_end_year,
+          //   "group_id": rdata.veh_group.vgm_id,
+          //   "subpackages": rdata.sub_packages,
+          //   "services": rdata.services,
+          //   "extracharges":rdata.pack_extra_details,
+          //   "service_vehgroup":rdata.service_veh_group,
+          //   "gs_vat":rdata.settings.gs_vat
+          // }
+          this.tot_package_price = Math.round(this.tot_package_price);
+          console.log("booking price------>",this.tot_package_price)
+        }
+      });
     } else {
+
     }
   }
   closeAddressModal() {
@@ -718,8 +582,10 @@ export class BookingPageComponent {
     let data = {
       custId: atob(this.custId),
     };
-    this.booking_service.getCustomerBookings(data).subscribe((data) => {
-      this.custBookingList = data.book_list;
+    this.booking_service.GetCustomerbookings(data).subscribe((rdata:any) => {
+      if(rdata.ret_data=="success"){
+      this.custBookingList = rdata.book_list;
+      }
     });
   }
 }

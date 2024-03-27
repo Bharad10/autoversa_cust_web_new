@@ -369,7 +369,7 @@
                     </div>
                     <br />
                     <div class="pay_btn">
-                      <button (click)="createBooking()">PAY</button>
+                      <button [disabled]="loading" (click)="createBooking()">PAY</button>
                     </div>
                   </mat-expansion-panel>
                 </mat-accordion>
