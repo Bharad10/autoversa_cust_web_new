@@ -66,4 +66,6 @@ export class BookingService {
     return this.http.post(environment.base_url + 'get_couponsforcustomer',data, {headers : this.reqHeader});
   }
 
+  
+
 }

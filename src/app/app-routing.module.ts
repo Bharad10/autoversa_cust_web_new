@@ -54,6 +54,9 @@ const routes: Routes = [
     path:'vehiclelist',loadChildren:()=>import('../app/pages/vehicle-list/vehicle-list.module').then(m=>m.VehicleListModule)
   },
   {
+    path:'vehicleScheduleDrop',loadChildren:()=>import('../app/pages/schedule-drop/schedule-drop.module').then(m=>m.ScheduleDropModule)
+  },
+  {
     path:'**',component:NotfoundPageComponent
   }
 ];
