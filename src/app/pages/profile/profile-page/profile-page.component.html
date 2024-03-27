@@ -65,17 +65,19 @@
                         <div class="col-md-6">
                           <h2 class="heading">Ongoing Bookings</h2>
                         </div>
-                        <div class="profile_card text-center">
-                          <div class="row" style="margin-bottom: 3%; border: 1px solid; border-radius: 16px;padding: 2%;">
-                            <div class="col-xl-4">
-                              <div class="card_image_section">
-                                <img src="./assets/icons/benz_icon.png" alt="" srcset=""
-                                  style="z-index: 1; border-radius: 12%" />
+                        <div class="profile_card_booklist text-center">
+                          <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
+                            <div class="row"
+                              style="margin-bottom: 3%; border: 1px solid; border-radius: 16px;padding: 2%;"
+                              *ngFor="let book of bookingList">
+                              <div class="col-xl-4">
+                                <div class="card_image_section">
+                                  <img src="./assets/icons/benz_icon.png" alt="" srcset=""
+                                    style="z-index: 1; border-radius: 12%" />
+                                </div>
                               </div>
-                            </div>
-                            <div class="col-xl-8 align-self-center">
-                              <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
-                                <div class="card_content" *ngFor="let book of bookingList">
+                              <div class="col-xl-8 align-self-center">
+                                <div class="card_content">
                                   <p class="profile-details">
                                     <strong>{{book.cv_plate_number
                                       }}</strong>
@@ -92,12 +94,13 @@
                                     <strong>Time: </strong>{{ book.formattedStartTime }} - {{ book.formattedEndTime }}
                                   </p>
                                 </div>
-                              </ng-container>
-                              <ng-template #noBookings>
-                                <p style=" font-size: xx-large; font-weight: bold; ">No bookings</p>
-                              </ng-template>
+                              </div>
+
                             </div>
-                          </div>
+                          </ng-container>
+                          <ng-template #noBookings>
+                            <p style=" font-size: xx-large; font-weight: bold; ">No Ongoing Bookings</p>
+                          </ng-template>
                         </div>
                       </div>
                     </div>
@@ -150,32 +153,47 @@
                           <h2 class="heading">My Previous Bookings</h2>
                         </div>
                         <div class="col-xl-12">
-                          <div class="profile_card text-center">
-                            <div class="row">
-                              <div class="col-xl-4">
-                                <div class="card_image_section">
-                                  <img src="./assets/images/cust_car.png" alt="" srcset=""
-                                    style="z-index: 1; border-radius: 12%" />
+                          <div class="profile_card_booklist text-center">
+                            <ng-container
+                              *ngIf="bookingHistoryList && bookingHistoryList.length > 0; else noBookingsHistory">
+                              <div class="row historylist"
+                              [style.border]="bookhistory.st_code === 'CANC' ? '1px solid red' : '1px solid'"
+                                *ngFor="let bookhistory of bookingHistoryList">
+                                <div class="col-xl-4">
+                                  <div class="card_image_section">
+                                    <img src="./assets/icons/benz_icon.png" alt="" srcset=""
+                                      style="z-index: 1; border-radius: 12%" />
+                                  </div>
+                                </div>
+                                <div class="col-xl-8 align-self-center">
+                                  <div class="card_content">
+                                    <p class="profile-details">
+                                      <strong>{{bookhistory.cv_plate_number
+                                        }}</strong>
+                                    </p>
+                                    <p class="profile-details">{{bookhistory.cv_make}} {{bookhistory.cv_model}}
+                                      {{bookhistory.cv_variant}}
+                                      ({{bookhistory.cv_year}})</p>
+                                    <p class="profile-details">
+                                      {{ bookhistory.pkg_name }} ({{bookhistory.bk_number}})
+                                    </p>
+                                    <p class="profile-details">
+                                      <strong>Date: </strong>{{ bookhistory.formattedDate }}
+                                    </p>
+                                    <p class="profile-details">
+                                      <strong>Time: </strong>{{ bookhistory.formattedStartTime }} - {{
+                                      bookhistory.formattedEndTime }}
+                                    </p>
+                                    <p class="profile-details" *ngIf="bookhistory.st_code === 'CANC'">
+                                      <strong>Reason: </strong>{{ bookhistory.bkt_content.split(':')[1].trim() }}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-xl-8 align-self-center">
-                                <div class="card_content">
-                                  <p class="profile-details">
-                                    <strong>DU 3455</strong>
-                                  </p>
-                                  <p class="profile-details">Mercedes Benz</p>
-                                  <p class="profile-details">
-                                    Regular Oil Service (BK 108)
-                                  </p>
-                                  <p class="profile-details">
-                                    <strong>Date of booking: </strong>03-10-2023
-                                  </p>
-                                  <p class="profile-details">
-                                    <strong>Date of delivery: </strong>05-10-2023
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
+                            </ng-container>
+                            <ng-template #noBookingsHistory>
+                              <p style=" font-size: xx-large; font-weight: bold; ">No Previous Bookings</p>
+                            </ng-template>
                           </div>
                         </div>
                       </div>

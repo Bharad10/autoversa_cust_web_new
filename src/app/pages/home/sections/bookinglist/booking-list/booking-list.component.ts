@@ -1,25 +1,37 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
+import { BookingService } from 'src/app/services/booking.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-booking-list',
+  templateUrl: './booking-list.component.html',
+  styleUrls: ['./booking-list.component.css']
 })
-export class HomeComponent {
+export class BookingListComponent {
   //user Id
   userId: any;
 
   // Booking List
   bookingList: any;
+  serviceData:any;
+  imageurl: any = "assets/images/sample.jpg";
+  base_url = environment.aws_url;
+  
+  constructor( private authService: AuthService,private booking_service : BookingService, private router: Router ) {
 
-  constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
+  }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('id');
     this.fetchBookingList();
+    this.booking_service.allServicesListedForLandingPage().subscribe(rdata=>{
+      if (rdata.ret_data == "success") {
+        this.serviceData = rdata.data;
+        console.log("hi======>", this.serviceData);
+      }
+    })
   }
 
   fetchBookingList() {
@@ -48,5 +60,9 @@ export class HomeComponent {
           };
         });
     });
+  }
+  
+  bookNow(package_id: any) {
+    this.router.navigateByUrl('booking/' + btoa(package_id));
   }
 }

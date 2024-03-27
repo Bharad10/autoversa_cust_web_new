@@ -25,8 +25,9 @@ export class ProfilePageComponent implements OnInit {
   custData: any;
 
   // Booking List
+  bookingList: any;
+  bookingHistoryList: any;
 
-  bookingList:any;
   //Vehicle List
   data: any
   vehicleList: any;
@@ -55,6 +56,7 @@ export class ProfilePageComponent implements OnInit {
     });
     this.fetchCustomer();
     this.fetchBookingList();
+    this.fetchBookingHistoryList();
     if ("id" in localStorage) {
       this.logoutVar = true;
     }
@@ -68,22 +70,47 @@ export class ProfilePageComponent implements OnInit {
       custId: atob(this.userId)
     };
     this.authService.getBookingList(data).subscribe((data) => {
-      this.bookingList = data.book_list.map((booking: any) => {
-        // Format date
+      this.bookingList = data.book_list
+        .filter((booking: any) => booking.st_code !== "CANC" && booking.st_code !== "DLCC")
+        .map((booking: any) => {
+          const bookingDate = new Date(booking.bk_booking_date);
+          const formattedDate = bookingDate.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          });
+          const startTime = new Date(`1970-01-01T${booking.tm_start_time}`);
+          const endTime = new Date(`1970-01-01T${booking.tm_end_time}`);
+          const formattedStartTime = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          const formattedEndTime = endTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          return {
+            ...booking,
+            formattedDate,
+            formattedStartTime,
+            formattedEndTime
+          };
+        });
+    });
+  }
+
+  fetchBookingHistoryList() {
+    let data = {
+      custId: atob(this.userId)
+    };
+    this.authService.getBookingHistoryList(data).subscribe((response) => {
+      const cancelledList = response.cancelled_list || [];
+      const bookList = response.book_list || [];
+      const mergedList = [...cancelledList, ...bookList].map((booking: any) => {
         const bookingDate = new Date(booking.bk_booking_date);
         const formattedDate = bookingDate.toLocaleDateString('en-GB', {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric'
         });
-  
-        // Format time
         const startTime = new Date(`1970-01-01T${booking.tm_start_time}`);
         const endTime = new Date(`1970-01-01T${booking.tm_end_time}`);
         const formattedStartTime = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         const formattedEndTime = endTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  
-        // Assign formatted values to booking object
         return {
           ...booking,
           formattedDate,
@@ -91,7 +118,7 @@ export class ProfilePageComponent implements OnInit {
           formattedEndTime
         };
       });
-      console.log("yahoo", this.bookingList);
+      this.bookingHistoryList = mergedList;
     });
   }
 
@@ -107,8 +134,6 @@ export class ProfilePageComponent implements OnInit {
       this.custState = this.custData.state_name;
       this.emiritesId = this.custData.state_id;
     });
-
-
   }
 
   openProfileEditModal() {
@@ -155,7 +180,6 @@ export class ProfilePageComponent implements OnInit {
 
   pictureFile(event: any) {
     this.uploadFile = event.target.files[0];
-    console.log(this.uploadFile);
   }
 
   editProfile() {
@@ -169,7 +193,6 @@ export class ProfilePageComponent implements OnInit {
       emiratesId: this.emiritesId,
     };
     this.authService.editUserDetails(data).subscribe((data) => {
-      console.log(data);
     });
     this.fetchCustomer();
     this.closeProfileEditModal();
@@ -180,7 +203,6 @@ export class ProfilePageComponent implements OnInit {
     if (modelDiv != null) {
       modelDiv.style.display = 'none';
     }
-
   }
 
   setVehicleBrand(event: any) {
@@ -190,7 +212,6 @@ export class ProfilePageComponent implements OnInit {
     };
     this.authService.vehicleModels(brandData).subscribe((data) => {
       this.vehicle_models = data.models;
-      console.log('Vehicle Models', data.models);
     });
   }
 
@@ -201,10 +222,8 @@ export class ProfilePageComponent implements OnInit {
       brand: this.selected_brand,
       model: event.target.value,
     };
-    console.log('variant data-------------------->', variantData);
     this.authService.vehicleVariants(variantData).subscribe((response) => {
       this.vehicle_variants = response.variants;
-      console.log('hereeeeeeeee--->', this.vehicle_variants);
     });
   }
 
@@ -232,14 +251,12 @@ export class ProfilePageComponent implements OnInit {
           this.vehicle_years.push(year);
         }
       }
-      console.log("Vehicle Years",this.vehicle_years);
     });
   }
 
   setVehicleYear(event: any) {
     this.selected_year = event.target.value;
   }
-
   createModel() {
     let car_info = {
       cv_make: this.selected_brand,
@@ -250,7 +267,6 @@ export class ProfilePageComponent implements OnInit {
       cv_model: this.selected_model,
     };
     this.authService.createCarModel(car_info).subscribe((data) => {
-      console.log(data);
     });
     this.vehicle_plate_number = '';
     this.toast.success("Vehicle Added Sucessfully!")
@@ -263,7 +279,6 @@ export class ProfilePageComponent implements OnInit {
       custId: atob(this.userId)
     }
     this.authService.customerVehicleList(inData).subscribe(data => {
-      console.log(data);
       this.vehicleList = data.vehList
     })
   }
