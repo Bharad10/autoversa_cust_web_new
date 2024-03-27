@@ -32,6 +32,7 @@ export class ScheduleDropPageComponent implements OnInit {
     this.getBookingDetails()
     this.getCustomerAddress()
     this.getBookingDetailsForDateConfirmation()
+    
   }
 
   getBookingDetailsForDateConfirmation() {
@@ -70,11 +71,12 @@ export class ScheduleDropPageComponent implements OnInit {
   getCustomerAddress(){
     this.booking_service.GetcustomerAddresses({ cust_id: localStorage.getItem('id') }).subscribe((data:any)=>{
       this.custAdresses = data.cust_address
+      console.log(this.custAdresses);
     })
     
   }
 
-  selectAddress(event:any){
+  selectAddress(){
     
   }
 
