@@ -290,6 +290,10 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
+  redirectToBookingStatus(book: any) {
+    this.router.navigateByUrl('booking-status-flow/' + btoa(book));
+  }
+
   logout() {
     localStorage.clear();
     location.reload();

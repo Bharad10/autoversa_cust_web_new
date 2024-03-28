@@ -69,7 +69,7 @@
                           <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
                             <div class="row"
                               style="margin-bottom: 3%; border: 1px solid; border-radius: 16px;padding: 2%;"
-                              *ngFor="let book of bookingList">
+                              *ngFor="let book of bookingList" (click)="redirectToBookingStatus(book.bk_id)">
                               <div class="col-xl-4">
                                 <div class="card_image_section">
                                   <img src="./assets/icons/benz_icon.png" alt="" srcset=""
@@ -157,7 +157,7 @@
                             <ng-container
                               *ngIf="bookingHistoryList && bookingHistoryList.length > 0; else noBookingsHistory">
                               <div class="row historylist"
-                              [style.border]="bookhistory.st_code === 'CANC' ? '1px solid red' : '1px solid'"
+                                [style.border]="bookhistory.st_code === 'CANC' ? '1px solid red' : '1px solid'"
                                 *ngFor="let bookhistory of bookingHistoryList">
                                 <div class="col-xl-4">
                                   <div class="card_image_section">

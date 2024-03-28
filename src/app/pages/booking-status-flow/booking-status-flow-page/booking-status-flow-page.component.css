@@ -108,6 +108,20 @@
     margin-right: 5px;
 }
 
+.outlinebutton>button {
+    font-family: 'Montserrat-Semibold', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 50px;
+    outline: none;
+    background-color: white;
+    color: black;
+    text-transform: uppercase;
+}
+
 @media only screen and (max-width: 826px) and (min-width: 300px) {
 
     .choose_car_box {
@@ -120,6 +134,10 @@
 
     .inner_breand_logo {
         padding: 0px 0px !important;
+    }
+    
+    .outlinebutton{
+        margin-bottom: 2%;
     }
 
     .bodyheading {
