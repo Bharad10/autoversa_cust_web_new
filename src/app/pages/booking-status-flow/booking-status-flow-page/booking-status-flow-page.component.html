@@ -296,8 +296,8 @@
                                 </div>
                               </div>
                           </div>
-                          <hr>
-                          <table id="package_table">
+                          <hr *ngIf="pendingJobs_flag">
+                          <table id="package_table" *ngIf="pendingJobs_flag">
                             <thead>
                               <tr>
                                 <th
@@ -348,8 +348,8 @@
                               <div class="col-4">
                                 <button
                                 type="button"
-                                class="btn btn-success"
-                                (click)="approveSelectedJobs();"
+                                class="btn btn-danger"
+                                (click)="approveSelectedJobs(1);"
                                 *ngIf="selected_jobs.length>0"
                                 mdbRipple
                               >
@@ -360,7 +360,7 @@
                                 <button
                                 type="button"
                                 class="btn btn-success"
-                                (click)="approveSelectedJobs();"
+                                (click)="approveSelectedJobs(0);"
                                 *ngIf="selected_jobs.length>0"
                                 mdbRipple
                               >

@@ -19,6 +19,7 @@ export class BookingStatusFlowPageComponent {
   Booking_payments: any[] = [];
   selectAll=false;
   selected_jobs:any[] = [];
+  pendingJobs_flag =false;
   cust_status_master = [
     'BKCC',
     'DRPC',
@@ -305,6 +306,13 @@ export class BookingStatusFlowPageComponent {
       if(rdata.ret_data=="success"){
         this.booking_details = rdata.booking;
         this.booking_details.bk_consumcost = parseFloat(this.booking_details.bk_consumcost)+parseFloat(this.booking_details.bk_consumvat);
+        rdata.jobs.forEach((element: { status: any; bkj_status: any; job_id: any; bkj_id: any; }) => {
+          element.status = element.bkj_status;
+          element.job_id = element.bkj_id;
+          if(element.bkj_status==1){
+            this.pendingJobs_flag = true;
+          }
+        });
         this.booing_jobs =rdata.jobs;
         this.Booking_payments = rdata.payments;
        this.calculateTotal();
@@ -351,7 +359,6 @@ export class BookingStatusFlowPageComponent {
 
   }
   Selectalljobs() {
-    console.log("----------------selectAll-----",this.selectAll)
     if (!this.selectAll) {
       this.selected_jobs = [];
       const bookingJobs = this.booing_jobs;
@@ -361,13 +368,10 @@ export class BookingStatusFlowPageComponent {
           return { ...job, iselected: true };
         });
         
-        
         this.selected_jobs = bookingJobs;
         this.booing_jobs = updatedBookingJobs;
       } else {
-        console.error("Booking jobs data is not an array or does not exist");
       }
-      console.log("----------------jjj",this.selected_jobs)
   }else{
     this.selected_jobs = [];
     const bookingJobs = this.booing_jobs;
@@ -395,7 +399,27 @@ export class BookingStatusFlowPageComponent {
     }
 
   }
-  approveSelectedJobs(){
+  approveSelectedJobs(flag:any){
+    if(flag==0){
+      this.selected_jobs.forEach(element => {
+        element.status=2;
+        element.job_accepted_cost = element.bkj_cust_cost;
+      });
+    }else{
+      this.selected_jobs.forEach(element => {
+        element.status=3;
+      });
+    }
+    let input_data ={
+      'selectedjobs': this.selected_jobs,
+      'bookid': this.booking_details.bk_id,
+      "booking_version": this.booking_details.bk_version
+    }
+    this.booking_service.JobstatusChange(input_data).subscribe((rdata: any) => {
+      if(rdata.ret_data=="success"){
+        this.onWorkcardSelection(1);
+      }
+    });
 
   }
 }
