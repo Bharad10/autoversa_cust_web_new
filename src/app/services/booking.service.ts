@@ -65,7 +65,9 @@ export class BookingService {
   getCouponsForCustomer(data:any): Observable<any>{
     return this.http.post(environment.base_url + 'get_couponsforcustomer',data, {headers : this.reqHeader});
   }
-
+  JobstatusChange(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/multiple_Job_status_update_bycust',data, {headers : this.reqHeader});
+  }
   
 
 }
