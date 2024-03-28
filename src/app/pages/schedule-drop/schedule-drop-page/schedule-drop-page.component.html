@@ -86,20 +86,11 @@
                               </div>
 
                               <div class="p-4">
-                                <ng-select
-                                  [(ngModel)]="dropAddressId"
-                                  (change)="selectAddress($event)"
-                                  selected="dropAddressId"
-                                >
-                                  <ng-option aria-selected="true">
-                                    Selected Location
-                                  </ng-option>
-                                  <ng-option
-                                    *ngFor="let address of custAdresses"
-                                    [value]="address.cad_id"
-                                    >{{ address.cad_address }}</ng-option
-                                  >
-                                </ng-select>
+                                <ng-select [(ngModel)]="dropAddressId" (change)="selectAddress()">
+                              <ng-option value="0" >Select Pickup Address</ng-option>
+                              <ng-option *ngFor="let eachaddress of custAdresses"
+                                [value]="eachaddress.cad_id">{{eachaddress.cad_address}}</ng-option>
+                            </ng-select>
                               </div>
                             </div>
                           </div>

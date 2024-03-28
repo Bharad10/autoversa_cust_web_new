@@ -62,6 +62,13 @@
     font-size: 22px;
 }
 
+.sub-status-details {
+    text-align: left;
+    margin-bottom: 0% !important;
+    font-family: 'Montserrat-Regular', sans-serif;
+    font-size: 22px;
+}
+
 .status-details-inactive{
     text-align: left;
     margin-bottom: 0% !important;

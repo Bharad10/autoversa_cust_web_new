@@ -2,55 +2,61 @@
   <div class="inner_banner_section">
   </div>
 </div>
-
 <div class="brands_section_area">
- <div class="inner_brands_section">
-  <div class="container">
-   <div class="row">
-    <div class="col-xl-12 service-content">
-     <div class="main_brands_area">
-      <div class="inner_breand_logo">
-        <h2 class="heading">Vehicle List</h2>
-        <div class="choose_car_box">
-         <div class="choose_car_box_main">
-          <div class="heading_section">
-            <div>
-              <button (click)="openaddModal()" class="btn btn-warning text-white"> Add Vehicle </button>
-            </div>
-          </div>
-        
-          <div class="vehicle_list">
-            <div *ngFor="let item of data " class="card">
-              <div class="card-body">
-                <div class="card-content">
-                  <div>
-                    <img src="https://www.shutterstock.com/image-vector/mercedez-benz-logo-sign-symbol-600nw-2269881673.jpg"
-                      alt="" style="height: 100px;">
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;">
-                    <span>{{item.cv_plate_number}}</span>
-                    <span>{{item.cv_make}} {{item.cv_model}}</span>
-                    <span>{{item.cv_year}}</span>
-                  </div>
-                  <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;" class="card_buttons">
-                    <div class="d-flex" style="gap: 5px;">
-                      <button class="btn btn-danger">Delete</button>
-                      <button (click)="openeditModal(item.cv_id)" class="btn btn-primary">Edit</button>
+  <div class="inner_brands_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 service-content">
+          <div class="main_brands_area">
+            <div class="inner_breand_logo">
+              <h2 class="heading">Vehicle List</h2>
+              <div class="choose_car_box">
+                <div class="choose_car_box_main">
+                  <div class="heading_section">
+                    <div class="row">
+                      <div class="col-4">
+                      </div>
+                      <div class="col-4">
+                      </div>
+                      <div class="col-4" style="text-align: right;">
+                        <button (click)="openaddModal()" class="btn btn-warning text-white"> Add Vehicle </button>
+                      </div>
                     </div>
                   </div>
+                  <div class="vehicle_list">
+                    <div class="card" *ngFor="let item of data ">
+                      <div class="card-body">
+                        <div class="card-content">
+                          <div>
+                            <img
+                              src="https://www.shutterstock.com/image-vector/mercedez-benz-logo-sign-symbol-600nw-2269881673.jpg"
+                              alt="" style="height: 100px;">
+                          </div>
+                          <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;">
+                            <span>{{item.cv_plate_number}}</span>
+                            <span>{{item.cv_make}} {{item.cv_model}}</span>
+                            <span>{{item.cv_year}}</span>
+                          </div>
+                          <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;"
+                            class="card_buttons">
+                            <div class="d-flex" style="gap: 5px;">
+                              <button class="btn btn-danger">Delete</button>
+                              <button (click)="openeditModal(item.cv_id)" class="btn btn-primary">Edit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
-        
-         </div> 
         </div>
       </div>
-     </div> 
     </div>
-   </div>   
   </div>
- </div> 
 </div>
 
 <!-- add modal content -->
@@ -87,7 +93,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()" >Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()">Close</button>
         <button type="button" (click)="createModel()" class="btn btn-warning">Save</button>
       </div>
     </div>

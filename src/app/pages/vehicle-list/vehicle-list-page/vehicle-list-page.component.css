@@ -1,4 +1,3 @@
-
 .banner_section {
     background-image: url('^assets/images/top_banner.png');
     width: 100%;
@@ -7,6 +6,7 @@
     background-size: cover;
     background-attachment: fixed;
 }
+
 .banner_section {
     position: relative;
 }
@@ -17,7 +17,7 @@
     padding-bottom: 30px;
 }
 
-.heading_section{
+.heading_section {
     .banner_section {
         background-image: url('^assets/images/top_banner.png');
         width: 100%;
@@ -26,64 +26,65 @@
         background-size: cover;
         background-attachment: fixed;
     }
+
     .banner_section {
         position: relative;
     }
-    
+
     .brands_section_area {
         background: #F3F3F3;
         padding-top: 15px;
         padding-bottom: 30px;
     }
-    
-    .heading_section{
+
+    .heading_section {
         padding: 30px;
         display: flex;
         justify-content: space-between;
     }
-    
-    .vehicle_list{
+
+    /* .vehicle_list {
         padding: 30px;
         display: flex;
         justify-content: center;
         gap: 10px;
         flex-wrap: wrap;
-    }
-    
-    .card-content{
+    } */
+
+    .card-content {
         display: flex;
         gap: 20px;
     }
 
-    .modal-title{
+    .modal-title {
         font-family: 'Montserrat-Semibold', sans-serif;
         font-size: 14px;
         text-align: center;
     }
-    
-    
-    
+
+
+
     @media only screen and (max-width: 826px) and (min-width: 300px) {
         .main_brands_area {
             margin-top: 0%;
         }
-    
+
         .inner_breand_logo {
             padding: 0px 0px !important;
-        } 
-    
-        .vehicle_list{
-            padding: 5px;
-            width:100%;
         }
-    
-        
-    
-        
+
+        .vehicle_list {
+            padding: 5px;
+            width: 100%;
+        }
+
+
+
+
     }
 }
 
-.vehicle_list{
+.vehicle_list {
     padding: 30px;
     display: flex;
     justify-content: center;
@@ -91,7 +92,7 @@
     flex-wrap: wrap;
 }
 
-.card-content{
+.card-content {
     display: flex;
     gap: 20px;
 }
@@ -130,18 +131,18 @@
 
     .inner_breand_logo {
         padding: 0px 0px !important;
-    } 
+    }
 
-    .vehicle_list{
+    .vehicle_list {
         padding: 5px;
-        width:100%;
+        width: 100%;
     }
 
     .choose_car_box {
         margin-right: 0%;
     }
 
-    
+
     .brands_section_area {
         background: #F3F3F3;
         /* padding: 30px; */
@@ -154,5 +155,5 @@
     }
 
 
-    
+
 }
