@@ -1,9 +1,10 @@
-import { Component, Type } from '@angular/core';
+import { Component, ElementRef, Input, Type, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as RecordRTC from 'recordrtc';
 import { buffer } from 'rxjs';
+import { AddressService } from 'src/app/services/address.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookingService } from 'src/app/services/booking.service';
 import { environment } from 'src/environments/environment';
@@ -82,13 +83,41 @@ export class BookingPageComponent {
   appliedCoupon:any;
   isCouponApplied:boolean=false;
   totPriceAfterApplyingCoupon:any;
+
+  display:any;
+  position:any;
+
+  custAddressData:any;
+
+  address:any;
+
+  addressType:any;
+
+  customerAddress:any;
+
+
+  placeDetails: any = { city: '', area: '', country: '', verificationCity: '' };
+
+  @Input() placeholder = 'Search For Places';
+
+  @ViewChild('inputField', { static: true })
+  inputField!: ElementRef<HTMLInputElement>;
+
+  autocomplete: google.maps.places.Autocomplete | undefined;
+
+  map!: google.maps.Map; // Define map variable
+
+  marker: google.maps.Marker | undefined; // Define marker variable
+
   constructor(
     private domSanitizer: DomSanitizer,
     private router: Router,
     private activerouter: ActivatedRoute,
     private booking_service: BookingService,
     private auth_service: AuthService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private authService:AuthService,
+    private adress_service:AddressService
   ) {
     this.timeslots = [];
     this.booking_slot = 0;
@@ -128,6 +157,8 @@ export class BookingPageComponent {
     this.getCustomerVehicleList();
     this.getCustomerBookings();
     this.getBookingDetails();
+    this.adressFetch();
+    this.getCurrentLocation();
   }
 
   getCouponsForCustomer() {
@@ -137,6 +168,7 @@ export class BookingPageComponent {
       vgroup_id: this.vehicle_groupid,
       totalamount: this.tot_package_price,
     };
+
     //getCopouns For Customer
     this.booking_service.getCouponsForCustomer(data).subscribe((data) => {
       this.allCoupons = data.coupons;
@@ -231,6 +263,8 @@ export class BookingPageComponent {
           // this.drop_addressId = rdata.cust_address[count].cad_id
           
           console.log('----------drop adresses----->', this.drop_address);
+          console.log("This is Drop Address leng",this.drop_address.length);
+          
         }
       });
   }
@@ -310,16 +344,74 @@ export class BookingPageComponent {
       .gettimeslotsbyDate(inputData)
       .subscribe((rdata: any) => {
         if (rdata.ret_data == 'success') {
-          rdata.time_slots.forEach((element: { tm_id: any; tm_start_time: string; tm_end_time: string; }) => {
-            let slots = {
-              tm_id: element.tm_id,
-              tm_start_time: (((Number(element.tm_start_time.slice(0, 2))) + 11) % 12 + 1) + ":" + element.tm_start_time.slice(3, 5) + " " + (Number(element.tm_start_time.slice(0, 2)) > 12 ? "PM" : "AM"),
-              tm_end_time: (((Number(element.tm_end_time.slice(0, 2))) + 11) % 12 + 1) + ":" + element.tm_end_time.slice(3, 5) + " " + (Number(element.tm_end_time.slice(0, 2)) > 12 ? "PM" : "AM")
-            };
-            console.log("each slot------>", slots);
-            this.timeslots.push(slots);
+          const currentTime = new Date();
+          let bufferTime = parseInt(rdata.settings.gs_bookingbuffer_time);
+
+          console.log('Buffer Time: ' + bufferTime);
+
+          // Create a new Date object for the buffer time
+          const bufferDate = new Date(currentTime);
+          bufferDate.setMinutes(bufferDate.getMinutes() + bufferTime);
+
+          console.log(
+            'Before buffer time addition: ' + currentTime.getMinutes()
+          );
+
+          console.log('After buffer time addition: ' + bufferDate.getMinutes());
+
+          // Continue with your logic using the updated date
+
+          rdata.time_slots.forEach((data: any, index: any) => {
+            let time = data.tm_start_time;
+            const [hoursStr, minutesStr] = time.split(':');
+            const targetHours = parseInt(hoursStr);
+            const targetMinutes = parseInt(minutesStr);
+
+            // Convert target time to minutes since midnight for comparison
+            const targetTimeInMinutes = targetHours * 60 + targetMinutes;
+
+            // Convert buffer time to minutes since midnight for comparison
+            const bufferTimeInMinutes =
+              bufferDate.getHours() * 60 + bufferDate.getMinutes();
+
+            // Compare the target time with the buffer time
+            if (targetTimeInMinutes > bufferTimeInMinutes) {
+              let startTime = data.tm_start_time;
+              let endTime = data.tm_end_time;
+
+              // Convert start time to 12-hour format
+              let startDate = new Date('2000-01-01 ' + startTime);
+              let startTime12hr = startDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              });
+
+              // Convert end time to 12-hour format
+              let endDate = new Date('2000-01-01 ' + endTime);
+              let endTime12hr = endDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              });
+
+              let driversAlredayAssigned = rdata.assigned_emp.filter((item:any)=>{
+                return data.tm_id == item.tem_slotid
+              })
+
+              let timeData 
+
+              if (driversAlredayAssigned.length >= Number(data.driver_count)){
+                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:true };
+              }else{
+                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:false };
+              }
+
+              this.timeslots.push(timeData);
+            }
           });
-          
+
+         console.log(this.timeslots);
         }
       });
   }
@@ -368,8 +460,13 @@ export class BookingPageComponent {
     }
   }
   openPickupsection(type: any) {
-
-    //Validations
+    if (type == 0) {
+      this.panelOpenState1 = false;
+      this.panelOpenState2 = true;
+      this.panelOpenState3 = false;
+      this.stopRecording();
+    } else {
+      //Validations
     if(!this.pickup_addressId&&!this.drop_addressId){
       this.toast.warning("Select Address")
       return 
@@ -406,12 +503,6 @@ export class BookingPageComponent {
       return 
     }
 
-
-    if (type == 0) {
-      this.panelOpenState1 = false;
-      this.panelOpenState2 = true;
-      this.panelOpenState3 = false;
-    } else {
       this.panelOpenState1 = false;
       this.panelOpenState2 = false;
       this.panelOpenState3 = true;
@@ -638,6 +729,7 @@ export class BookingPageComponent {
           // }
           this.tot_package_price = Math.round(this.tot_package_price);
           console.log("booking price------>",this.tot_package_price)
+          this.getCouponsForCustomer()
         }
       });
     } else {
@@ -687,6 +779,72 @@ export class BookingPageComponent {
     }
   }
 
+  ngAfterViewInit() {
+    console.log('google', google);
+    console.log('google maps', google.maps);
+    console.log('places', google.maps.places);
+
+    if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+      this.autocomplete = new google.maps.places.Autocomplete(
+        this.inputField.nativeElement
+      );
+      this.autocomplete.addListener('place_changed', () => {
+        const place = this.autocomplete?.getPlace();
+        if (place && place.address_components) {
+          let city, area, sublocality, country;
+
+          for (let component of place.address_components) {
+            if (component.types.includes('locality')) {
+              city = component.long_name;
+            } else if (component.types.includes('sublocality_level_1')) {
+              sublocality = component.long_name;
+            } else if (
+              component.types.includes('administrative_area_level_1')
+            ) {
+              area = component.long_name;
+            } else if (component.types.includes('country')) {
+              country = component.long_name;
+            }
+          }
+          console.log('City:', city);
+          console.log('Area:', area);
+          console.log('country:', country);
+
+          if (sublocality) {
+            this.placeDetails = {
+              city: sublocality,
+              area: area,
+              country: country,
+              verificationCity: city,
+            };
+          } else {
+            this.placeDetails = {
+              city: city,
+              area: area,
+              country: country,
+              verificationCity: city,
+            };
+          }
+        }
+        this.position = {
+          lat: place?.geometry?.location?.lat(),
+          lng: place?.geometry?.location?.lng(),
+        };
+
+        console.log(place);
+        this.custAddressData =
+          this.placeDetails.city +
+          ' ' +
+          this.placeDetails.area +
+          ' ' +
+          this.placeDetails.country;
+        console.log(this.position);
+      });
+    } else {
+      console.error('Google Maps API not available');
+    }
+  }
+
   openCopounModal() {
     const modalDiv = document.getElementById('copounModal');
     if (modalDiv != null) {
@@ -728,4 +886,103 @@ export class BookingPageComponent {
       modalDiv.style.display = 'none';
     }
   }
+
+  clickEvent(event: google.maps.MapMouseEvent) {
+    if (event.latLng != null) {
+      this.display = event.latLng.toJSON();
+      // Update marker position
+      this.position = {
+        lat: this.display.lat,
+        lng: this.display.lng,
+      };
+      // Update marker on the map
+      this.updateMarker();
+    }
+  }
+
+  onRadioChange(event: any) {
+    this.addressType = event.target.value;
+  }
+
+  addAddress() {
+    if (this.address == '' || this.addressType == null) {
+      alert('Please Fill the form');
+      return;
+    }
+
+    if (this.placeDetails.verificationCity.toLowerCase() === 'abu dhabi') {
+      let data = {
+        countryId: 1,
+        stateId: this.placeDetails.area,
+        cityId: this.placeDetails.city,
+        address: this.custAddressData,
+        landmark: this.address,
+        add_type: this.addressType,
+        lattitude: this.position.lat,
+        longitude: this.position.lng,
+        cust_id: atob(this.custId),
+      };
+      this.authService.addAddress(data).subscribe((data) => {
+        console.log(data);
+      });
+
+      this.closeAddressModal();
+      this.adressFetch();
+      this.toast.success('Adress added successfully');
+    } else {
+      this.toast.error('Service Only Available in Abu Dhabi');
+    }
+  }
+
+  adressFetch() {
+    let data = {
+      customerId: atob(this.custId),
+    };
+    this.adress_service.userAddressFetch(data).subscribe((data) => {
+      this.customerAddress = data.cust_addressList;
+      console.log(data);
+    });
+  }
+
+  updateMarker() {
+    // Remove previous marker if exists
+    if (this.marker) {
+      this.marker.setMap(null);
+    }
+    // Add marker at the clicked position
+    this.marker = new google.maps.Marker({
+      position: this.position,
+      map: this.map,
+    });
+  }
+
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.position = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          // Initialize the map with the current location
+          this.map = new google.maps.Map(document.getElementById('map')!, {
+            center: this.position,
+            zoom: 15,
+          });
+
+          // Add marker at current location
+          const marker = new google.maps.Marker({
+            position: this.position,
+            map: this.map,
+          });
+        },
+        () => {
+          console.error('Error: The Geolocation service failed.');
+        }
+      );
+    } else {
+      console.error("Error: Your browser doesn't support geolocation.");
+    }
+  }
+
 }
