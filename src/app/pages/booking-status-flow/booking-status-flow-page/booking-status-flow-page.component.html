@@ -94,6 +94,10 @@
                               *ngIf="eachdata.code == 'WIPC'" mdbRipple>
                               Workcard
                             </button>
+                            <button type="button" class="btn btn-info" (click)="onInspectionSelection(2)"
+                            *ngIf="eachdata.code == 'PIWC'" mdbRipple>
+                            Inspection
+                          </button>
                             <!-- <button status="primary" (click)="onWorkcardSelection(1);" *ngIf="eachdata.code=='WIPC'">Workcard</button> -->
                           </div>
                           <br />
@@ -366,6 +370,34 @@
       <div class="modal-body">
         <div style="display: flex; flex-direction: column; gap: 10px;">
           <textarea [(ngModel)]="holdReason" name="holdReason"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeholdModal()">Close</button>
+        <button type="button" (click)="changeBookingstatus(1)" class="btn btn-warning">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" id="rescheduleModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"
+          style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Hold this Booking
+        </h1>
+        <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" (dateChange)="ondateSelection();"
+              placeholder="Choose a booking date" [(ngModel)]="bookingDate" [min]="minSelectableDate" [max]="maxSelectableDate" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <i class="fa fa-calendar"></i>
         </div>
       </div>
       <div class="modal-footer">
