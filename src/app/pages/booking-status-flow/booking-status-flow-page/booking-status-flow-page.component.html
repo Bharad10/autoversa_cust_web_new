@@ -18,10 +18,10 @@
                           <h2 class="bodyheading">My Active booking</h2>
                         </div>
                         <div class="row card_section" *ngFor="let eachbookingData of activeBookings"
-                          [ngStyle]="{ 'background-color': bgColor1 }" (click)="changeBackgroundColor(1)">
+                          [ngStyle]="{ 'background-color': bgColor1 }" (click)="changeBackgroundColor(1)" style=" margin-bottom: 2%; ">
                           <div class="col-md-4">
                             <div class="card_image_section">
-                              <img src="./assets/icons/benz_icon.png" alt="" srcset="" />
+                              <img src="./assets/icons/benz_icon.png" alt="" srcset="" style="width: 100%;"/>
                             </div>
                           </div>
                           <div class="col-md-8">

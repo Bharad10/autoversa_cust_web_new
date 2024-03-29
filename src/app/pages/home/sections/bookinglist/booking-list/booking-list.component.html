@@ -13,8 +13,8 @@
         </div>
         <div class="service_section_content">
             <div class="container">
-                <ng-container *ngIf="bookingList && bookingList.length > 0; else noBookings">
-                    <div class="row" *ngFor="let book of bookingList">
+                <ng-container *ngIf="bookingList && bookingList.length > 0;">
+                    <div class="row" *ngFor="let book of bookingList" style=" border-bottom: 1px solid; margin-bottom: 1%; ">
                         <div class="col-xl-3">
                             <div class="card_image_section">
                                 <img src="./assets/icons/benz_icon.png" alt="" srcset=""
@@ -79,11 +79,7 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-template #noBookings>
-                    <p style=" font-size: xx-large; font-weight: bold; ">No Ongoing Bookings</p>
-                </ng-template>
             </div>
         </div>
     </div>
 </div>
-<hr>
