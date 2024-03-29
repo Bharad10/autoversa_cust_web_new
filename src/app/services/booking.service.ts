@@ -71,6 +71,11 @@ export class BookingService {
   bookingHoldStatusChange(data:any): Observable<any>{
     return this.http.post(environment.base_url + 'Booking/BookingController/hold_booking',data, {headers : this.reqHeader});
   }
-  
+  bookingReschedule(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/reschedule_booking',data, {headers : this.reqHeader});
+  }
+  GetBookingInspectionDetails(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/Get_inspection_by_bookid',data, {headers : this.reqHeader});
+  }
 
 }
