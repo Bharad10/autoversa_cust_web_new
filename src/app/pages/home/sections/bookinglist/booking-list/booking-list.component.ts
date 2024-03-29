@@ -34,6 +34,10 @@ export class BookingListComponent {
     })
   }
 
+  navigate(bookingId:any){
+    this.router.navigateByUrl('rescheduleOrder/'+ btoa(bookingId))
+  }
+
   fetchBookingList() {
     let data = {
       custId: atob(this.userId)

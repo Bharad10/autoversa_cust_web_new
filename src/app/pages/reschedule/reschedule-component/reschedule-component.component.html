@@ -1,0 +1,84 @@
+<div class="banner_section">
+  <div class="inner_banner_section"></div>
+</div>
+<div class="brands_section_area">
+  <div class="inner_brands_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 service-content">
+          <div class="main_brands_area">
+            <div class="inner_breand_logo">
+              <h2 class="heading">Reschedule</h2>
+              <div class="choose_car_box">
+                <div class="choose_car_box_main">
+                  <div class="heading_section">
+                    <div class="row">
+                      <div class="col-6">
+                        <h1>Current Selected Location</h1>
+                      </div>
+                      <div class="col-6">
+                        <textarea class="form-control" name="" id="" disabled [value]="bookingaddress" ></textarea>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-6">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="">
+                              <h4>Select Date</h4>
+                            </div>
+                            <div class="row">
+                              <div class="col-10"> <input class="form-control"
+                                matInput
+                                [matDatepicker]="picker"
+                                placeholder="Choose a booking date"
+                                [(ngModel)]="bookingDate" [min]="minSelectableDate" [max]="maxSelectableDate" (dateChange)="ondateSelection()"
+                              />
+                            </div>  
+                             <div class="col-2">
+                                <mat-datepicker-toggle
+                                matSuffix
+                                [for]="picker"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker #picker></mat-datepicker>
+                             </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                       <div class="card">
+                        <div class="card-body">
+                            <div class="p-2">
+                                <h4>Select Time</h4>
+                            </div>
+                            <div>
+                                <ng-select [(ngModel)]="booking_slot"
+                            selected="booking_slot">
+                            <ng-option [value]="0" selected>Select Time slot</ng-option>
+                            <ng-option *ngFor="let eachslot of timeslots"
+                              [value]="eachslot.tm_id" [disabled]="eachslot.isTimeSlotFilled">
+                              <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>{{eachslot.tm_start_time}} - {{eachslot.tm_end_time}}</span>
+                                <span *ngIf="eachslot.isTimeSlotFilled" class="badge">Slot Full</span>
+                              </div>
+                            </ng-option>
+                          </ng-select>
+                            </div>
+                        </div>
+                       </div>
+                      </div>
+                    </div>
+                    <button (click)="bookingReschedule()" class="btn btn-warning text-white">
+                        PROCEED
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

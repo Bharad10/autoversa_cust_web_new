@@ -1,0 +1,159 @@
+.banner_section {
+    background-image: url('^assets/images/top_banner.png');
+    width: 100%;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.banner_section {
+    position: relative;
+}
+
+.brands_section_area {
+    background: #F3F3F3;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
+
+.heading_section {
+    .banner_section {
+        background-image: url('^assets/images/top_banner.png');
+        width: 100%;
+        height: 320px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .banner_section {
+        position: relative;
+    }
+
+    .brands_section_area {
+        background: #F3F3F3;
+        padding-top: 15px;
+        padding-bottom: 30px;
+    }
+
+    .heading_section {
+        padding: 30px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    /* .vehicle_list {
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    } */
+
+    .card-content {
+        display: flex;
+        gap: 20px;
+    }
+
+    .modal-title {
+        font-family: 'Montserrat-Semibold', sans-serif;
+        font-size: 14px;
+        text-align: center;
+    }
+
+
+
+    @media only screen and (max-width: 826px) and (min-width: 300px) {
+        .main_brands_area {
+            margin-top: 0%;
+        }
+
+        .inner_breand_logo {
+            padding: 0px 0px !important;
+        }
+
+        .vehicle_list {
+            padding: 5px;
+            width: 100%;
+        }
+
+
+
+
+    }
+}
+
+.vehicle_list {
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card-content {
+    display: flex;
+    gap: 20px;
+}
+
+.service-content {
+    margin-top: -18%;
+    z-index: 1;
+}
+
+.inner_breand_logo {
+    padding: 0px 0px !important;
+}
+
+.heading {
+    color: white;
+    font-family: 'Montserrat-Bold', sans-serif;
+    font-size: 50px;
+}
+
+.choose_car_box {
+    background: #fff;
+    padding: 50px 35px;
+    border-radius: 20px;
+}
+
+.choose_car_box {
+    box-shadow: 0px 4px 18px 5px #0000002e;
+}
+
+
+
+@media only screen and (max-width: 826px) and (min-width: 300px) {
+    .main_brands_area {
+        margin-top: 0%;
+    }
+
+    .inner_breand_logo {
+        padding: 0px 0px !important;
+    }
+
+    .vehicle_list {
+        padding: 5px;
+        width: 100%;
+    }
+
+    .choose_car_box {
+        margin-right: 0%;
+    }
+
+
+    .brands_section_area {
+        background: #F3F3F3;
+        /* padding: 30px; */
+        padding-top: 15px;
+        padding-bottom: 30px;
+    }
+
+    .inner_breand_logo {
+        padding: 40px 0px;
+    }
+
+
+
+}
