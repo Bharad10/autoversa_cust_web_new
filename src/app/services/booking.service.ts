@@ -68,6 +68,9 @@ export class BookingService {
   JobstatusChange(data:any): Observable<any>{
     return this.http.post(environment.base_url + 'Booking/BookingController/multiple_Job_status_update_bycust',data, {headers : this.reqHeader});
   }
+  bookingHoldStatusChange(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/hold_booking',data, {headers : this.reqHeader});
+  }
   
 
 }

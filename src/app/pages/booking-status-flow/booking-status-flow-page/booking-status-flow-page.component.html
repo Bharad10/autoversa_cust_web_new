@@ -56,17 +56,17 @@
                           <div class="row" style=" padding: 2%; margin-left: 0%; ">
                             <div class="col-xl-4" style="padding: 0% !important;">
                               <div class="outlinebutton">
-                                <button>Cancel</button>
+                                <button (click)="openaddModal()">Cancel</button>
                               </div>
                             </div>
                             <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
                               <div class="outlinebutton">
-                                <button>Hold</button>
+                                <button (click)="openholdModal();">Hold</button>
                               </div>
                             </div>
                             <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
                               <div class="outlinebutton">
-                                <button>Reschedule</button>
+                                <button (click)="changeBookingstatus(2);">Reschedule</button>
                               </div>
                             </div>
                           </div>
@@ -327,6 +327,50 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" id="cancelModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"
+          style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Cancel this Booking
+        </h1>
+        <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <textarea [(ngModel)]="cancelReason" name="cancelReason"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()">Close</button>
+        <button type="button" (click)="changeBookingstatus(0)" class="btn btn-warning">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" id="holdModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title"
+          style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Hold this Booking
+        </h1>
+        <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <textarea [(ngModel)]="holdReason" name="holdReason"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeholdModal()">Close</button>
+        <button type="button" (click)="changeBookingstatus(1)" class="btn btn-warning">Save</button>
       </div>
     </div>
   </div>
