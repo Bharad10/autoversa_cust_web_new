@@ -30,6 +30,20 @@
     top: 30%;
 }
 
+.pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+.modal{
+    z-index: 20;   
+}
+.modal-backdrop{
+    z-index: 10;        
+}
+
 .banner_content>h2 {
     font-size: 56px;
     font-weight: 700;
@@ -92,6 +106,8 @@ textarea {
     padding-left: 5%;
     width: 100%;
 }
+
+
 
 /* AddAddress Modal Text Area */
 #addressModal > div > div > div.modal-body > div > div > div.col-12 > textarea{

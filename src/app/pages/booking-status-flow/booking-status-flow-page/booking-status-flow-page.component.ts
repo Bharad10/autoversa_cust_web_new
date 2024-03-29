@@ -20,6 +20,8 @@ export class BookingStatusFlowPageComponent {
   selectAll=false;
   selected_jobs:any[] = [];
   pendingJobs_flag =false;
+  cancelReason:any;
+  holdReason:any;
   cust_status_master = [
     'BKCC',
     'DRPC',
@@ -434,5 +436,65 @@ export class BookingStatusFlowPageComponent {
       }
     });
 
+  }
+  closeaddModal() {
+    const modelDiv = document.getElementById('cancelModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    }
+  }
+  openaddModal() {
+    const modelDiv = document.getElementById('cancelModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    }
+  }
+  closeholdModal() {
+    const modelDiv = document.getElementById('holdModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    }
+  }
+  openholdModal() {
+    const modelDiv = document.getElementById('holdModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    }
+  }
+  changeBookingstatus(changeFlag:any){
+    let input_data;
+    if(changeFlag==0){
+       input_data ={
+        "bookid": this.booking_details.bk_id,
+        "reason": this.cancelReason,
+        "type": "CANCEL",
+        "backendstatus": "CANB",
+        "customerstatus":"CANC",
+        "current_bstatus":"Booking Created",
+        "current_cstatus":"Booking Created",
+        "user_type": "0",
+        "booking_version": this.booking_details.bk_version
+      }
+    }else if(changeFlag==1){
+      input_data ={
+        "bookid": this.booking_details.bk_id,
+        "reason": this.cancelReason,
+        "type": "CANCEL",
+        "backendstatus": "CANB",
+        "customerstatus":"CANC",
+        "current_bstatus":"Booking Created",
+        "current_cstatus":"Booking Created",
+        "user_type": "0",
+        "booking_version": this.booking_details.bk_version
+      }
+    }
+    if(changeFlag==0 || changeFlag==1){
+      this.booking_service.bookingHoldStatusChange(input_data).subscribe((rdata: any) => {
+        if(rdata.ret_data=="success"){
+          this.onWorkcardSelection(1);
+        }
+      });
+    }
+    
   }
 }
