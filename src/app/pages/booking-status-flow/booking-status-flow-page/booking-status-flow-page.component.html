@@ -51,10 +51,26 @@
                               {{ formatTime(eachbookingData.tm_start_time) }} -
                               {{ formatTime(eachbookingData.tm_end_time) }}
                             </p>
-                            <br />
+
+                          </div>
+                          <div class="row" style=" padding: 2%; margin-left: 0%; ">
+                            <div class="col-xl-4" style="padding: 0% !important;">
+                              <div class="outlinebutton">
+                                <button>Cancel</button>
+                              </div>
+                            </div>
+                            <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
+                              <div class="outlinebutton">
+                                <button>Hold</button>
+                              </div>
+                            </div>
+                            <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
+                              <div class="outlinebutton">
+                                <button>Reschedule</button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <br />
                       </div>
                       <br />
                       <div class="col-xl-6" *ngIf="workcard_showFlag == 0">
@@ -242,8 +258,8 @@
                               </div>
                             </div>
                           </div>
-                          <hr>
-                          <table id="package_table">
+                          <hr *ngIf="pendingJobs_flag">
+                          <table id="package_table" *ngIf="pendingJobs_flag">
                             <thead>
                               <tr>
                                 <th colspan="4" style="
@@ -288,13 +304,13 @@
 
                             </div>
                             <div class="col-4">
-                              <button type="button" class="btn btn-success" (click)="approveSelectedJobs();"
+                              <button type="button" class="btn btn-success" (click)="approveSelectedJobs(1);"
                                 *ngIf="selected_jobs.length>0" mdbRipple>
                                 Reject
                               </button>
                             </div>
                             <div class="col-4" style=" text-align: center;">
-                              <button type="button" class="btn btn-success" (click)="approveSelectedJobs();"
+                              <button type="button" class="btn btn-success" (click)="approveSelectedJobs(0);"
                                 *ngIf="selected_jobs.length>0" mdbRipple>
                                 Approve
                               </button>

@@ -542,7 +542,7 @@ export class BookingPageComponent {
       "sub_packages": this.subpackages,
       "services": this.services,
       "expenses": [],
-      "packid": this.package_id,
+      "packid": atob(this.package_id),
       "packtype": this.package_data.pkg_type,
       "packprice": this.tot_package_price,
       "pack_vat": this.tot_package_vat,
