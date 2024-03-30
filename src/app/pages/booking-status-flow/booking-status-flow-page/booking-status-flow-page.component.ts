@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookingService } from 'src/app/services/booking.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-booking-status-flow-page',
@@ -24,6 +25,7 @@ export class BookingStatusFlowPageComponent {
   holdReason:any;
   timeslots:any[]=[];
   booking_slot: any;
+  inspectionDetails:any;
   cust_status_master = [
     'BKCC',
     'DRPC',
@@ -44,6 +46,7 @@ export class BookingStatusFlowPageComponent {
   bookingDate:any;
   minSelectableDate: any;
   maxSelectableDate: any;
+  base_url = environment.aws_url;
   constructor(
     private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService
   ) {
@@ -333,7 +336,17 @@ export class BookingStatusFlowPageComponent {
     }
     this.booking_service.GetBookingInspectionDetails(input_data).subscribe((rdata: any) => {
       if(rdata.ret_data=="success"){
-        
+        this.inspectionDetails = rdata.inspection;
+        this.inspectionDetails.media = rdata.medias;
+        this.inspectionDetails.media = this.inspectionDetails.media.map((item: any) => ({ ...item, cssStyle: 'scale(1)' }));
+if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
+  const filteredData = rdata.pickup_odometers.filter((item: { bkt_code: string; }) => item.bkt_code === "PIWC");
+  if (filteredData.length > 0) {
+      this.inspectionDetails.pickup_odometer = filteredData[0].bkt_url;
+  }
+}
+
+
       }
     });
   }
@@ -627,7 +640,5 @@ export class BookingStatusFlowPageComponent {
     }
     
   }
-  onInspectionSelection(card_flag:any){
 
-  }
 }

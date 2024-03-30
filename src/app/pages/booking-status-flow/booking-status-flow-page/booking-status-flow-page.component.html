@@ -94,7 +94,7 @@
                               *ngIf="eachdata.code == 'WIPC'" mdbRipple>
                               Workcard
                             </button>
-                            <button type="button" class="btn btn-info" (click)="onInspectionSelection(2)"
+                            <button type="button" class="btn btn-info" (click)="onWorkcardSelection(2)"
                             *ngIf="eachdata.code == 'PIWC'" mdbRipple>
                             Inspection
                           </button>
@@ -322,6 +322,138 @@
                           </div>
                           <br />
                         </div>
+                      </div>
+                      <div class="col-xl-6" *ngIf="workcard_showFlag == 2">
+                        <div class="row">
+                          <h2 class="bodyheading">Workcard</h2>
+                        </div>
+                        <div class="row" *ngIf="inspectionDetails">
+                          <div class="col-md-12">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <label class="label col-form-label" style="font-size: 14px; font-weight: 700; width: 100%;">Pickup Inspection Details</label>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <label class="label col-form-label">Pickup Inspection Date</label>
+                                      <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" [value]="inspectionDetails.bki_created_on | date : 'dd-MM-yyyy'" readonly />
+                                  </div>
+                                  <div class="col-md-6">
+                                    <label class="label col-form-label">Pickup Inspection By</label>
+                                    <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" [(ngModel)]="inspectionDetails.us_firstname"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    readonly />
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="label col-form-label">Registration Card</label>
+                                  <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" *ngIf="inspectionDetails.bki_reg_card_flag == 0" value="Hard Copy" readonly />
+                                  <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" *ngIf="inspectionDetails.bki_reg_card_flag == 1" value="Soft Copy" readonly />
+                                  <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" *ngIf="inspectionDetails.bki_reg_card_flag == 2" value="None" readonly />
+                              </div>
+                              <div class="col-md-6" [ngStyle]="{ border: inspectionDetails.color }">
+                                <label class="label col-form-label">Registration Validity</label>
+                                <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" [value]="inspectionDetails.cv_registrationvalidity | date : 'dd-MM-yyyy'" readonly />
+                              </div>
+                              <div class="col-md-6">
+                                <label class="label col-form-label">Pickup Odometer</label>
+                                <input type="text" nbInput class="icon-input" fullWidth fieldSize="small" [value]="inspectionDetails.pickup_odometer" readonly />
+                              </div>
+                                  <div class="col-md-12">
+                                      <label class="label col-form-label" style="margin: 10px 0 0px 0px; font-size: 14px; font-weight: 700; width: 100%;">Contents in vehicle</label>
+                                      <ng-container *ngFor="let contents of inspectionDetails.contents">
+                                          <input mdbCheckbox class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" [checked]="true" [ngStyle]="{'background-color': '#3186ac', 'border-color': '#3186ac', 'margin-top' : '1.25%'}" />
+                                          {{ contents.civ_name }}
+                                      </ng-container>
+                                  </div>
+                                  <div class="col-md-12">
+                                    <label class="label col-form-label">Pickup Notes</label><br />
+                                    <textarea
+                                      nbInput
+                                      fullWidth
+                                      placeholder="No additional complaints"
+                                      rows="3"
+                                      value="{{ inspectionDetails.bki_additionalcomments }}"
+                                      readonly
+                                    ></textarea>
+                                </div>
+                                  <div class="col-md-12" *ngIf="inspectionDetails.media.length > 0">
+                                      <div class="row" style="margin-top: 2% !important; padding: 0 !important">
+                                          <ng-container *ngFor="let media of inspectionDetails.media; let z = index">
+                                              <div class="col-md-4" *ngIf="media.bka_image_type != 6" style="padding: 0 !important">
+                                                <br />
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '10' && media.bka_type == '6'"
+                                                  >Vin Number</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '10' && media.bka_type == '5'"
+                                                  >Odometer</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '5'"
+                                                  >Front View</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-top: 5%; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '4'"
+                                                  >Back View</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-top: 5%; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '3'"
+                                                  >Right View</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-top: 5%; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '2'"
+                                                  >Left View</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-top: 5%; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '1'"
+                                                  >Top View</label
+                                                >
+                                                <label
+                                                  class="label col-form-label" style="color: black; margin-top: 5%; margin-bottom: 5%;"
+                                                  *ngIf="media.bka_image_type == '0'"
+                                                  >Additional Image</label
+                                                >
+                                                <br />
+                                                <a href="{{base_url + media.bka_url}}" data-fancybox="gallery" data-caption="Caption">
+                                                  <img
+                                                  [src]="base_url + media.bka_url"
+                                                  class="user-img"
+                                                  style="
+                                                    width: 99%;
+                                                    padding: 3%;
+                                                    border: 1px solid #eee;
+                                                    height: auto;
+                                                  "
+                                                />
+                                                </a>
+                                              </div>
+                                          </ng-container>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-12" *ngIf="inspectionDetails.media.length > 0">
+                                      <ng-container *ngFor="let media of inspectionDetails.media">
+                                          <label *ngIf="media.bka_image_type == 6" style="margin-top: 35%; font-size: 14px; font-weight: 700; width: 100%;">Pickup Inspection Video</label>
+                                          <video width="100%" height="300" controls *ngIf="media.bka_image_type == 6" style="padding: 1%; border: 3px solid #eee; margin-top: 1%">
+                                              <source src="{{ base_url + media.bka_url }}" type="video/mp4" />
+                                              <source src="{{ base_url + media.bka_url }}" type="video/ogg" />
+                                          </video>
+                                      </ng-container>
+                                  </div>
+                                  <div class="col-md-12" style="margin-top: 5%;">
+                                      <label style="margin: 10px 0 0px 0px; font-size: 14px; font-weight: 700; width: 100%;">Customer Signature</label>
+                                  </div>
+                                  <img [src]="base_url + inspectionDetails.bki_signature" width="200px" height="50px" />
+                              </div>
+                          </div>
+                      </div>
+                      
                       </div>
                     </div>
                     <br />
