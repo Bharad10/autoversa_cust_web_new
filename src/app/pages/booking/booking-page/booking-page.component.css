@@ -209,6 +209,20 @@ textarea {
     border-radius: 5px;
   }
 
+  .pac-container {
+    background-color: #FFF;
+    z-index: 20;
+    position: fixed;
+    display: inline-block;
+    float: left;
+}
+.modal{
+    z-index: 20;   
+}
+.modal-backdrop{
+    z-index: 10;        
+}
+
 @media only screen and (max-width: 826px) and (min-width: 300px) {
     .inner_service_image_section>img {
         width: 100% !important;
