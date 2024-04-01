@@ -18,7 +18,7 @@
                           <h2 class="bodyheading">My Active booking</h2>
                         </div>
                         <div class="row card_section" *ngFor="let eachbookingData of activeBookings"
-                          [ngStyle]="{ 'background-color': bgColor1 }" (click)="changeBackgroundColor(1)">
+                          [ngStyle]="{ 'background-color': eachbookingData.bgColor }" (click)="changeBackgroundColor(1)">
                           <div class="col-md-4">
                             <div class="card_image_section">
                               <img src="./assets/icons/benz_icon.png" alt="" srcset="" />
@@ -66,7 +66,7 @@
                             </div>
                             <div class="col-xl-4" style="padding-left: 1% !important;padding-right: 0% !important;">
                               <div class="outlinebutton">
-                                <button (click)="changeBookingstatus(2);">Reschedule</button>
+                                <button (click)="navigate()">Reschedule</button>
                               </div>
                             </div>
                           </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'src/app/services/booking.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class RescheduleComponentComponent implements OnInit{
   bkVersion:any;
   custStatus:any;
 
-  constructor(private booking_service:BookingService,private activerouter: ActivatedRoute){
+  constructor(private booking_service:BookingService,private activerouter: ActivatedRoute,private router: Router){
     this.bookingId = this.activerouter.snapshot.paramMap.get('id')
   }
   ngOnInit(): void {
@@ -175,6 +175,9 @@ export class RescheduleComponentComponent implements OnInit{
       booking_version:this.bkVersion
     }
    this.booking_service.bookingReschedule(data).subscribe((data:any)=>{
+      if(data.ret_data=="success"){
+        this.router.navigateByUrl('');
+      }
     console.log(data);
    }) 
   }

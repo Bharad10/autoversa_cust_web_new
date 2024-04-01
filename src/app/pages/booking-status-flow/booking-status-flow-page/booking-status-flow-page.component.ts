@@ -290,6 +290,10 @@ export class BookingStatusFlowPageComponent {
   getCustomerBookings() {
     this.booking_service.GetCustomerbookings({ custId: atob(this.customerId) }).subscribe((rdata: any) => {
       if (rdata.ret_data == "success") {
+        rdata.book_list.forEach((element: any) => {
+          if(element.bk_id==this.booking_details.bk_id) element.bgColor = '#e1e1e1';
+          else element.bgColor = '';
+        });
         this.activeBookings = rdata.book_list;
       }
     });
@@ -606,7 +610,7 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
     }else if(changeFlag==1){
       input_data ={
         "bookid": this.booking_details.bk_id,
-        "reason": this.cancelReason,
+        "reason": this.holdReason,
         "type": "HOLD",
         "backendstatus": "HOLDB",
         "customerstatus":"HOLDC",
@@ -628,7 +632,7 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
     if(changeFlag==0 || changeFlag==1){
       this.booking_service.bookingHoldStatusChange(input_data).subscribe((rdata: any) => {
         if(rdata.ret_data=="success"){
-          this.onWorkcardSelection(1);
+          this.onWorkcardSelection(0);
         }
       });
     }else if(changeFlag==2){
@@ -639,6 +643,9 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
       });
     }
     
+  }
+  navigate(){
+    this.router.navigateByUrl('rescheduleOrder/'+ btoa(this.booking_details.bk_id))
   }
 
 }
