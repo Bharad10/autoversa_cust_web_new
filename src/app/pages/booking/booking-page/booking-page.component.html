@@ -108,7 +108,7 @@
                                 </p>
                               </div>
                               <div class="col-4">
-                                <textarea class="textArea" style="width: 40rem; height: 10rem" maxlength="500" #description nbInput
+                                <textarea style="width: 40rem; height: 10rem" maxlength="140" #description nbInput
                                   [(ngModel)]="comments" placeholder="Your message here..." name="operationdescription"
                                   class="major_service_textarea"></textarea>
                               </div>
@@ -214,7 +214,7 @@
                       </label>
                     </div>
                     <br />
-                    <div *ngIf="pickup_addressId&&drop_addressId" class="pickuptype_label">Pickup options</div>
+                    <div class="pickuptype_label">Pickup options</div>
                     <br />
 
                     <div *ngIf="pickup_addressId&&drop_addressId" >
@@ -552,7 +552,7 @@
                     </div>
                     <br />
                     <div class="pay_btn">
-                      <button [disabled]="loading" (click)="createBooking()">PAY</button>
+                      <button (click)="createBooking()">PAY</button>
                     </div>
                   </mat-expansion-panel>
                 </mat-accordion>
@@ -564,78 +564,79 @@
     </div>
 
     <!-- --------------------------------------------------Modal-------------------------------------------- -->
-    <!-- Adress Modal -->
-    <div class="modal" tabindex="-1" id="addressModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add Address</h5>
-            <button type="button" (click)="closeAddressModal()" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="Address_Display" style="display: flex; justify-content: center; align-items: center;" >
-              <div class="form_display" style="display: flex; flex-direction: column; gap: 10px;">
-                <input #inputField type="text" class="form-control" [placeholder]="placeholder" />
-                <div style="display: flex; justify-content: center;">
-                  <google-map height="400px" width="400px" [zoom]="15" (mapClick)="clickEvent($event)" [center]="position">
-                    <map-marker [position]="position"></map-marker>
-                  </google-map>
-                </div>
-                <div style="display: flex; gap: 2px">
-                  <input type="text" [value]="placeDetails.city" class="form-control" placeholder="city" disabled
-                    [(ngModel)]="placeDetails.city" />
-                  <input type="text" [value]="placeDetails.area" class="form-control" placeholder="area" disabled
-                    [(ngModel)]="placeDetails.area" />
-                </div>
-                <div>
-                  <textarea name="" id="" [(ngModel)]="custAddressData" style="width: 100%" class="form-control" [value]=""
-                    placeholder="Address"></textarea>
-                </div>
-                <div>
-                  <textarea name="" id="" style="width: 100%" class="form-control" [(ngModel)]="address"
-                    placeholder="Building/Flat No"></textarea>
-                </div>
-                <div>
-                  <span>Address Type</span>
-                  <div class="d-flex gap-2">
-                    <div class="form-check">
-                      <input class="form-check-input" (change)="onRadioChange($event)" value="home" type="radio"
-                        name="flexRadioDefault" id="flexRadioDefault1" />
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        Home
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" (change)="onRadioChange($event)" value="work" type="radio"
-                        name="flexRadioDefault" id="flexRadioDefault2" />
-                      <label class="form-check-label" for="flexRadioDefault2">
-                        Work
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" (change)="onRadioChange($event)" value="other" type="radio"
-                        name="flexRadioDefault" id="flexRadioDefault2" />
-                      <label class="form-check-label" for="flexRadioDefault2">
-                        Other
-                      </label>
-                    </div>
+  <!-- Adress Modal -->
+  <div class="modal" tabindex="-1" id="addressModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Address</h5>
+          <button type="button" (click)="closeAddressModal()" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex;justify-content: center;">
+            <div style="display: flex;justify-content: center; flex-direction: column; gap: 10px;">
+              <input #inputField type="text" class="form-control" [placeholder]="placeholder" />
+              <div>
+                <google-map height="400px" width="400px" [zoom]="15" (mapClick)="clickEvent($event)" [center]="position">
+                  <map-marker [position]="position"></map-marker>
+                </google-map>
+              </div>
+              <div style="display: flex; gap: 2px">
+                <input type="text" [value]="placeDetails.city" class="form-control" placeholder="city" disabled
+                  [(ngModel)]="placeDetails.city" />
+                <input type="text" [value]="placeDetails.area" class="form-control" placeholder="area" disabled
+                  [(ngModel)]="placeDetails.area" />
+              </div>
+              <div>
+                <textarea name="" id="" [(ngModel)]="custAddressData" style="width: 100%" class="form-control" [value]=""
+                  placeholder="Address"></textarea>
+              </div>
+              <div>
+                <textarea name="" id="" style="width: 100%" class="form-control" [(ngModel)]="address"
+                  placeholder="Building/Flat No"></textarea>
+              </div>
+              <div>
+                <span>Address Type</span>
+                <div class="d-flex gap-2">
+                  <div class="form-check">
+                    <input class="form-check-input" (change)="onRadioChange($event)" value="home" type="radio"
+                      name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Home
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" (change)="onRadioChange($event)" value="work" type="radio"
+                      name="flexRadioDefault" id="flexRadioDefault2" />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Work
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" (change)="onRadioChange($event)" value="other" type="radio"
+                      name="flexRadioDefault" id="flexRadioDefault2" />
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      Other
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" (click)="closeAddressModal()" class="btn btn-secondary" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button type="button" (click)="addAddress()" class="btn btn-primary">
-              Save changes
-            </button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="closeAddressModal()" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" (click)="addAddress()" class="btn btn-primary">
+            Save changes
+          </button>
         </div>
       </div>
     </div>
+  </div> 
+  
 
   <!-- Coupoun Modal -->
   <div class="modal" tabindex="-1" id="copounModal">
@@ -738,13 +739,12 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Hold On. Please read before proceeding</h5>
+          <button (click)="closetermsModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Please read before proceeding <br>
-          Registration card should not be expired <br>
-          Be careful not to keep anything illicit inside the car 
+          <p><strong>●</strong> Registration card should not be expired</p>
+          <p><strong>●</strong> Be careful not to keep anything illicit inside the car</p>
         </div>
         <div class="modal-footer">
           <button (click)="closetermsModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

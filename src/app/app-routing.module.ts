@@ -57,6 +57,9 @@ const routes: Routes = [
     path:'vehicleScheduleDrop',loadChildren:()=>import('../app/pages/schedule-drop/schedule-drop.module').then(m=>m.ScheduleDropModule)
   },
   {
+    path:'rescheduleOrder/:id', loadChildren:()=>import('../app/pages/reschedule/reschedule.module').then(m=>m.RescheduleModule)
+  },
+  {
     path:'**',component:NotfoundPageComponent
   }
 ];

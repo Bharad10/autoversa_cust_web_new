@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookingService } from 'src/app/services/booking.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-booking-status-flow-page',
@@ -22,6 +23,9 @@ export class BookingStatusFlowPageComponent {
   pendingJobs_flag =false;
   cancelReason:any;
   holdReason:any;
+  timeslots:any[]=[];
+  booking_slot: any;
+  inspectionDetails:any;
   cust_status_master = [
     'BKCC',
     'DRPC',
@@ -39,6 +43,10 @@ export class BookingStatusFlowPageComponent {
   workcard_showFlag = 0;
   position: any;
   booing_jobs: any[] = [];
+  bookingDate:any;
+  minSelectableDate: any;
+  maxSelectableDate: any;
+  base_url = environment.aws_url;
   constructor(
     private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService
   ) {
@@ -282,6 +290,10 @@ export class BookingStatusFlowPageComponent {
   getCustomerBookings() {
     this.booking_service.GetCustomerbookings({ custId: atob(this.customerId) }).subscribe((rdata: any) => {
       if (rdata.ret_data == "success") {
+        rdata.book_list.forEach((element: any) => {
+          if(element.bk_id==this.booking_details.bk_id) element.bgColor = '#e1e1e1';
+          else element.bgColor = '';
+        });
         this.activeBookings = rdata.book_list;
       }
     });
@@ -301,7 +313,8 @@ export class BookingStatusFlowPageComponent {
   }
   onWorkcardSelection(card_flag: any) {
     this.workcard_showFlag = card_flag;
-    let input_data = {
+    if(card_flag==1){
+      let input_data = {
       bookid: atob(this.booking_id)
     }
     this.booking_service.GetBookingJobDetails(input_data).subscribe((rdata: any) => {
@@ -320,6 +333,27 @@ export class BookingStatusFlowPageComponent {
         this.calculateTotal();
       }
     });
+  }else if(card_flag==2){
+    let input_data = {
+      bookid: atob(this.booking_id),
+      type: 1
+    }
+    this.booking_service.GetBookingInspectionDetails(input_data).subscribe((rdata: any) => {
+      if(rdata.ret_data=="success"){
+        this.inspectionDetails = rdata.inspection;
+        this.inspectionDetails.media = rdata.medias;
+        this.inspectionDetails.media = this.inspectionDetails.media.map((item: any) => ({ ...item, cssStyle: 'scale(1)' }));
+if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
+  const filteredData = rdata.pickup_odometers.filter((item: { bkt_code: string; }) => item.bkt_code === "PIWC");
+  if (filteredData.length > 0) {
+      this.inspectionDetails.pickup_odometer = filteredData[0].bkt_url;
+  }
+}
+
+
+      }
+    });
+  }
   }
   calculateTotal() {
     console.log("jjjjjiiiiiii-----k-->");
@@ -461,6 +495,104 @@ export class BookingStatusFlowPageComponent {
       modelDiv.style.display = 'block';
     }
   }
+  ondateSelection() {
+    this.timeslots = [];
+    const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    const dayName = days[this.bookingDate.getDay()]; // This will return "Saturday"
+    const day = ('0' + this.bookingDate.getDate()).slice(-2);
+    const month = ('0' + (this.bookingDate.getMonth() + 1)).slice(-2);
+    const year = this.bookingDate.getFullYear();
+
+    const formattedDate = `${day}-${month}-${year}`;
+    let inputData = {
+      day: dayName,
+      date: formattedDate,
+      branch_id:1
+    };
+    this.booking_service
+      .gettimeslotsbyDate(inputData)
+      .subscribe((rdata: any) => {
+        if (rdata.ret_data == 'success') {
+          const currentTime = new Date();
+          let bufferTime = parseInt(rdata.settings.gs_bookingbuffer_time);
+
+          console.log('Buffer Time: ' + bufferTime);
+
+          // Create a new Date object for the buffer time
+          const bufferDate = new Date(currentTime);
+          bufferDate.setMinutes(bufferDate.getMinutes() + bufferTime);
+
+          console.log(
+            'Before buffer time addition: ' + currentTime.getMinutes()
+          );
+
+          console.log('After buffer time addition: ' + bufferDate.getMinutes());
+
+          // Continue with your logic using the updated date
+
+          rdata.time_slots.forEach((data: any, index: any) => {
+            let time = data.tm_start_time;
+            const [hoursStr, minutesStr] = time.split(':');
+            const targetHours = parseInt(hoursStr);
+            const targetMinutes = parseInt(minutesStr);
+
+            // Convert target time to minutes since midnight for comparison
+            const targetTimeInMinutes = targetHours * 60 + targetMinutes;
+
+            // Convert buffer time to minutes since midnight for comparison
+            const bufferTimeInMinutes =
+              bufferDate.getHours() * 60 + bufferDate.getMinutes();
+
+            // Compare the target time with the buffer time
+            if (targetTimeInMinutes > bufferTimeInMinutes) {
+              let startTime = data.tm_start_time;
+              let endTime = data.tm_end_time;
+
+              // Convert start time to 12-hour format
+              let startDate = new Date('2000-01-01 ' + startTime);
+              let startTime12hr = startDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              });
+
+              // Convert end time to 12-hour format
+              let endDate = new Date('2000-01-01 ' + endTime);
+              let endTime12hr = endDate.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              });
+
+              let driversAlredayAssigned = rdata.assigned_emp.filter((item:any)=>{
+                return data.tm_id == item.tem_slotid
+              })
+
+              let timeData 
+
+              if (driversAlredayAssigned.length >= Number(data.driver_count)){
+                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:true };
+              }else{
+                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:false };
+              }
+
+              this.timeslots.push(timeData);
+            }
+          });
+
+         console.log(this.timeslots);
+        }
+      });
+  }
+
   changeBookingstatus(changeFlag:any){
     let input_data;
     if(changeFlag==0){
@@ -478,18 +610,33 @@ export class BookingStatusFlowPageComponent {
     }else if(changeFlag==1){
       input_data ={
         "bookid": this.booking_details.bk_id,
-        "reason": this.cancelReason,
-        "type": "CANCEL",
-        "backendstatus": "CANB",
-        "customerstatus":"CANC",
+        "reason": this.holdReason,
+        "type": "HOLD",
+        "backendstatus": "HOLDB",
+        "customerstatus":"HOLDC",
         "current_bstatus":"Booking Created",
         "current_cstatus":"Booking Created",
         "user_type": "0",
         "booking_version": this.booking_details.bk_version
       }
+    }else if(changeFlag==2){
+      input_data ={
+        // "bookid": this.booking_details.bk_id,
+        // "bookingdate": this.bookingDate,
+        // "slot": selected_timeid,
+        // "scheduletype": widget.scheduletype,
+        // "prebookingdate": bookeddate,
+        // "booking_version": booking['bk_version']
+      }
     }
     if(changeFlag==0 || changeFlag==1){
       this.booking_service.bookingHoldStatusChange(input_data).subscribe((rdata: any) => {
+        if(rdata.ret_data=="success"){
+          this.onWorkcardSelection(0);
+        }
+      });
+    }else if(changeFlag==2){
+      this.booking_service.bookingReschedule(input_data).subscribe((rdata: any) => {
         if(rdata.ret_data=="success"){
           this.onWorkcardSelection(1);
         }
@@ -497,4 +644,8 @@ export class BookingStatusFlowPageComponent {
     }
     
   }
+  navigate(){
+    this.router.navigateByUrl('rescheduleOrder/'+ btoa(this.booking_details.bk_id))
+  }
+
 }
