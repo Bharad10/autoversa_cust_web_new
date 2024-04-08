@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 
+
+
+
 @NgModule({
   declarations: [
     BookingPageComponent
@@ -24,7 +27,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     NgSelectModule,
     MatDatepickerModule,
     MatInputModule,
-    GoogleMapsModule
+    GoogleMapsModule,
   ]
 })
 export class BookingModule { }

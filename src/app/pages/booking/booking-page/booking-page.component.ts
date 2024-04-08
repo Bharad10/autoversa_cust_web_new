@@ -3,11 +3,17 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import * as RecordRTC from 'recordrtc';
+
 import { buffer } from 'rxjs';
 import { AddressService } from 'src/app/services/address.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { BookingService } from 'src/app/services/booking.service';
+import { DataService } from 'src/app/services/data.service';
 import { environment } from 'src/environments/environment';
+
+
+
+
 
 @Component({
   selector: 'app-booking-page',
@@ -15,6 +21,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./booking-page.component.css'],
 })
 export class BookingPageComponent {
+
+  
+
   base_url = environment.aws_url;
   panelOpenState1 = true;
   panelOpenState2 = false;
@@ -77,11 +86,19 @@ export class BookingPageComponent {
   minSelectableDate: any;
   maxSelectableDate: any;
 
-  //coupon 
-  allCoupons:any;
-  appliedCoupon:any;
-  isCouponApplied:boolean=false;
-  totPriceAfterApplyingCoupon:any;
+
+  bookingSectionDisplay:boolean=false;
+  isVehIdnotEmpty:boolean = false;
+
+  custVehIdFromHomePage:any;
+
+  
+
+  //coupon
+  allCoupons: any;
+  appliedCoupon: any;
+  isCouponApplied: boolean = false;
+  totPriceAfterApplyingCoupon: any;
 
   @Input() placeholder = 'Search For Places';
   @ViewChild('inputField', { static: true })
@@ -93,17 +110,19 @@ export class BookingPageComponent {
 
   marker: google.maps.Marker | undefined; // Define marker variable
 
-
   display: any;
   position: any = { lat: 24.453884, lng: 54.3773438 };
-  
+
   placeDetails: any = { city: '', area: '', country: '', verificationCity: '' };
 
-  custAddressData:any;
-  address:any;
-  addressType:any;
-  customerAddress:any;
+  custAddressData: any;
+  address: any;
+  addressType: any;
+  customerAddress: any;
 
+  audioFile: any;
+  convertedAAC: any;
+  
 
   constructor(
     private domSanitizer: DomSanitizer,
@@ -112,7 +131,8 @@ export class BookingPageComponent {
     private booking_service: BookingService,
     private auth_service: AuthService,
     private toast: ToastrService,
-    private adress_service:AddressService
+    private adress_service: AddressService,
+    public data:DataService
   ) {
     this.timeslots = [];
     this.booking_slot = 0;
@@ -151,9 +171,26 @@ export class BookingPageComponent {
     this.customerVehicleId = 0;
     this.getCustomerVehicleList();
     this.getCustomerBookings();
-    this.getBookingDetails();
-    this.adressFetch();
-    this.getCurrentLocation();
+   
+  }
+
+  getCustomerBookings() {
+    let data = {
+      custId: atob(this.custId),
+    };
+    this.booking_service.getCustomerBookings(data).subscribe((data) => {
+      this.custBookingList = data.book_list;
+      this.getBookingDetails();
+      this.adressFetch();
+      this.dataFetchfromHomePage()
+      this.getCurrentLocation(); 
+    });
+  }
+
+  dataFetchfromHomePage(){   
+    this.customerVehicleId = this.data.getData();
+    let fnData = this.data.getData()
+    this.onvehicleSelectionChange(fnData)
   }
 
   ngAfterViewInit() {
@@ -313,8 +350,10 @@ export class BookingPageComponent {
       .then(this.successCallback.bind(this), this.errorCallback.bind(this));
   }
   successCallback(stream: MediaStream) {
+    console.log("Recording Started Sucessfully");
     const options: RecordRTC.Options = {
-      mimeType: 'audio/wav',
+      mimeType: 'audio/ogg',
+      audioBitsPerSecond: 128000
     };
     var StereoAudioRecorder = RecordRTC.StereoAudioRecorder;
     this.record = new StereoAudioRecorder(stream, options);
@@ -323,9 +362,34 @@ export class BookingPageComponent {
   stopRecording() {
     this.recording = false;
     this.record.stop(this.processRecording.bind(this));
+    console.log("Recording Stopped Successfully");
+    
   }
-  processRecording(blob: Blob | MediaSource) {
-    this.url = URL.createObjectURL(blob);
+  processRecording(blob: Blob ) {
+    // this.url = URL.createObjectURL(blob);
+    // this.audioFile = blob;
+    // console.log('This is blob', this.audioFile);
+    this.audioFile = blob;
+    console.log('Recorded audio MIME type:', blob.type);
+  
+  // Create a FileReader object
+  const reader = new FileReader();
+
+  // Define a function to execute when the FileReader finishes reading the Blob
+  reader.onloadend = () => {
+    // Access the base64-encoded audio data URL from the result
+    const base64DataUrl = reader.result as string;
+
+    // Now you can use the base64DataUrl as needed, for example, assign it to this.url
+    this.url = base64DataUrl;
+
+    console.log('Base64-encoded audio data URL:', this.url);
+  };
+
+  // Start reading the Blob as a data URL (base64-encoded)
+  reader.readAsDataURL(blob);
+
+   
   }
   deleteAudio() {
     this.url = null;
@@ -334,6 +398,9 @@ export class BookingPageComponent {
   errorCallback(error: any) {
     this.error = 'Cant play audio in your browser';
   }
+
+  //converting the blob url to acc format..
+  
 
   getCustomerAddresses() {
     this.booking_service
@@ -345,12 +412,12 @@ export class BookingPageComponent {
 
           // let count = this.drop_address.length
           //     count = (count - 1)
-          //     console.log("Count of the Address Array",count); 
+          //     console.log("Count of the Address Array",count);
 
           // //Selecting The address Default
           // this.pickup_addressId = rdata.cust_address[count].cad_id
           // this.drop_addressId = rdata.cust_address[count].cad_id
-          
+
           console.log('----------drop adresses----->', this.drop_address);
         }
       });
@@ -432,10 +499,11 @@ export class BookingPageComponent {
     const year = this.bookingDate.getFullYear();
 
     const formattedDate = `${day}-${month}-${year}`;
+    
     let inputData = {
       day: dayName,
       date: formattedDate,
-      branch_id:1
+      branch_id: 1,
     };
     this.booking_service
       .gettimeslotsbyDate(inputData)
@@ -468,8 +536,13 @@ export class BookingPageComponent {
             const targetTimeInMinutes = targetHours * 60 + targetMinutes;
 
             // Convert buffer time to minutes since midnight for comparison
-            const bufferTimeInMinutes =
-              bufferDate.getHours() * 60 + bufferDate.getMinutes();
+            let bufferTimeInMinutes ;
+              if(this.bookingDate == Date.now()){
+              bufferTimeInMinutes =
+              bufferDate.getHours() * 60 + bufferDate.getMinutes(); 
+              }else{
+                bufferTimeInMinutes = 0;
+              } 
 
             // Compare the target time with the buffer time
             if (targetTimeInMinutes > bufferTimeInMinutes) {
@@ -492,24 +565,35 @@ export class BookingPageComponent {
                 hour12: true,
               });
 
-              let driversAlredayAssigned = rdata.assigned_emp.filter((item:any)=>{
-                return data.tm_id == item.tem_slotid
-              })
+              let driversAlredayAssigned = rdata.assigned_emp.filter(
+                (item: any) => {
+                  return data.tm_id == item.tem_slotid;
+                }
+              );
 
-              let timeData 
+              let timeData;
 
-              if (driversAlredayAssigned.length >= Number(data.driver_count)){
-                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:true };
-              }else{
-                timeData = { tm_start_time: startTime12hr, tm_end_time: endTime12hr, tm_id:data.tm_id , isTimeSlotFilled:false };
+              if (driversAlredayAssigned.length >= Number(data.driver_count)) {
+                timeData = {
+                  tm_start_time: startTime12hr,
+                  tm_end_time: endTime12hr,
+                  tm_id: data.tm_id,
+                  isTimeSlotFilled: true,
+                };
+              } else {
+                timeData = {
+                  tm_start_time: startTime12hr,
+                  tm_end_time: endTime12hr,
+                  tm_id: data.tm_id,
+                  isTimeSlotFilled: false,
+                };
               }
 
               this.timeslots.push(timeData);
             }
           });
 
-         console.log(this.timeslots);
-          
+          console.log(this.timeslots);
         }
       });
   }
@@ -559,48 +643,46 @@ export class BookingPageComponent {
   }
   openPickupsection(type: any) {
     if (type == 0) {
-     
       this.panelOpenState1 = false;
       this.panelOpenState2 = true;
       this.panelOpenState3 = false;
       this.stopRecording();
     } else {
-          //Validations
-    if(!this.pickup_addressId&&!this.drop_addressId){
-      this.toast.warning("Select Address")
-      return 
-    }
+      //Validations
+      if (!this.pickup_addressId && !this.drop_addressId) {
+        this.toast.warning('Select Address');
+        return;
+      }
 
-    if(!this.pickup_addressId){
-      this.toast.warning("Select Pickup Address")
-      return
-    }
+      if (!this.pickup_addressId) {
+        this.toast.warning('Select Pickup Address');
+        return;
+      }
 
-    if(!this.drop_addressId){
-      this.toast.warning("Select Drop Address")
-      return 
-    }
+      if (!this.drop_addressId) {
+        this.toast.warning('Select Drop Address');
+        return;
+      }
 
+      if (!this.bookingDate && !this.booking_slot) {
+        this.toast.error('Please Select Date and Time of your Booking');
+        return;
+      }
 
-    if(!this.bookingDate && !this.booking_slot){
-      this.toast.error("Please Select Date and Time of your Booking")
-      return
-    }
+      if (!this.bookingDate) {
+        this.toast.error('Please Select the Date');
+        return;
+      }
 
-    if(!this.bookingDate){
-      this.toast.error("Please Select the Date")
-      return
-    }
+      if (!this.booking_slot) {
+        this.toast.error('Please Select the Time');
+        return;
+      }
 
-    if(!this.booking_slot){
-      this.toast.error("Please Select the Time")
-      return 
-    }
-
-    if(!this.selectedPickupOption){
-      this.toast.error("Please Select the Pickup Type")
-      return 
-    }
+      if (!this.selectedPickupOption) {
+        this.toast.error('Please Select the Pickup Type');
+        return;
+      }
       this.panelOpenState1 = false;
       this.panelOpenState2 = false;
       this.panelOpenState3 = true;
@@ -611,57 +693,108 @@ export class BookingPageComponent {
     this.pickup_vat = eachpickup.vat;
     this.pickup_cost = eachpickup.cost;
 
-    if(eachpickup.pk_mulkiyaflag == 1){
-      this.opentermsModal()
+    if (eachpickup.pk_mulkiyaflag == 1) {
+      this.opentermsModal();
     }
   }
-  createBooking() {
+   createBooking() {       
     this.panelOpenState1 = false;
     this.panelOpenState2 = false;
     this.panelOpenState3 = true;
+    let bookingData ;
 
-   
     this.custId = localStorage.getItem('id');
     this.custName = localStorage.getItem('name');
-    let bookingData = {
-      bookingattachment: this.url,
-      custId: atob(this.custId),
-      cust_name: atob(this.custName),
-      vehId: this.customerVehicleId,
-      brand: this.brand,
-      model: this.model,
-      variant: this.variant,
-      bkurl: '',
-      pickupaddress: this.pickup_addressId,
-      dropaddress: this.drop_addressId,
-      bookingdate: this.bookingDate,
-      operationlabourrate: 5,
-      sub_packages: this.subpackages,
-      services: this.services,
-      expenses: [],
-      packid: this.package_id,
-      packtype: this.package_data.pkg_type,
-      packprice: this.tot_package_price,
-      pack_vat: this.tot_package_vat,
-      pickup_vat: this.pickup_vat,
-      gs_vat: this.gs_vat,
-      veh_groupid: this.vehicle_groupid,
-      vgm_labour_rate: this.labour_rate,
-      total_amount: this.tot_package_price,
-      advance: '0',
-      discount: this.discount ? this.discount : '0',
-      bk_branchid: 1,
-      complaint: this.comments,
-      slot: this.booking_slot,
-      pickuptype: this.selectedPickupOption,
-      sourcetype: 'WEB',
-      pack_extra_details: this.pack_extra,
-      bk_pickup_cost: (
-        parseFloat(this.pickup_cost) - parseFloat(this.pickup_vat)
-      ).toFixed(2),
-      coupon_id: this.coupon_id != 0 ? this.coupon_id : null,
-      gs_ispayment: this.gs_ispayment,
-    };
+   
+
+      // const response = await fetch(this.url);
+      // const blobData = await response.blob();
+
+      
+
+       bookingData = {
+        bookingattachment:this.url,
+        custId: atob(this.custId),
+        cust_name: atob(this.custName),
+        vehId: this.customerVehicleId,
+        brand: this.brand,
+        model: this.model,
+        variant: this.variant,
+        bkurl: '',
+        pickupaddress: this.pickup_addressId,
+        dropaddress: this.drop_addressId,
+        bookingdate: this.bookingDate,
+        operationlabourrate: 5,
+        sub_packages: this.subpackages,
+        services: this.services,
+        expenses: [],
+        packid: atob(this.package_id),
+        packtype: this.package_data.pkg_type,
+        packprice: this.tot_package_price,
+        pack_vat: this.tot_package_vat,
+        pickup_vat: this.pickup_vat,
+        gs_vat: this.gs_vat,
+        veh_groupid: this.vehicle_groupid,
+        vgm_labour_rate: this.labour_rate,
+        total_amount: this.tot_package_price,
+        advance: '0',
+        discount: this.discount ? this.discount : '0',
+        bk_branchid: 1,
+        complaint: this.comments,
+        slot: this.booking_slot,
+        pickuptype: this.selectedPickupOption,
+        sourcetype: 'WEB',
+        pack_extra_details: this.pack_extra,
+        bk_pickup_cost: (
+          parseFloat(this.pickup_cost) - parseFloat(this.pickup_vat)
+        ).toFixed(2),
+        coupon_id: this.coupon_id != 0 ? this.coupon_id : null,
+        gs_ispayment: this.gs_ispayment,
+      };
+    
+    
+    // const formData = new FormData();
+    // formData.append('bookingattachment', this.audioFile);
+    // formData.append('custId', bookingData.custId);
+    // formData.append('cust_name', bookingData.cust_name);
+    // formData.append('vehId',bookingData.vehId);
+    // formData.append('brand', bookingData.brand);
+    // formData.append('model', bookingData.model);
+    // formData.append('variant', bookingData.variant);
+    // formData.append('bkurl', bookingData.bkurl);
+    // formData.append('pickupaddress', bookingData.pickupaddress.toString());
+    // formData.append('dropaddress', bookingData.dropaddress.toString());
+    // formData.append('bookingdate', bookingData.bookingdate);
+    // formData.append('operationlabourrate', bookingData.operationlabourrate.toString());
+    // formData.append('sub_packages', bookingData.sub_packages);
+    // formData.append('services',bookingData.services);
+    // formData.append('expenses', bookingData.expenses.toString());
+    // formData.append('packid', bookingData.packid);
+    // formData.append('packtype', bookingData.packtype);
+    // formData.append('packprice', bookingData.packprice);
+    // formData.append('pack_vat', bookingData.pack_vat);
+    // formData.append('pickup_vat', bookingData.pickup_vat);
+    // formData.append('gs_vat', bookingData.gs_vat);
+    // formData.append('veh_groupid', bookingData.veh_groupid);
+    // formData.append('vgm_labour_rate', bookingData.vgm_labour_rate);
+    // formData.append('total_amount', bookingData.total_amount);
+    // formData.append('advance', bookingData.advance);
+    // formData.append('discount',bookingData.discount);
+    // formData.append('bk_branchid', bookingData.bk_branchid.toString());
+    // formData.append('complaint', bookingData.complaint);
+    // formData.append('slot', bookingData.slot);
+    // formData.append('pickuptype', bookingData.pickuptype);
+    // formData.append('sourcetype', bookingData.sourcetype);
+    // formData.append('pack_extra_details', bookingData.pack_extra_details);
+    // formData.append(
+    //   'bk_pickup_cost',
+    //   bookingData.bk_pickup_cost
+    // );
+    // formData.append('coupon_id', bookingData.coupon_id);
+    // formData.append('gs_ispayment', bookingData.gs_ispayment);
+
+    // console.log('fffffffffmdata=----', formData);
+
     this.booking_service.create_booking(bookingData).subscribe((rdata: any) => {
       if (rdata.ret_data == 'success') {
         this.router.navigateByUrl(
@@ -669,12 +802,15 @@ export class BookingPageComponent {
         );
       }
     });
+   
+    
   }
 
-  onvehicleSelectionChange(custvehId: any) { 
+  onvehicleSelectionChange(custvehId: any) {
     if (custvehId) {
+      console.log("Iam i empty?",this.custBookingList);
       let filterdArray = this.custBookingList.filter((data: any) => {
-        return custvehId == data.bk_vehicle_id;
+        return Number(custvehId) == data.bk_vehicle_id;
       });
 
       if (
@@ -683,12 +819,16 @@ export class BookingPageComponent {
         (filterdArray.length > 0 &&
           filterdArray[0].custstatus != 'Booking Canceled')
       ) {
+        console.log("Suspected Issue");
+        
         this.toast.error('Booking already exists');
+        this.bookingSectionDisplay = false
+        
         return; // Exit the function if booking exists
       }
     }
     if (custvehId) {
-       
+      this.bookingSectionDisplay = true;
       let filterdVehicleData = this.customerVehicleList.filter(
         (customerVehicleList: any) => {
           return (customerVehicleList = customerVehicleList.cv_id == custvehId);
@@ -745,7 +885,7 @@ export class BookingPageComponent {
                 return;
               }
               console.log('This is Something Else', filterdData);
-              filterdData = []; 
+              filterdData = [];
             }
             rdata.services.forEach((element: any) => {
               if (element.pse_billexclusion == '0') {
@@ -904,12 +1044,10 @@ export class BookingPageComponent {
             //   "gs_vat":rdata.settings.gs_vat
             // }
             this.tot_package_price = Math.round(this.tot_package_price);
-            this.getCouponsForCustomer()
+            this.getCouponsForCustomer();
           }
-          
         });
     } else {
-      
     }
   }
   closeAddressModal() {
@@ -925,14 +1063,7 @@ export class BookingPageComponent {
     }
   }
 
-  getCustomerBookings() {
-    let data = {
-      custId: atob(this.custId),
-    };
-    this.booking_service.getCustomerBookings(data).subscribe((data) => {
-      this.custBookingList = data.book_list;
-    });
-  }
+  
 
   applyCoupon(copounData: any) {
     this.isCouponApplied = !this.isCouponApplied;
@@ -941,11 +1072,17 @@ export class BookingPageComponent {
       this.appliedCoupon = copounData;
       console.log(copounData);
       //discountamount
-      this.totPriceAfterApplyingCoupon = (this.tot_package_price + this.pickup_cost ) - this.appliedCoupon.discountamount 
-      console.log("Price After Applying Discount",this.totPriceAfterApplyingCoupon);
+      this.totPriceAfterApplyingCoupon =
+        this.tot_package_price +
+        this.pickup_cost -
+        this.appliedCoupon.discountamount;
+      console.log(
+        'Price After Applying Discount',
+        this.totPriceAfterApplyingCoupon
+      );
     } else {
       this.appliedCoupon = null;
-      console.log("Removing Discount",this.tot_package_price);
+      console.log('Removing Discount', this.tot_package_price);
     }
 
     if (this.isCouponApplied) {

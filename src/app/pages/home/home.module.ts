@@ -13,6 +13,8 @@ import { YellowSectionComponent } from './sections/yellow-section/yellow-section
 
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { BookingListComponent } from './sections/bookinglist/booking-list/booking-list.component';
+
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -26,7 +28,7 @@ import { BookingListComponent } from './sections/bookinglist/booking-list/bookin
   ],
   imports: [
     CommonModule,
-    HomeRoutingModule,CarouselModule
+    HomeRoutingModule,CarouselModule,FormsModule
   ],
   providers:[]
 })
