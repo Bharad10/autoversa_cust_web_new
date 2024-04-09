@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class DataService {
   
-  private sharedData: any;
+  private sharedData: number = 0;
 
   constructor() { }
 

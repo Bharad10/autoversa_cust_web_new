@@ -42,7 +42,7 @@
                                     {{eachveh.cv_make}} {{eachveh.cv_model}} {{eachveh.cv_variant}}
                                     ({{eachveh.cv_plate_number}})</option>
                                 </select> -->
-                                <ng-select [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
+                                <ng-select class="mt-2" [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
                                 selected="customerVehicleId">
                                 <ng-option [value]="0">Choose Your Vehicle</ng-option>
                                 <ng-option *ngFor="let eachveh of customerVehicleList"
@@ -184,7 +184,7 @@
                       <div class="col-xl-6">
                         <div class="row">
                           <label style="margin-top: 5px" class="address_label">Pickup Location*</label>
-                          <div class="col-11">
+                          <div class="col-11 mt-2">
                             <ng-select [(ngModel)]="pickup_addressId" (change)="onSelectionChange($event)"
                               selected="pickup_addressId">
                               <ng-option [value]="0">Select Pickup Address</ng-option>
@@ -196,7 +196,7 @@
                               display: flex;
                               justify-content: center;
                               align-items: center;
-                            " class="col-1">
+                            " class="col-1 mt-2">
                             <i mat-raised-button matTooltip="Add Pickup Location"
                               aria-label="Button that displays a tooltip when focused or hovered over"
                               (click)="openAddressModal()" class="fa fa-plus"></i>
@@ -206,7 +206,7 @@
                       <div class="col-xl-6">
                         <div class="row">
                           <label style="margin-top: 5px" class="address_label">Drop Location*</label>
-                          <div class="col-11">
+                          <div class="col-11 mt-2">
                             <ng-select [(ngModel)]="drop_addressId" (change)="onSelectionChange($event)"
                               selected="drop_addressId">
                               <ng-option [value]="0">Select Drop Address</ng-option>
@@ -218,7 +218,7 @@
                               display: flex;
                               justify-content: center;
                               align-items: center;
-                            " class="col-1">
+                            " class="col-1 mt-2">
                             <i mat-raised-button matTooltip="Add drop Location"
                               aria-label="Button that displays a tooltip when focused or hovered over"
                               class="fa fa-plus" (click)="openAddressModal()"></i>
@@ -229,29 +229,29 @@
                     <div class="form-check">
                       <input mdbCheckbox class="form-check-input" [(ngModel)]="isChecked" type="checkbox" value=""
                         id="flexCheckChecked" [checked]="true"
-                        [ngStyle]="{'background-color': '#3186ac', 'border-color': '#3186ac', 'margin-top' : '1.25%'}" />
+                        [ngStyle]="{'background-color': '#3186ac', 'border-color': '#3186ac'}" />
                       <label class="address_label" for="flexCheckChecked">
                         Drop location same as pickup location
                       </label>
                     </div>
                     <br />
-                    <div class="pickuptype_label">Pickup options</div>
+                    <div *ngIf="pickup_addressId&&drop_addressId" class="pickuptype_label">Pickup options</div>
                     <br />
 
                     <div *ngIf="pickup_addressId&&drop_addressId" >
                     <div class="row label" *ngFor="let eachpickup of pickup_options; let p = index">
-                      <div class="col-8">
-                        <label class="packagedetailslist">
-                          <input type="radio" [value]="eachpickup.pk_id" name="pickuptype_{{p}}"
-                            (click)="PickupOptionSelection(eachpickup);" [(ngModel)]="selectedPickupOption" />
-                          {{eachpickup.pk_name}}
-                        </label>
-                      </div>
                       <div class="col-4">
-                        <p class="packagedetailslist" *ngIf="!eachpickup.cost" style="color: #26c20e">
+                        <div class="pickup_options">
+                          <input type="radio" [value]="eachpickup.pk_id" name="pickuptype_{{p}}"
+                          (click)="PickupOptionSelection(eachpickup);" [(ngModel)]="selectedPickupOption" />
+                         {{eachpickup.pk_name}} 
+                        </div>   
+                      </div>
+                      <div class="col-8">
+                        <p class="pickup_options" *ngIf="!eachpickup.cost" style="color: #26c20e">
                           FREE
                         </p>
-                        <p class="packagedetailslist" *ngIf="eachpickup.cost && eachpickup.cost!=0"
+                        <p class="pickup_options" *ngIf="eachpickup.cost && eachpickup.cost!=0"
                           style="color: #f7941e">
                           AED {{eachpickup.cost}}
                         </p>
@@ -521,16 +521,16 @@
                     </div>
                     <hr />
                     <div class="row">
-                      <p class="packagedetailslist">Payment Summary</p>
+                      <p *ngIf="pickup_cost" class="packagedetailslist">Payment Summary</p>
                     </div>
                     <br />
                     <div class="row label">
-                      <div class="col-6" *ngIf="package_data">
+                      <div class="col-6" *ngIf="pickup_cost">
                         <label class="packagedetailslist">
                           {{package_data.pkg_name}}
                         </label>
                       </div>
-                      <div class="col-6">
+                      <div *ngIf="pickup_cost" class="col-6">
                         <label class="packagedetailslist"> AED {{tot_package_price}} </label>
                       </div>
                     </div>
@@ -540,19 +540,19 @@
                           {{pickup_name}}
                         </label>
                       </div>
-                      <div class="col-6">
+                      <div *ngIf="pickup_cost" class="col-6">
                         <label class="packagedetailslist" style="color: #26c20e" *ngIf="this.pickup_cost==0"> FREE
                         </label>
                         <label class="packagedetailslist" *ngIf="this.pickup_cost!=0"> AED {{this.pickup_cost}} </label>
                       </div>
                     </div>
-                    <div class="row label">
+                    <div *ngIf="pickup_cost" class="row label">
                       <div class="col-6">
                         <label class="packagedetailslist"> Grand Total </label>
                       </div>
                       <div class="col-6">
                         <label class="packagedetailslist">
-                          <strong *ngIf="!isCouponApplied">AED {{tot_package_price+this.pickup_cost | number: "1.2-2"}}</strong>
+                          <strong *ngIf="!isCouponApplied">AED {{tot_package_price + this.pickup_cost | number: "1.2-2"}}</strong>
                           <strong *ngIf="isCouponApplied">AED {{ totPriceAfterApplyingCoupon| number: "1.2-2"}}</strong>
                         </label>
                       </div>
