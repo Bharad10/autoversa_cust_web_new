@@ -278,13 +278,18 @@ export class BookingStatusFlowPageComponent {
     });
     this.getCustomerBookings();
   }
-  changeBackgroundColor(sectionNumber: number) {
+  changeBackgroundColor(sectionNumber: number, bookingId:any) {
     if (sectionNumber === 1) {
       this.bgColor1 = '#e1e1e1';
       this.bgColor2 = '';
     } else if (sectionNumber === 2) {
       this.bgColor1 = '';
       this.bgColor2 = '#e1e1e1';
+    }
+
+    if(bookingId){
+     this.router.navigateByUrl("booking-status-flow/" + btoa(bookingId)) 
+    //  window.location.reload();
     }
   }
   getCustomerBookings() {
@@ -646,6 +651,10 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
   }
   navigate(){
     this.router.navigateByUrl('rescheduleOrder/'+ btoa(this.booking_details.bk_id))
+  }
+
+  navigateToStatusFlow(bookingId:any){
+    this.router.navigateByUrl("booking-status-flow/" + btoa(bookingId));
   }
 
 }
