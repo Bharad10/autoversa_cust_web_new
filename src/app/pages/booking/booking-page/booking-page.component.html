@@ -34,14 +34,21 @@
                                 <p class="package-heading" style="color: black">
                                   Choose Vehicle
                                 </p>
-                                <select class="form-select" aria-label="Default select example"
+                                <!-- <select class="form-select" aria-label="Default select example"
                                   [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
                                   selected="customerVehicleId">
                                   <option [ngValue]="null" disabled selected>Choose Your Vehicle</option>
                                   <option *ngFor="let eachveh of customerVehicleList" value="{{eachveh.cv_id}}">
                                     {{eachveh.cv_make}} {{eachveh.cv_model}} {{eachveh.cv_variant}}
                                     ({{eachveh.cv_plate_number}})</option>
-                                </select>
+                                </select> -->
+                                <ng-select [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
+                                selected="customerVehicleId">
+                                <ng-option [value]="0">Choose Your Vehicle</ng-option>
+                                <ng-option *ngFor="let eachveh of customerVehicleList"
+                                  [value]="eachveh.cv_id">{{eachveh.cv_make}} {{eachveh.cv_model}} {{eachveh.cv_variant}}
+                                  ({{eachveh.cv_plate_number}})</ng-option>
+                              </ng-select>
                               </div>
                             </div>
                             <div class="form_heading" *ngIf="(!customerVehicleId && !bookingSectionDisplay) ">
