@@ -20,6 +20,7 @@ export class HomeComponent {
   ngOnInit(): void {
     this.userId = localStorage.getItem('id');
     this.fetchBookingList();
+    //location.reload();
   }
 
   fetchBookingList() {
