@@ -297,6 +297,6 @@ export class ProfilePageComponent implements OnInit {
   logout() {
     localStorage.clear();
     location.reload();
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('')
   }
 }
