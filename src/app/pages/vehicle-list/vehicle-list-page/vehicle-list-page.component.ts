@@ -186,7 +186,7 @@ export class VehicleListPageComponent implements OnInit {
 
     this.fetchCarModels();
 
-    alert('Vehicle Updated SucessFully');
+    this.toast.success('Vehicle Updated SucessFully');
 
     this.closeeditModal();
   }
