@@ -352,8 +352,8 @@ export class BookingPageComponent {
   successCallback(stream: MediaStream) {
     console.log("Recording Started Sucessfully");
     const options: RecordRTC.Options = {
-      mimeType: 'audio/ogg',
-      audioBitsPerSecond: 128000
+      mimeType: 'audio/wav',
+      
     };
     var StereoAudioRecorder = RecordRTC.StereoAudioRecorder;
     this.record = new StereoAudioRecorder(stream, options);
@@ -540,7 +540,7 @@ export class BookingPageComponent {
               if(this.bookingDate == Date.now()){
               bufferTimeInMinutes =
               bufferDate.getHours() * 60 + bufferDate.getMinutes(); 
-              }else{
+              } else {
                 bufferTimeInMinutes = 0;
               } 
 
