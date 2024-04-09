@@ -540,7 +540,7 @@ export class BookingPageComponent {
               if(this.bookingDate == Date.now()){
               bufferTimeInMinutes =
               bufferDate.getHours() * 60 + bufferDate.getMinutes(); 
-              }else{
+              } else {
                 bufferTimeInMinutes = 0;
               } 
 
