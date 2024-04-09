@@ -44,14 +44,28 @@
                                 </select>
                               </div>
                             </div>
-                            <div class="form_heading" *ngIf="!customerVehicleId">
+                            <div class="form_heading" *ngIf="(!customerVehicleId && !bookingSectionDisplay) ">
                               <div class="mb-2 col-12">
                                 <p class="warning-heading" style="color: black">
                                   Please select a vehicle.
                                 </p>
                               </div>
                             </div>
-                            <div class="form_heading" *ngIf="customerVehicleId">
+                            <div class="form_heading" *ngIf="(!customerVehicleId && bookingSectionDisplay) ">
+                              <div class="mb-2 col-12">
+                                <p class="warning-heading" style="color: black">
+                                  Please select a vehicle.
+                                </p>
+                              </div>
+                            </div>
+                            <div class="form_heading" *ngIf="customerVehicleId && !bookingSectionDisplay ">
+                              <div class="mb-2 col-12">
+                                <p class="warning-heading" style="color: black">
+                                  Please select another Vehicle Booking Already Exists
+                                </p>
+                              </div>
+                            </div>
+                            <div class="form_heading" *ngIf="customerVehicleId && bookingSectionDisplay  ">
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
                                   What's Included
@@ -242,18 +256,15 @@
                     <div class="row">
                       <div class="col-xl-6">
                         <div class="pickuptype_label">Select Booking Date*</div>
-                        <div>
-                          <mat-form-field>
-                            <input matInput [matDatepicker]="picker" (dateChange)="ondateSelection();"
+                        <div style="display: flex; align-items: center;">
+                            <input class="form-control" matInput [matDatepicker]="picker" (dateChange)="ondateSelection();"
                               placeholder="Choose a booking date" [(ngModel)]="bookingDate" [min]="minSelectableDate" [max]="maxSelectableDate" >
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field>
-                          <i class="fa fa-calendar"></i>
                         </div>
                       </div>
                       <div class="col-xl-6">
-                        <div class="pickuptype_label">Booking Time Slot*</div>
+                        <div class="pickuptype_label mb-2">Booking Time Slot*</div>
                         <div>
                           <ng-select [(ngModel)]="booking_slot" (change)="onSelectionChange($event)"
                             selected="booking_slot">
@@ -739,13 +750,12 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Hold On. Please read before proceeding</h5>
+          <button (click)="closetermsModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Please read before proceeding <br>
-          Registration card should not be expired <br>
-          Be careful not to keep anything illicit inside the car 
+          <p><strong>●</strong> Registration card should not be expired</p>
+          <p><strong>●</strong> Be careful not to keep anything illicit inside the car</p>
         </div>
         <div class="modal-footer">
           <button (click)="closetermsModal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

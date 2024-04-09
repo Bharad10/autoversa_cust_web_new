@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 export class BookingService {
   
   reqHeader = new HttpHeaders({'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('cust_token')});
+  // reqHeader = new HttpHeaders({"Content-Type": "multipart/form-data", Authorization: 'Bearer ' + localStorage.getItem('cust_token')})
   
 
   constructor(private http: HttpClient) {

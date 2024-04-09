@@ -11,28 +11,31 @@
                                     <div class="form_heading">
                                         <h3>Book A Service.</h3>
                                     </div>
-                                    <div class="input_field_box">
-                                        <select name="" id="" placeholder="CHOOSE YOUR CAR">
-                                            <option value="">CHOOSE YOUR CAR</option>
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="fiat">Fiat</option>
-                                            <option value="audi">Audi</option>
+                                    <div *ngIf="vehicleList" class="input_field_box">
+                                        <select (change)="vehicleIdChanging($event)" [(ngModel)]="selectedCar" name="" id="" >
+                                            <option  value="0" >CHOOSE YOUR CAR</option>
+                                            <option *ngFor="let car of vehicleList" [value]="car.cv_id">{{car.cv_make}} {{car.cv_model}} {{car.cv_variant}}
+                                                ({{car.cv_plate_number}})</option>
                                         </select>
                                     </div>
-                                    <div class="input_field_box">
-                                        <select name="" id="" placeholder="CHOOSE YOUR CAR">
-                                            <option value="">CHOOSE A SERVICE</option>
-                                            <option value="volvo">Minor Service</option>
-                                            <option value="saab">Quick Lube</option>
+                                    <div *ngIf="vehicleList" class="input_field_box">
+                                        <select [(ngModel)]="selectedService"  name="" id="" placeholder="CHOOSE YOUR CAR">
+                                            <option value="0" >CHOOSE A SERVICE</option>
+                                            <option *ngFor="let data of serviceData" [value]="data.package.pkg_id">{{data.package.pkg_name}}</option>
                                         </select>
                                     </div>
-                                    <!-- <div class="input_field_box">
-                                        <input type="number" onKeyPress="if(this.value.length==10) return false;" oninput="validity.valid||(value='');" name="mobile_number" placeholder="ENTER MOBILE NUMBER"
+                                    <div *ngIf="!customerId">
+                                        <p>To Start Booking Proceed to Login</p>
+                                    </div>
+                                    <div *ngIf="!customerId" class="input_field_box">
+                                        <input [(ngModel)]="mobileNumber" type="number" onKeyPress="if(this.value.length==10) return false;" oninput="validity.valid||(value='');" name="mobile_number" placeholder="ENTER MOBILE NUMBER"
                                             class="input_field">
-                                    </div> -->
-                                    <div class="contact_select_btn">
-                                        <button>Book A Service</button>
+                                    </div>
+                                    <div *ngIf="vehicleList" class="contact_select_btn">
+                                        <button (click)="bookingNavigate()">Book A Service</button>
+                                    </div>
+                                    <div *ngIf="!customerId" class="contact_select_btn">
+                                        <button (click)="loginNavigate()">Proceed to Login</button>
                                     </div>
                                 </div>
                             </div>

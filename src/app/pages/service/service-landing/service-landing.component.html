@@ -110,7 +110,7 @@
                                                     <div class="book_now_btn">
                                                         <button *ngIf="token && customerVehicleList.length > 0"  (click)="bookNow(package.package.pkg_id)">Book Now</button>
                                                         <button *ngIf="!token" routerLink="/login/welcome" >Login</button>
-                                                        <button *ngIf="customerVehicleList.length < 0">Add Vehicle</button>
+                                                        <!-- <button *ngIf="customerVehicleList.length && token">Add Vehicle</button> -->
                                                     </div>
                                                 </div>
                                             </div>
