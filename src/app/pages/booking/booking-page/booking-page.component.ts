@@ -54,7 +54,7 @@ export class BookingPageComponent {
   custId: any;
   custName: any;
   customerVehicleList: any;
-  customerVehicleId: any;
+  customerVehicleId= 0;
   brand: any;
   model: any;
   variant: any;
@@ -168,7 +168,7 @@ export class BookingPageComponent {
   ngOnInit(): void {
     this.invokeStripe();
     this.custId = localStorage.getItem('id');
-    this.customerVehicleId = 0;
+    //this.customerVehicleId = 0;
     this.getCustomerVehicleList();
     this.getCustomerBookings();
    
