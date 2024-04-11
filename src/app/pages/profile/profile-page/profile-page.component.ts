@@ -39,10 +39,12 @@ export class ProfilePageComponent implements OnInit {
   vehicle_variants: any;
   selected_variant: any;
   selected_year: any;
-  vehicle_plate_number: any
+  vehicle_plate_number: any;
 
   //logout Varaible
   logoutVar: boolean = true;
+
+  panelOpenState: boolean[] = [];
 
 
   constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
@@ -63,6 +65,18 @@ export class ProfilePageComponent implements OnInit {
     else {
       this.logoutVar = false;
     }
+  }
+
+  isPanelOpen(index: number): boolean {
+    return this.panelOpenState[index];
+  }
+
+  panelOpened(index: number): void {
+    this.panelOpenState[index] = true;
+  }
+
+  panelClosed(index: number): void {
+    this.panelOpenState[index] = false;
   }
 
   fetchBookingList() {
@@ -298,5 +312,9 @@ export class ProfilePageComponent implements OnInit {
     localStorage.clear();
     location.reload();
     this.router.navigateByUrl('')
+  }
+
+  navigateToStatusFlow(bookingId:any){
+    this.router.navigateByUrl('booking-status-flow/'+ btoa(bookingId))
   }
 }

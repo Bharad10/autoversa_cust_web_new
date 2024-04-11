@@ -19,6 +19,7 @@ export class BannerComponent implements OnInit {
   selectedService: any;
   custBookingList: any;
   mobileNumber:any;
+  loading: boolean = false;
   constructor(
     private authService: AuthService,
     private booking_service: BookingService,
@@ -91,7 +92,15 @@ export class BannerComponent implements OnInit {
     this.data.setData(this.selectedCar);
   }
 
-  loginNavigate(){
-    this.router.navigateByUrl('login/'+ btoa(this.mobileNumber))
+  signin() {
+    this.loading = true;
+    this.authService.sendsignin_otp({ phone: this.mobileNumber, country_code: "+91" }).subscribe((rdata: any) => {
+      if (rdata.ret_data == "success") {
+        this.router.navigateByUrl('verification/' + btoa('+91') + '/' + btoa(this.mobileNumber) + '/' + btoa(rdata.timer.gs_reotp_time));
+      } else {
+        this.loading = false; 
+      }
+      this.loading = false; 
+    });
   }
 }

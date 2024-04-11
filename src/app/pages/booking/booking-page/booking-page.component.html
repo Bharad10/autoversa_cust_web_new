@@ -173,7 +173,7 @@
                 <br />
                 <mat-accordion>
                   <mat-expansion-panel [expanded]="panelOpenState2" (opened)="panelOpenState2 = true"
-                    (closed)="panelOpenState2 = false">
+                    (closed)="panelOpenState2 = false" [disabled]="pickupandDropPanelDisplay">
                     <mat-expansion-panel-header>
                       <mat-panel-title class="cardtitle">
                         2. Pickup & Drop
@@ -234,10 +234,9 @@
                         Drop location same as pickup location
                       </label>
                     </div>
-                    <br />
-                    <div *ngIf="pickup_addressId&&drop_addressId" class="pickuptype_label">Pickup options</div>
-                    <br />
-
+                    
+                    <div *ngIf="pickup_addressId&&drop_addressId" class="pickuptype_label mb-4 mt-4">Pickup options</div>
+                    
                     <div *ngIf="pickup_addressId&&drop_addressId" >
                     <div class="row label" *ngFor="let eachpickup of pickup_options; let p = index">
                       <div class="col-4">
@@ -303,48 +302,98 @@
                 <br />
                 <mat-accordion>
                   <mat-expansion-panel [expanded]="panelOpenState3" (opened)="panelOpenState3 = true"
-                    (closed)="panelOpenState3 = false">
+                    (closed)="panelOpenState3 = false" [disabled]="PaymentPanelDisplay">
                     <mat-expansion-panel-header>
                       <mat-panel-title class="cardtitle">
                         3. Payment method
                       </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <br />
-                    <div class="row label">
-                      <div class="col-4">
-                        <label class="packagedetailslist">
-                          <input type="radio" name="pickuptype" /> Apple Pay
+                    <div class="row mt-3">
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <!-- <div class="col-12"><span class="address_label">Booking Details</span></div> -->
+                          <div class="row">
+                            <div style="display: flex; justify-content: center; align-items: cenetr;" class="col-4">
+                              <img src="./assets/icons/benz_icon.png" alt="" style="height: 13vh;">
+                            </div>
+                            
+                            <div *ngIf="VehDataForSummary" style="display: flex; flex-direction: column; gap: 2px;" class="col-8">
+                              <span style="font-size: 1rem;">{{VehDataForSummary[0].cv_plate_number}}</span>
+                              <span style="font-weight: lighter;">{{VehDataForSummary[0].cv_make}} {{VehDataForSummary[0].cv_model}} {{VehDataForSummary[0].cv_varient}}</span>
+                              <span style="font-weight: lighter;">{{VehDataForSummary[0].cv_model}} {{VehDataForSummary[0].cv_varient}} {{VehDataForSummary[0].cv_year}} </span>
+                              <span>
+                                {{package_data.pkg_name}}
+                              </span> 
+                              <span style="color: green;">Random Recovery</span> 
+                            </div>
+                          </div>
+                      </div>
+                      </div>
+
+                      <div class="col-xl-6">
+                        <div class="row">
+                          <div *ngIf="timeForSummary && formattedDateForSummary" class="col-12">
+                            <div>
+                            <span  style="margin-right: 0px !important;" class="address_label">Selected Time and Date</span><br>
+                            <span><i class="ms-4 fa-solid fa-clock"> </i> {{timeForSummary[0].tm_start_time}} - {{timeForSummary[0].tm_end_time}}</span> <br>
+                            <span><i class="ms-4 fa-regular fa-calendar-days"></i> {{formattedDateForSummary}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div *ngIf="pickupAddressForSummary" class="col-6">
+                        <label class="address_label">
+                          Pickup Address*
+                          <textarea  [value]="pickupAddressForSummary[0].cad_address" disabled style="width: 35vw;" class="form-control"></textarea>
+                        </label>
+                      </div>
+
+                      <div *ngIf="dropAddressForSummary" class="col-6">
+                        <label class="address_label">
+                          Drop Address*
+                          <textarea  [value]="dropAddressForSummary[0].cad_address" disabled style="width: 35vw;" class="form-control"></textarea>
                         </label>
                       </div>
                     </div>
-                    <div class="row label">
-                      <div class="col-4">
-                        <label class="packagedetailslist">
-                          <input type="radio" name="pickuptype" /> xxxx 2441
-                        </label>
-                      </div>
-                      <div class="col-8">
-                        <p class="packagedetailslist">Expired in 11/22</p>
+
+                    <hr>
+
+                    <div class="row">
+                    <div  class="col-6">
+                     
+                      <div class="audio-record-content" *ngIf="url">
+                        <div class="row">
+                          <div class="col-xl-12 col-12">
+                            <audio class="audio-file" controls *ngIf="url">
+                              <source [src]="url" type="audio/wav" />
+                            </audio>
+                          </div>
+                          <!-- <div class="col-xl-2 col-2" style="margin-top: 4%;">
+                            <img src="./assets/images/delete_icon.png" alt="Delete" class="delete-icon" (click)="deleteAudio()" />
+                          </div> -->
+                        </div>
+                    </div>
+                      <div *ngIf="!url" >
+                        <h4>No Audio Provided</h4>
                       </div>
                     </div>
-                    <div class="row label">
-                      <div class="col-4">
-                        <label class="packagedetailslist">
-                          <input type="radio" name="pickuptype" /> xxxx 2661
-                        </label>
-                      </div>
-                      <div class="col-8">
-                        <p class="packagedetailslist">Expired in 01/23</p>
-                      </div>
+
+                    <div *ngIf="comments" class="col-6">
+                      <textarea disabled [value]="comments" disabled style="width: 35vw;" class="form-control"></textarea>
                     </div>
-                    <div class="row label">
-                      <div class="col-12">
-                        <label class="packagedetailslist">
-                          <input type="radio" name="pickuptype" /> Add Different
-                          Credit Card
-                        </label>
-                      </div>
+
+                    <div *ngIf="!comments" class="col-6">
+                      <h4>NO Comments</h4>
                     </div>
+
+                    </div>
+
+
+                    
                     <div *ngIf="allCoupons && !appliedCoupon && allCoupons.length > 0" class="row">
                       <div class="col-xl-4">
                         <div class="card">

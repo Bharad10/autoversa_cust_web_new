@@ -35,7 +35,10 @@
                                         <button (click)="bookingNavigate()">Book A Service</button>
                                     </div>
                                     <div *ngIf="!customerId" class="contact_select_btn">
-                                        <button (click)="loginNavigate()">Proceed to Login</button>
+                                        <button (click)="signin()" [disabled]="loading">
+                                            <span *ngIf="!loading">Sign In</span>
+                                            <span *ngIf="loading">Loading...</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -91,6 +91,10 @@
     box-shadow: 0px 4px 18px 5px #0000002e;
 }
 
+.row.card_section:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 .status_btn > button.outline_btn {
     width: 100%;
     padding: 10px 10px;

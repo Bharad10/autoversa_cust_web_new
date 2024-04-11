@@ -24,7 +24,7 @@
                                   src="./assets/images/default_profile.png"
                                   alt=""
                                   srcset=""
-                                  style="z-index: 1; width: 200px"
+                                  style="z-index: 1; width: 11vw"
                                 />
                               </div>
                             </div>
@@ -99,31 +99,63 @@
                               else noBookings
                             "
                           >
-                            <div
-                              class="row mb-3"
-                              *ngFor="let book of bookingList"
-                              (click)="redirectToBookingStatus(book.bk_id)"
-                              style="box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-                              border-radius: 10px;
-                              "
-                            >
-                              <div style="display: flex; justify-content:center ; align-items: center;" class="col-xl-4 p-4">
-                                <img
-                                  src="./assets/icons/benz_icon.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div class="col-xl-8 p-4">
-                                <span style="font-weight: bold; font-size: 1.5rem">{{ book.cv_plate_number }}</span><br>
-                                <span style="font-weight: 700; font-size: 1.1rem">{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}}
-                                  ({{book.cv_year}})</span><br>
-                                  <span style="font-weight: 600; font-size: 1rem"> {{ book.pkg_name }} ({{book.bk_number}})</span><br>
-                                  <div class="mt-4">
-                                  <span><i class="fa-solid fa-calendar"></i></span> <span class="ms-2" style="font-weight: 500;">{{ book.formattedDate }}</span><br>
-                                  <span><i class="fa-solid fa-clock"></i></span> <span class="ms-2" style="font-weight: 500;" >{{ book.formattedStartTime }} - {{ book.formattedEndTime }}</span>
+                          <mat-accordion style='height: 50vh; overflow: auto;' >
+                            <mat-expansion-panel *ngFor="let book of bookingList; let i = index" [expanded]="isPanelOpen(i)" (opened)="panelOpened(i)" (closed)="panelClosed(i)"  style="margin-bottom: 10px;">
+                              <mat-expansion-panel-header [collapsedHeight]="'15vh'" [expandedHeight]="'15vh'">
+                                  <div class="row">
+                                    <div style="display: flex; justify-content: center; align-items: cenetr;" class="col-4">
+                                      <img src="./assets/icons/benz_icon.png" alt="" style="height: 10vh;">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 2px;" class="col-8">
+                                      <span>{{ book.pkg_name }} ({{book.bk_number}})
+                                      </span> 
+                                      <span style="color: green;">{{book.custstatus}}</span> 
+                                      <span style="font-weight: lighter;">{{book.cv_make}} {{book.cv_model}}</span>
+                                    </div>
                                   </div>
+                              </mat-expansion-panel-header>
+                              <div class="row mt-2">
+                                <div class="col-12">
+                                  <span>{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}} ({{book.cv_year}})</span><br>
+                                <span style="font-size: 16px;" class="me-2 vehicle-details"><i class="fa-solid fa-calendar"></i></span>  
+                                {{ book.formattedDate }} <br>
+                                <span style="font-size: 16px;" class="me-2" >
+                                  <i class="fa-solid fa-clock"></i> </span>
+                                  {{ book.formattedStartTime }} - {{ book.formattedEndTime }}
+                                </div>
                               </div>
-                            </div>
+                                  <hr>
+                              <div class="row">
+                                <div class="col-12">
+                                  <span>Current Work Status</span>
+                                  <div>
+                                    <div class="mt-2" style="justify-content: start; display: flex; align-items:center; gap: 5px;">
+                                      <img *ngIf="book.st_code === 'BKCC'" src="./assets/images/booking_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'DRPC'" src="./assets/images/driver_enroute_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'PIPC'" src="./assets/images/pickup_icon_new.png" alt="" srcset="" style="height: 5vh;">
+                                      <img *ngIf="book.st_code === 'VAWC'" src="./assets/images/vehicle_wrkshp_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'WIPC'" src="./assets/images/work_in_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'CDLC'" src="./assets/images/confirm_drop_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'RFDC'" src="./assets/images/ready_delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'DEDC'" src="./assets/images/drop_enrouted.png" alt="" srcset="" style="height: 5vh;">
+                                      <img *ngIf="book.st_code === 'DLCC'" src="./assets/images/delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                      <img *ngIf="book.st_code === 'HOLDC'" src="./assets/images/hold_icon.png" alt="" srcset="" style="height: 5vh; ">
+        
+                                      <div>
+                                        <p class="m-2"><strong>{{book.custstatus}}</strong></p>
+                                    </div>
+                                  </div>
+                                  <div class="mt-2">
+                                    <button (click)="navigateToStatusFlow(book.bk_id)" class="btn btn-warning text-white">
+                                      View Details
+                                    </button>
+                                  </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </mat-expansion-panel>
+                          </mat-accordion>
+                            
                           </ng-container>
                           <ng-template #noBookings>
                             <p style="font-size: xx-large; font-weight: bold">
@@ -166,17 +198,17 @@
                               "
                               >
                                <div style="display: flex; justify-content:center ; align-items: center;" class="p-4 col-xl-4">
-                                <img src="./assets/icons/benz_icon.png" alt="">
+                                <img src="./assets/icons/benz_icon.png" alt="" height="90vh">
                                </div> 
 
                                <div style="display: flex;  align-items: center;" class="col-xl-8 p-4">
                                 <div>
                                   <div>
-                                <span style="font-weight: bold; font-size: 1.5rem">{{ car.cv_plate_number }}</span><br>
+                                <span style="font-weight: bold; font-size: 1rem">{{ car.cv_plate_number }}</span><br>
                                   </div>
                                   
-                                  <div class="mt-5">
-                                    <span><i class="fa-solid fa-car"></i></span> <span class="ms-2" style="font-weight: 700; font-size: 1.1rem">{{car.cv_make}} {{car.cv_model}} 
+                                  <div class="">
+                                    <span><i class="fa-solid fa-car"></i></span> <span class="ms-2" style="font-weight: 700; font-size: 0.9">{{car.cv_make}} {{car.cv_model}} 
                                     </span><br>
                                     <span><i class="fa-solid fa-wrench"></i></span> <span style="font-weight: 500;" class="ms-2" >{{car.cv_variant}} ({{car.cv_year}})</span>
                                   </div>

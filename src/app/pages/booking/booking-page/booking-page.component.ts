@@ -92,13 +92,23 @@ export class BookingPageComponent {
 
   custVehIdFromHomePage:any;
 
-  
+  pickupandDropPanelDisplay:boolean = true;
+  PaymentPanelDisplay:boolean = true; 
+
+
+  VehDataForSummary:any;
+  formattedDateForSummary:any;
+  timeForSummary:any;
 
   //coupon
   allCoupons: any;
   appliedCoupon: any;
   isCouponApplied: boolean = false;
   totPriceAfterApplyingCoupon: any;
+
+  pickupAddressForSummary:any;
+  dropAddressForSummary:any;
+  timeDateForSummary:any;
 
   @Input() placeholder = 'Search For Places';
   @ViewChild('inputField', { static: true })
@@ -428,9 +438,15 @@ export class BookingPageComponent {
       (address: { cad_id: string }) =>
         address.cad_id === this.pickup_addressId.toString()
     ).cad_distance;
+    let pickupAddressForSummaryTemp = this.pickup_address.filter((data:any)=>{
+      return data.cad_id == this.pickup_addressId
+    })
+    this.pickupAddressForSummary = pickupAddressForSummaryTemp;
+    console.log("-------PickupaddressForSummaryTemp-------", pickupAddressForSummaryTemp);
     if (this.isChecked) {
       this.total_distance = parseFloat(pickup_distance) * 2;
       this.drop_addressId = this.pickup_addressId;
+      this.dropAddressForSummary = this.pickupAddressForSummary
     } else if (this.drop_addressId != 0) {
       let drop_distance = this.drop_address.find(
         (address: { cad_id: string }) =>
@@ -438,8 +454,21 @@ export class BookingPageComponent {
       ).cad_distance;
       this.total_distance =
         parseFloat(pickup_distance) + parseFloat(drop_distance);
+      let dropAddressForSummarytemp = this.drop_address.filter((data:any)=>{
+        return data.cad_id == this.drop_addressId
+      })
+      this.dropAddressForSummary = dropAddressForSummarytemp
+      console.log("---------DropAddress-----------",this.dropAddressForSummary);
+      
     } else {
       this.total_distance = 0;
+    }
+
+    if(this.booking_slot){
+     let slotForSummary = this.timeslots.filter((data:any)=>{
+        return this.booking_slot == data.tm_id
+      })
+     this.timeForSummary = slotForSummary   
     }
     this.getpickupOptions();
   }
@@ -499,6 +528,8 @@ export class BookingPageComponent {
     const year = this.bookingDate.getFullYear();
 
     const formattedDate = `${day}-${month}-${year}`;
+
+    this.formattedDateForSummary = formattedDate
     
     let inputData = {
       day: dayName,
@@ -646,6 +677,7 @@ export class BookingPageComponent {
       this.panelOpenState1 = false;
       this.panelOpenState2 = true;
       this.panelOpenState3 = false;
+      this.pickupandDropPanelDisplay = !this.pickupandDropPanelDisplay
       this.stopRecording();
     } else {
       //Validations
@@ -686,6 +718,8 @@ export class BookingPageComponent {
       this.panelOpenState1 = false;
       this.panelOpenState2 = false;
       this.panelOpenState3 = true;
+      this.PaymentPanelDisplay = !this.PaymentPanelDisplay
+      
     }
   }
   PickupOptionSelection(eachpickup: any) {
@@ -834,6 +868,9 @@ export class BookingPageComponent {
           return (customerVehicleList = customerVehicleList.cv_id == custvehId);
         }
       );
+      this.VehDataForSummary = filterdVehicleData
+      console.log("---SelectedVehdata---",this.VehDataForSummary);
+      
       this.brand = filterdVehicleData[0].cv_make;
       this.model = filterdVehicleData[0].cv_model;
       this.variant = filterdVehicleData[0].cv_variant;
