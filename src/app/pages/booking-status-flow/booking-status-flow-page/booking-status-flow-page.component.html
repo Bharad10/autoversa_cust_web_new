@@ -17,7 +17,7 @@
                         <div class="row">
                           <h2 class="bodyheading">My Active booking</h2>
                         </div>
-                        <div  class="row card_section p-2 mb-3" *ngFor="let eachbookingData of activeBookings"
+                        <!-- <div  class="row card_section p-2 mb-3" *ngFor="let eachbookingData of activeBookings"
                           [ngStyle]="{ 'background-color': eachbookingData.bgColor }" (click)="changeBackgroundColor(1,eachbookingData.bk_id)"
                           style="box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
                           cursor: pointer;
@@ -95,7 +95,83 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
+                        <mat-accordion>
+                          <mat-expansion-panel  [ngStyle]="{ 'background-color': book.bgColor }"  *ngFor="let book of activeBookings let i = index" [expanded]="isPanelOpen(i)" (opened)="panelOpened(i)" (closed)="panelClosed(i)"  style="margin-bottom: 10px;">
+                            <mat-expansion-panel-header [collapsedHeight]="'15vh'" [expandedHeight]="'15vh'">
+                                <div class="row">
+                                  <div style="display: flex; justify-content: center; align-items: cenetr;" class="col-4">
+                                    <img src="./assets/icons/benz_icon.png" alt="" style="height: 10vh;">
+                                  </div>
+                                  <div style="display: flex; flex-direction: column; gap: 2px;" class="col-8">
+                                    <span style="font-weight: bold; font-size: large;">{{ book.pkg_name }} ({{book.bk_number}})
+                                    </span> 
+                                    <span  style="color:#31bbac;">{{book.custstatus}}</span>
+                                    <span style="font-weight: lighter;">{{book.cv_make}} {{book.cv_model}}</span>
+                                  </div>
+                                </div>
+                            </mat-expansion-panel-header>
+                            <div  class="row mt-2">
+                              <div style="display: flex; flex-direction: column; justify-content: center; gap: 0.5rem;" class="col-12">
+                              <span style="font-size: 1.2rem; font-weight: bold;">{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}} ({{book.cv_year}})</span>
+                              <div><span style="font-size: 1.1rem;" class="me-2 vehicle-details"><i class="fa-solid fa-calendar"></i></span>  
+                              <span style="font-weight: lighter;">{{
+                                book.bk_booking_date
+                                | date : "dd-MM-yyyy"
+                                }}</span> </div>
+                              <div><span style="font-size: 1.1rem;" class="me-2" >
+                                <i class="fa-solid fa-clock"></i> </span>
+                                <span style="font-weight: lighter;">{{ formatTime(book.tm_start_time) }} -
+                                  {{ formatTime(book.tm_end_time) }}</span></div>
+                              </div>
+                            </div>
+                            <div class="mt-2" style="display: flex; gap: 1vw;">
+                              <div>
+                                <button class="viewdetails_btn" (click)="openholdModal();">Hold</button>
+                              </div>
+                              <div>
+                                <button class="viewdetails_btn" (click)="openaddModal()" >Cancel</button>
+                              </div>
+                                <div>
+                                  <button class="viewdetails_btn" (click)="navigate()">Reschedule</button> 
+                                </div>
+                                    
+                              <div>
+
+                              </div>
+                            </div>
+                                <hr>
+                            <div class="row">
+                              <div class="col-12">
+                                <span style="font-size: 1.2rem; font-weight: bold;">Current Work Status</span>
+                                <div>
+                                  <div class="mt-2" style="justify-content: start; display: flex; align-items:center; gap: 5px;">
+                                    <img *ngIf="book.st_code === 'BAPC'" src="./assets/images/awaiting_payment.png" alt="no image found" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'BKCC'" src="./assets/images/booking_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'DRPC'" src="./assets/images/driver_enroute_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'PIPC'" src="./assets/images/pickup_icon_new.png" alt="" srcset="" style="height: 5vh;">
+                                    <img *ngIf="book.st_code === 'VAWC'" src="./assets/images/vehicle_wrkshp_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'WIPC'" src="./assets/images/work_in_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'CDLC'" src="./assets/images/confirm_drop_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'RFDC'" src="./assets/images/ready_delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'DEDC'" src="./assets/images/drop_enrouted.png" alt="" srcset="" style="height: 5vh;">
+                                    <img *ngIf="book.st_code === 'DLCC'" src="./assets/images/delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'HOLDC'" src="./assets/images/hold_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <div>
+                                      <p class="m-2">{{book.custstatus}}</p>
+                                  </div>
+                                </div>
+                                <div class="mt-2" >
+                                  <button (click)="navigateToStatusFlow(book.bk_id)" class="viewdetails_btn">
+                                    View Details
+                                  </button>
+                                </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-expansion-panel>
+                        </mat-accordion>
+
                       </div>
                       <br />
                       <div class="col-xl-6" *ngIf="workcard_showFlag == 0">

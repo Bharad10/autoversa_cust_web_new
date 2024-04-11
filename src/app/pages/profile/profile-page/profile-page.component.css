@@ -242,6 +242,14 @@ hr {
     width: 100%;
 }
 
+.viewdetails_btn{
+    background-color: #31bbac;
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;
+}
+
 .brand_label>h4 {
     font-size: 20px;
     font-weight: 600;

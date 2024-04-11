@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BookingService } from 'src/app/services/booking.service';
 import { environment } from 'src/environments/environment.prod';
@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.prod';
   templateUrl: './booking-status-flow-page.component.html',
   styleUrls: ['./booking-status-flow-page.component.css']
 })
-export class BookingStatusFlowPageComponent {
+export class BookingStatusFlowPageComponent implements OnInit {
 
   booking_id: any;
   booking_details: any;
@@ -47,11 +47,14 @@ export class BookingStatusFlowPageComponent {
   minSelectableDate: any;
   maxSelectableDate: any;
   base_url = environment.aws_url;
+  panelOpenState: boolean[] = [];
+  initiallyOpenBookId: string = ''; 
   constructor(
     private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService
-  ) {
-
+  ) {}
+  ngOnInit(): void {  
     this.booking_id = this.activerouter.snapshot.paramMap.get('id');
+    this.initiallyOpenBookId = atob(this.booking_id);
     this.customerId = localStorage.getItem('id');
     let input_data = {
       book_id: this.booking_id
@@ -278,6 +281,18 @@ export class BookingStatusFlowPageComponent {
     });
     this.getCustomerBookings();
   }
+
+  isPanelOpen(index: number): boolean {
+    return this.activeBookings[index]?.bk_id === this.initiallyOpenBookId;
+  }
+
+  panelOpened(index: number): void {
+    this.panelOpenState[index] = true;
+  }
+
+  panelClosed(index: number): void {
+    this.panelOpenState[index] = false;
+  }
   changeBackgroundColor(sectionNumber: number, bookingId:any) {
     if (sectionNumber === 1) {
       this.bgColor1 = '#e1e1e1';
@@ -302,6 +317,7 @@ export class BookingStatusFlowPageComponent {
         this.activeBookings = rdata.book_list;
       }
     });
+
   }
   formatTime(time: string): string {
     const timeParts = time.split(':');
@@ -653,8 +669,239 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
     this.router.navigateByUrl('rescheduleOrder/'+ btoa(this.booking_details.bk_id))
   }
 
-  navigateToStatusFlow(bookingId:any){
-    this.router.navigateByUrl("booking-status-flow/" + btoa(bookingId));
+  navigateToStatusFlow(bookingId:any){ 
+    this.booking_id = bookingId
+    this.initiallyOpenBookId = bookingId;
+    this.customerId = localStorage.getItem('id');
+    let input_data = {
+      book_id: btoa(this.booking_id)
+    }
+    this.booking_service.GetbookingdetailsbyId(input_data).subscribe((rdata: any) => {
+      if (rdata.ret_data == "success") {
+        this.position = this.cust_status_master.indexOf(rdata.booking.cust_status.st_code);
+        this.booking_details = rdata.booking;
+        console.log("rdata.booking details--->", rdata.booking);
+        console.log("bookin details--->", this.booking_details.bk_consumcost);
+        const created_date: Date = new Date(this.booking_details.bk_created_on);
+        const day: number = created_date.getDate();
+        const month: number = created_date.getMonth() + 1;
+        const year: number = created_date.getFullYear();
+        const formatted_date: string = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`;
+        this.booking_details.bk_created_on = formatted_date;
+        rdata.booking.status_flow.forEach((element: {
+          bkt_created_on: string | number | Date; bkt_code: string; bkt_task: string;
+        }) => {
+          let stdata: any;
+          if (element.bkt_code == "BKCC" && element.bkt_task != "Unhold") {
+
+            stdata = {
+              "status": "Booking created",
+              "code": element.bkt_code,
+              "icon": './assets/images/booking_icon.png',
+              "dateandtime": formatted_date
+            }
+          } else if (element.bkt_code == "DRPC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Driver en route to location",
+              "code": element.bkt_code,
+              "icon": './assets/images/driver_enroute_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "PIPC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Pick up in progress",
+              "code": element.bkt_code,
+              "icon": './assets/images/pickup_process_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "PIWC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Picked up & en route to workshop",
+              "code": element.bkt_code,
+              "icon": './assets/images/pickup_enroute_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "VAWC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Vehicle at workshop",
+              "code": element.bkt_code,
+              "icon": './assets/images/vehicle_wrkshp_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "WIPC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Work in progress",
+              "code": element.bkt_code,
+              "icon": './assets/images/work_in_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "CDLC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Ready for delivery",
+              "code": element.bkt_code,
+              "icon": './assets/images/ready_delivery_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "RFDC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Delivery scheduled on",
+              "code": element.bkt_code,
+              "icon": './assets/images/drop_enrouted.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "DEDC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Booking created",
+              "code": element.bkt_code,
+              "icon": './assets/images/booking_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } else if (element.bkt_code == "DLCC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Delivery completed",
+              "code": element.bkt_code,
+              "icon": './assets/images/delivery_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          }
+          if (this.statusFlow.length > 0) {
+            let filterdstatusData = this.statusFlow.filter((data) => (data = data.code == stdata.code));
+
+            filterdstatusData.length > 0 ? "" : this.statusFlow.push(stdata);
+          } else {
+            stdata ? this.statusFlow.push(stdata) : "";
+          }
+        });
+        for (let i = (this.position + 1); i < this.cust_status_master.length; i++) {
+          let temp;
+          if (this.cust_status_master[i] == "DRPC") {
+            temp = {
+              "status": "Driver en route\nto pickup location",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/driver_enrouted_inactive.png',
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "PIPC") {
+            temp = {
+              "status": "Pick up in progress",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/pickup_icon_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "PIWC") {
+            temp = {
+              "status": "Picked up & en route\nto workshop",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/pickup_enroute_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "VAWC") {
+            temp = {
+              "status": "Vehicle @ Workshop",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/vehicle_wrkshp_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "WIPC") {
+            temp = {
+              "status": "Work In Progress",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/work_in_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "CDLC") {
+            temp = {
+              "status": "Ready for Delivery",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/ready_delivery_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "RFDC") {
+            temp = {
+              "status": "Location Confirmed",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/confirm_drop_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "DEDC") {
+            temp = {
+              "status": "Driver en route\nto drop location",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/drop_enrouted_inactive.png'
+            };
+            this.statusFlow[i] = temp;
+          }
+          if (this.cust_status_master[i] == "DLCC") {
+            temp = {
+              "status": "Delivery Completed",
+              "dateandtime": "",
+              "code": "",
+              "icon": './assets/images/delivery_inactive.png'
+            };
+          }
+          temp ? this.statusFlow[i] = temp : "";
+        }
+      }
+      console.log("st ssssss----->", this.statusFlow);
+      this.getCustomerBookings();
+        window.location.reload();
+    });
+    
+     this.router.navigateByUrl("booking-status-flow/" + btoa(bookingId));
+   
   }
+
+  
 
 }

@@ -95,6 +95,38 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.viewdetails_btn{
+    background-color: #31bbac;
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;
+}
+
+.hold_btn{
+    background-color: rgb(255, 204, 0);
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;
+}
+
+.cancel_btn{
+    background-color: rgb(255, 68, 0);
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;  
+}
+
+.reschedule_btn{
+    background-color: rgb(0, 119, 255);
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;   
+}
+
 .status_btn > button.outline_btn {
     width: 100%;
     padding: 10px 10px;

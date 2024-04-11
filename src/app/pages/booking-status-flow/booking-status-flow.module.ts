@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 
+import { MatExpansionModule } from '@angular/material/expansion'; 
+
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { MatInputModule } from '@angular/material/input';
     BookingStatusFlowRoutingModule,
     FormsModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    MatExpansionModule
   ]
 })
 export class BookingStatusFlowModule { }

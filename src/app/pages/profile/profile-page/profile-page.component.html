@@ -107,29 +107,30 @@
                                       <img src="./assets/icons/benz_icon.png" alt="" style="height: 10vh;">
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 2px;" class="col-8">
-                                      <span>{{ book.pkg_name }} ({{book.bk_number}})
+                                      <span style="font-weight: bold; font-size: large;">{{ book.pkg_name }} ({{book.bk_number}})
                                       </span> 
-                                      <span style="color: green;">{{book.custstatus}}</span> 
+                                      <span  style="color:#31bbac;">{{book.custstatus}}</span>
                                       <span style="font-weight: lighter;">{{book.cv_make}} {{book.cv_model}}</span>
                                     </div>
                                   </div>
                               </mat-expansion-panel-header>
-                              <div class="row mt-2">
-                                <div class="col-12">
-                                  <span>{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}} ({{book.cv_year}})</span><br>
-                                <span style="font-size: 16px;" class="me-2 vehicle-details"><i class="fa-solid fa-calendar"></i></span>  
-                                {{ book.formattedDate }} <br>
-                                <span style="font-size: 16px;" class="me-2" >
+                              <div  class="row mt-2">
+                                <div style="display: flex; flex-direction: column; justify-content: center; gap: 0.5rem;" class="col-12">
+                                <span style="font-size: 1.2rem; font-weight: bold;">{{book.cv_make}} {{book.cv_model}} {{book.cv_variant}} ({{book.cv_year}})</span>
+                                <div><span style="font-size: 1.1rem;" class="me-2 vehicle-details"><i class="fa-solid fa-calendar"></i></span>  
+                                <span style="font-weight: lighter;">{{ book.formattedDate }}</span> </div>
+                                <div><span style="font-size: 1.1rem;" class="me-2" >
                                   <i class="fa-solid fa-clock"></i> </span>
-                                  {{ book.formattedStartTime }} - {{ book.formattedEndTime }}
+                                  <span style="font-weight: lighter;">{{ book.formattedStartTime }} - {{ book.formattedEndTime }}</span></div>
                                 </div>
                               </div>
                                   <hr>
                               <div class="row">
                                 <div class="col-12">
-                                  <span>Current Work Status</span>
+                                  <span style="font-size: 1.2rem; font-weight: bold;">Current Work Status</span>
                                   <div>
                                     <div class="mt-2" style="justify-content: start; display: flex; align-items:center; gap: 5px;">
+                                      <img *ngIf="book.st_code === 'BAPC'" src="./assets/images/work_in_icon.png" alt="no image found" srcset="" style="height: 5vh; ">
                                       <img *ngIf="book.st_code === 'BKCC'" src="./assets/images/booking_icon.png" alt="" srcset="" style="height: 5vh; ">
                                       <img *ngIf="book.st_code === 'DRPC'" src="./assets/images/driver_enroute_icon.png" alt="" srcset="" style="height: 5vh; ">
                                       <img *ngIf="book.st_code === 'PIPC'" src="./assets/images/pickup_icon_new.png" alt="" srcset="" style="height: 5vh;">
@@ -140,13 +141,14 @@
                                       <img *ngIf="book.st_code === 'DEDC'" src="./assets/images/drop_enrouted.png" alt="" srcset="" style="height: 5vh;">
                                       <img *ngIf="book.st_code === 'DLCC'" src="./assets/images/delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
                                       <img *ngIf="book.st_code === 'HOLDC'" src="./assets/images/hold_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                     
         
                                       <div>
-                                        <p class="m-2"><strong>{{book.custstatus}}</strong></p>
+                                        <p class="m-2">{{book.custstatus}}</p>
                                     </div>
                                   </div>
                                   <div class="mt-2">
-                                    <button (click)="navigateToStatusFlow(book.bk_id)" class="btn btn-warning text-white">
+                                    <button (click)="navigateToStatusFlow(book.bk_id)" class="viewdetails_btn">
                                       View Details
                                     </button>
                                   </div>
