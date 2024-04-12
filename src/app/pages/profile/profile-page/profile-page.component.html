@@ -493,6 +493,7 @@
               type="text"
               placeholder="Plate Number"
               aria-label="Plate Number"
+              onkeypress="if(this.value.length==20) return false"
             />
           </div>
         </div>
@@ -619,7 +620,7 @@
               placeholder="Variant" aria-label="Variant">
             <input class="form-control" disabled [(ngModel)]="selected_year" [value]="selected_year" type="text"
               placeholder="Year" aria-label="Year">
-            <input class="form-control" [(ngModel)]="vehicle_plate_number" [value]="vehicle_plate_number" type="text"
+            <input class="form-control" onkeypress="if(this.value.length==20) return false" [(ngModel)]="vehicle_plate_number" [value]="vehicle_plate_number" type="text"
               placeholder="Plate Number" aria-label="Plate Number">
           </div>
         </div>

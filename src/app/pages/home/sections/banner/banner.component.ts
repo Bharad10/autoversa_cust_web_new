@@ -93,6 +93,9 @@ export class BannerComponent implements OnInit {
   }
 
   signin() {
+    if(this.mobileNumber <= 10){
+      return;
+    }
     this.loading = true;
     this.authService.sendsignin_otp({ phone: this.mobileNumber, country_code: "+91" }).subscribe((rdata: any) => {
       if (rdata.ret_data == "success") {

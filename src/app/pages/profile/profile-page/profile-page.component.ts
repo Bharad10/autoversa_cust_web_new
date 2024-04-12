@@ -304,6 +304,7 @@ export class ProfilePageComponent implements OnInit {
     if (modelDiv != null) {
       modelDiv.style.display = 'block';
     }
+    this.vehicle_plate_number = '';
   }
 
   redirectToBookingStatus(book: any) {
@@ -312,8 +313,8 @@ export class ProfilePageComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    location.reload();
-    this.router.navigateByUrl('')
+    window.location.reload();
+    this.router.navigateByUrl('/')
   }
 
   navigateToStatusFlow(bookingId:any){
@@ -346,9 +347,11 @@ export class ProfilePageComponent implements OnInit {
 
     this.vehicle_plate_number = '';
 
-    this.fetchCarModels();
-
     this.toast.success('Vehicle Updated SucessFully');
+
+    this.vehicle_plate_number = '';
+
+    this.fetchCarModels();
 
     this.closeeditModal();
   }

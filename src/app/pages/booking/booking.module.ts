@@ -11,6 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 
 import { GoogleMapsModule } from '@angular/google-maps';
 
+import {MatTooltipModule} from '@angular/material/tooltip';
+
+
 
 
 
@@ -28,6 +31,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     MatDatepickerModule,
     MatInputModule,
     GoogleMapsModule,
+    MatTooltipModule
   ]
 })
 export class BookingModule { }

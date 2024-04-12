@@ -116,8 +116,20 @@
                               </div>
                             </div>
                             <div
+                            class="form_heading"
+                            *ngIf="
+                              customerVehicleId && !serviceAvailable
+                            "
+                          >
+                            <div class="mb-2 col-12">
+                              <p class="warning-heading" style="color: black">
+                                Sorry we can't service this Model Right Now
+                              </p>
+                            </div>
+                          </div>
+                            <div
                               class="form_heading"
-                              *ngIf="customerVehicleId && bookingSectionDisplay"
+                              *ngIf="customerVehicleId && bookingSectionDisplay && serviceAvailable "
                             >
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
@@ -330,13 +342,11 @@
                             "
                             class="col-1 mt-2"
                           >
-                            <i
-                              mat-raised-button
-                              matTooltip="Add Pickup Location"
-                              aria-label="Button that displays a tooltip when focused or hovered over"
-                              (click)="openAddressModal()"
+                            <div matTooltip="Add Pickup Location"
+                            aria-label="Button that displays a tooltip when focused or hovered over"
+                            (click)="openAddressModal()"><i
                               class="fa fa-plus"
-                            ></i>
+                            ></i></div>
                           </div>
                         </div>
                       </div>
@@ -370,7 +380,6 @@
                             class="col-1 mt-2"
                           >
                             <i
-                              mat-raised-button
                               matTooltip="Add drop Location"
                               aria-label="Button that displays a tooltip when focused or hovered over"
                               class="fa fa-plus"
