@@ -208,6 +208,8 @@
                                 </div>
                               </div>
                               <br />
+                              <div *ngIf="tot_package_price"><span class="package-heading">Package Cost: </span>  <span style="font-size: 1.2rem; font-weight: bolder;" class="text-warning">{{tot_package_price}} AED</span> </div> <br>
+
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
                                   Additional Queries
@@ -360,6 +362,7 @@
                               [(ngModel)]="drop_addressId"
                               (change)="onSelectionChange($event)"
                               selected="drop_addressId"
+                              [disabled]="isChecked"
                             >
                               <ng-option [value]="0"
                                 >Select Drop Address</ng-option
@@ -490,6 +493,7 @@
                             *ngIf="bookingDateRef.errors?.['matDatepickerParse']"
                             >Invalid date format</span
                           >
+                          <span *ngIf="bookingDateRef.errors?.['specialCharacters']">Inavlid date Format</span>
                         </mat-error>
                       </div>
                       <div class="col-xl-6">
