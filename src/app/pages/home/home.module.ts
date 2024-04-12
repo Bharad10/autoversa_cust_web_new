@@ -14,6 +14,8 @@ import { YellowSectionComponent } from './sections/yellow-section/yellow-section
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { BookingListComponent } from './sections/bookinglist/booking-list/booking-list.component';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+
 import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
@@ -28,7 +30,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    HomeRoutingModule,CarouselModule,FormsModule
+    HomeRoutingModule,CarouselModule,FormsModule,MatExpansionModule
   ],
   providers:[]
 })

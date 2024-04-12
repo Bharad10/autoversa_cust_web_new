@@ -46,6 +46,8 @@ export class ProfilePageComponent implements OnInit {
 
   panelOpenState: boolean[] = [];
 
+  selected_id_to_edit:any;
+
 
   constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
 
@@ -316,5 +318,56 @@ export class ProfilePageComponent implements OnInit {
 
   navigateToStatusFlow(bookingId:any){
     this.router.navigateByUrl('booking-status-flow/'+ btoa(bookingId))
+  }
+
+  closeeditModal() {
+    const modelDiv = document.getElementById('editModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    }
+  }
+
+  updateModal() {
+    let updateData = {
+      cv_make: this.selected_brand,
+      cv_model: this.selected_model,
+      cv_variant: this.selected_variant,
+      cv_year: this.selected_year,
+      custvehId: this.selected_id_to_edit,
+      cv_platenumber: this.vehicle_plate_number,
+      cv_cust_id: atob(this.userId)
+    };
+
+    console.log('updateData--------------------------------', updateData);
+
+    this.authService.updateCarModel(updateData).subscribe((data) => {
+      console.log(data);
+    });
+
+    this.vehicle_plate_number = '';
+
+    this.fetchCarModels();
+
+    this.toast.success('Vehicle Updated SucessFully');
+
+    this.closeeditModal();
+  }
+
+  openeditModal(cv_id: any) {
+    const modelDiv = document.getElementById('editModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    }
+
+    let filterdVehicleData = this.vehicleList.filter((data:any) => {
+      return (data = data.cv_id == cv_id);
+    });
+
+    this.selected_brand = filterdVehicleData[0].cv_make;
+    this.selected_variant = filterdVehicleData[0].cv_variant;
+    this.selected_year = filterdVehicleData[0].cv_year;
+    this.vehicle_plate_number = filterdVehicleData[0].cv_plate_number;
+    this.selected_id_to_edit = cv_id;
+    this.selected_model = filterdVehicleData[0].cv_model;
   }
 }

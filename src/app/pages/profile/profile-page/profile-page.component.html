@@ -194,7 +194,7 @@
                             >
                               <div
                                 *ngFor="let car of vehicleList"
-                                class="row  my-3"
+                                class="row  my-3 vehicleList "
                                 style="box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
                               border-radius: 10px;
                               "
@@ -203,7 +203,7 @@
                                 <img src="./assets/icons/benz_icon.png" alt="" height="90vh">
                                </div> 
 
-                               <div style="display: flex;  align-items: center;" class="col-xl-8 p-4">
+                               <div style="display: flex;  align-items: center;" class="col-xl-6 p-4">
                                 <div>
                                   <div>
                                 <span style="font-weight: bold; font-size: 1rem">{{ car.cv_plate_number }}</span><br>
@@ -215,6 +215,13 @@
                                     <span><i class="fa-solid fa-wrench"></i></span> <span style="font-weight: 500;" class="ms-2" >{{car.cv_variant}} ({{car.cv_year}})</span>
                                   </div>
                                   
+                                </div>
+                               </div>
+
+                               <div style="display: flex; align-items: center;" class="col-xl-2">
+                                <div style="display:flex; align-items: center; justify-content: center; gap: 0.6rem;" >
+                                  <div matTooltip="Click here to edit the vehicle" class="vehlist_btn" (click)="openeditModal(car.cv_id)"><i class="fa-solid fa-pen"></i></div>
+                                  <div matTooltip="Click here to delete the vehicle" class="vehlist_btn"><i class="fa-solid fa-trash"></i></div>
                                 </div>
                                </div>
 
@@ -588,6 +595,37 @@
           >
             Close
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Edit Modal -->
+  <div class="modal" tabindex="-1" id="editModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title">Edit Vehicle</h1>
+          <button (click)="closeeditModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <input class="form-control" disabled [(ngModel)]="selected_brand" [value]="selected_brand" type="text"
+              placeholder="Brand" aria-label="Brand">
+            <input class="form-control" disabled [(ngModel)]="selected_model" [value]="selected_model" type="text"
+              placeholder="Model" aria-label="Model">
+            <input class="form-control" disabled [(ngModel)]="selected_variant" [value]="selected_variant" type="text"
+              placeholder="Variant" aria-label="Variant">
+            <input class="form-control" disabled [(ngModel)]="selected_year" [value]="selected_year" type="text"
+              placeholder="Year" aria-label="Year">
+            <input class="form-control" [(ngModel)]="vehicle_plate_number" [value]="vehicle_plate_number" type="text"
+              placeholder="Plate Number" aria-label="Plate Number">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeeditModal()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button (click)="updateModal()" type="button" class="btn btn-warning">Update</button>
         </div>
       </div>
     </div>

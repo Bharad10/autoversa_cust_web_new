@@ -12,6 +12,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 
 import { MatExpansionModule } from '@angular/material/expansion'; 
 
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 @NgModule({
   declarations: [
     ProfilePageComponent,
@@ -23,7 +25,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ProfileRoutingModule,
     GoogleMapsModule,
     FormsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ]
 })
 export class ProfileModule { }

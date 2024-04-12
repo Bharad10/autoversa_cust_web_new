@@ -261,7 +261,7 @@ hr {
 }
 
 .brands_section_area {
-    background: #F3F3F3;
+    background: #e6e4e4;
     padding-top: 15px;
     padding-bottom: 30px;
 }
@@ -269,6 +269,25 @@ hr {
 .edit_icon {
     position: absolute;
 
+}
+
+.vehicleList{
+    transition: ease-out;
+}
+
+.vehicleList{
+    transition: ease-out;
+  
+}
+
+.vehicleList:hover{
+    background-color: #f9f6f6;
+    /* cursor: pointer; */
+}
+
+.vehlist_btn:hover{
+    cursor: pointer;
+    transform: scale(1.2);
 }
 
 @media only screen and (max-width: 826px) and (min-width: 300px) {

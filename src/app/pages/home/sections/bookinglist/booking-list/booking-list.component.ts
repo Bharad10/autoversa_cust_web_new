@@ -18,6 +18,7 @@ export class BookingListComponent {
   serviceData:any;
   imageurl: any = "assets/images/sample.jpg";
   base_url = environment.aws_url;
+  panelOpenState: boolean[] = [];
   
   constructor( private authService: AuthService,private booking_service : BookingService, private router: Router ) {
 
@@ -72,4 +73,17 @@ export class BookingListComponent {
   navigateBookingDetails(book_id: any){
     this.router.navigateByUrl('booking-status-flow/' + btoa(book_id));
   }
+  
+  isPanelOpen(index: number): boolean {
+    return this.panelOpenState[index];
+  }
+
+  panelOpened(index: number): void {
+    this.panelOpenState = this.panelOpenState.map((state, i) => index === i);
+  }
+
+  panelClosed(index: number): void {
+    this.panelOpenState[index] = false;
+  }
+
 }
