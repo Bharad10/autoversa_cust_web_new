@@ -29,7 +29,11 @@
                                     </div>
                                     <div *ngIf="!customerId" class="input_field_box">
                                         <input [(ngModel)]="mobileNumber" type="number" onKeyPress="if(this.value.length==10) return false;" oninput="validity.valid||(value='');" name="mobile_number" placeholder="ENTER MOBILE NUMBER"
-                                            class="input_field">
+                                            class="input_field" #phone_number="ngModel" pattern="^((\\+91-?)|0)?[0-9]{10}$">
+                                            <div class="text-danger text-center"
+                                            *ngIf="phone_number.invalid && (phone_number.touched || phone_number.dirty)">
+                                            <span *ngIf="phone_number.errors?.['pattern']">*Enter an valid Number</span>
+                                          </div>    
                                     </div>
                                     <div *ngIf="vehicleList" class="contact_select_btn">
                                         <button (click)="bookingNavigate()">Book A Service</button>

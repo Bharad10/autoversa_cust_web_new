@@ -116,8 +116,20 @@
                               </div>
                             </div>
                             <div
+                            class="form_heading"
+                            *ngIf="
+                              customerVehicleId && !serviceAvailable
+                            "
+                          >
+                            <div class="mb-2 col-12">
+                              <p class="warning-heading" style="color: black">
+                                Sorry we can't service this Model Right Now
+                              </p>
+                            </div>
+                          </div>
+                            <div
                               class="form_heading"
-                              *ngIf="customerVehicleId && bookingSectionDisplay"
+                              *ngIf="customerVehicleId && bookingSectionDisplay && serviceAvailable "
                             >
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
@@ -196,6 +208,8 @@
                                 </div>
                               </div>
                               <br />
+                              <div *ngIf="tot_package_price"><span class="package-heading">Package Cost: </span>  <span style="font-size: 1.2rem; font-weight: bolder;" class="text-warning">{{tot_package_price}} AED</span> </div> <br>
+
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
                                   Additional Queries
@@ -330,13 +344,11 @@
                             "
                             class="col-1 mt-2"
                           >
-                            <i
-                              mat-raised-button
-                              matTooltip="Add Pickup Location"
-                              aria-label="Button that displays a tooltip when focused or hovered over"
-                              (click)="openAddressModal()"
+                            <div matTooltip="Add Pickup Location"
+                            aria-label="Button that displays a tooltip when focused or hovered over"
+                            (click)="openAddressModal()"><i
                               class="fa fa-plus"
-                            ></i>
+                            ></i></div>
                           </div>
                         </div>
                       </div>
@@ -350,6 +362,7 @@
                               [(ngModel)]="drop_addressId"
                               (change)="onSelectionChange($event)"
                               selected="drop_addressId"
+                              [disabled]="isChecked"
                             >
                               <ng-option [value]="0"
                                 >Select Drop Address</ng-option
@@ -370,7 +383,6 @@
                             class="col-1 mt-2"
                           >
                             <i
-                              mat-raised-button
                               matTooltip="Add drop Location"
                               aria-label="Button that displays a tooltip when focused or hovered over"
                               class="fa fa-plus"
@@ -481,6 +493,7 @@
                             *ngIf="bookingDateRef.errors?.['matDatepickerParse']"
                             >Invalid date format</span
                           >
+                          <span *ngIf="bookingDateRef.errors?.['specialCharacters']">Inavlid date Format</span>
                         </mat-error>
                       </div>
                       <div class="col-xl-6">

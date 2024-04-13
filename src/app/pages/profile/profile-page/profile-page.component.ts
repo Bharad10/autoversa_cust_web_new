@@ -160,6 +160,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   closeProfileEditModal() {
+   
     let modalDiv = document.getElementById('profileEditModal');
     if (modalDiv != null) {
       modalDiv.style.display = 'none';
@@ -215,6 +216,11 @@ export class ProfilePageComponent implements OnInit {
   }
 
   closeaddModal() {
+    this.selected_brand = '';
+    this.selected_model = '';
+    this.selected_variant = '';
+    this.selected_year= '';
+    this.vehicle_plate_number = '';
     const modelDiv = document.getElementById('addModal');
     if (modelDiv != null) {
       modelDiv.style.display = 'none';
@@ -304,6 +310,7 @@ export class ProfilePageComponent implements OnInit {
     if (modelDiv != null) {
       modelDiv.style.display = 'block';
     }
+    this.vehicle_plate_number = '';
   }
 
   redirectToBookingStatus(book: any) {
@@ -312,8 +319,8 @@ export class ProfilePageComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    location.reload();
-    this.router.navigateByUrl('')
+    window.location.reload();
+    this.router.navigateByUrl('/')
   }
 
   navigateToStatusFlow(bookingId:any){
@@ -321,6 +328,11 @@ export class ProfilePageComponent implements OnInit {
   }
 
   closeeditModal() {
+    this.selected_model = '';
+    this.selected_id_to_edit = '';
+    this.selected_variant = '';
+    this.selected_year = '';
+    this.selected_brand = '';
     const modelDiv = document.getElementById('editModal');
     if (modelDiv != null) {
       modelDiv.style.display = 'none';
@@ -346,9 +358,11 @@ export class ProfilePageComponent implements OnInit {
 
     this.vehicle_plate_number = '';
 
-    this.fetchCarModels();
-
     this.toast.success('Vehicle Updated SucessFully');
+
+    this.vehicle_plate_number = '';
+
+    this.fetchCarModels();
 
     this.closeeditModal();
   }

@@ -127,7 +127,8 @@
                             </div>
                             <div class="mt-2" style="display: flex; gap: 1vw;">
                               <div>
-                                <button class="viewdetails_btn" (click)="openholdModal();">Hold</button>
+                                <button *ngIf="book.st_code !== 'HOLDC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
+                                <button *ngIf="book.st_code === 'HOLDC'" class="viewdetails_btn" >Unhold</button>
                               </div>
                               <div>
                                 <button class="viewdetails_btn" (click)="openaddModal()" >Cancel</button>
@@ -585,7 +586,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()">Close</button>
-        <button type="button" (click)="changeBookingstatus(0)" class="btn btn-warning">Save</button>
+        <button type="button" (click)="changeBookingstatus(0)" class="btn btn-warning">Cancel</button> 
       </div>
     </div>
   </div>
@@ -597,7 +598,7 @@
         <h1 class="modal-title"
           style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Hold this Booking
         </h1>
-        <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+        <button (click)="closeholdModal()" type="button" class="btn-close" data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -607,7 +608,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeholdModal()">Close</button>
-        <button type="button" (click)="changeBookingstatus(1)" class="btn btn-warning">Save</button>
+        <button type="button" (click)="changeBookingstatus(1)" class="btn btn-warning">Hold</button>
       </div>
     </div>
   </div>

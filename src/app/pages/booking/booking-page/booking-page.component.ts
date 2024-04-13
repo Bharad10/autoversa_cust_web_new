@@ -100,6 +100,8 @@ export class BookingPageComponent {
   formattedDateForSummary:any;
   timeForSummary:any;
 
+  serviceAvailable:boolean = true;
+
   //coupon
   allCoupons: any;
   appliedCoupon: any;
@@ -677,7 +679,7 @@ export class BookingPageComponent {
       this.panelOpenState1 = false;
       this.panelOpenState2 = true;
       this.panelOpenState3 = false;
-      this.pickupandDropPanelDisplay = !this.pickupandDropPanelDisplay
+      this.pickupandDropPanelDisplay = false
       this.stopRecording();
     } else {
       //Validations
@@ -718,7 +720,7 @@ export class BookingPageComponent {
       this.panelOpenState1 = false;
       this.panelOpenState2 = false;
       this.panelOpenState3 = true;
-      this.PaymentPanelDisplay = !this.PaymentPanelDisplay
+      this.PaymentPanelDisplay = false
       
     }
   }
@@ -841,6 +843,7 @@ export class BookingPageComponent {
   }
 
   onvehicleSelectionChange(custvehId: any) {
+    this.serviceAvailable = true;
     if (custvehId) {
       console.log("Iam i empty?",this.custBookingList);
       let filterdArray = this.custBookingList.filter((data: any) => {
@@ -916,6 +919,7 @@ export class BookingPageComponent {
                 }
               });
               if (filterdData.length > 0) {
+                this.serviceAvailable = false;
                 this.toast.error(
                   'Sorry, currently we cannot service this model'
                 );
@@ -1214,7 +1218,7 @@ export class BookingPageComponent {
       });
 
       this.closeAddressModal();
-      this.adressFetch();
+      this.getCustomerAddresses()
       this.toast.success('Adress added successfully');
     } else {
       this.toast.error('Service Only Available in Abu Dhabi');

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Toast, ToastrService } from 'ngx-toastr';
 import { BookingService } from 'src/app/services/booking.service';
 import { environment } from 'src/environments/environment.prod';
 
@@ -50,7 +51,8 @@ export class BookingStatusFlowPageComponent implements OnInit {
   panelOpenState: boolean[] = [];
   initiallyOpenBookId: string = ''; 
   constructor(
-    private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService
+    private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService,
+    private toast:ToastrService
   ) {}
   ngOnInit(): void {  
     this.booking_id = this.activerouter.snapshot.paramMap.get('id');
@@ -617,6 +619,10 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
   changeBookingstatus(changeFlag:any){
     let input_data;
     if(changeFlag==0){
+      if(!this.cancelReason){
+        this.toast.warning("Reason must be specified")
+        return
+      }
        input_data ={
         "bookid": this.booking_details.bk_id,
         "reason": this.cancelReason,
@@ -629,6 +635,10 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
         "booking_version": this.booking_details.bk_version
       }
     }else if(changeFlag==1){
+      if(!this.holdReason){
+        this.toast.warning("Reason must be specified")
+        return
+      }
       input_data ={
         "bookid": this.booking_details.bk_id,
         "reason": this.holdReason,
@@ -900,6 +910,13 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
     
      this.router.navigateByUrl("booking-status-flow/" + btoa(bookingId));
    
+  }
+
+  unholdBooking(bookId:any){
+    
+    let data = {
+
+    }
   }
 
   
