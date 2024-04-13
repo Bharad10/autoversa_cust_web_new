@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { HostListener } from '@angular/core';
 
 @Component({
@@ -10,6 +10,7 @@ export class HeaderComponent implements OnInit{
 
 hide_mobile_menu:boolean=false;
 user_auth: boolean = false;
+@Input() logoutData: any;
 mobile_menu(){
   this.hide_mobile_menu = !this.hide_mobile_menu;
 }
