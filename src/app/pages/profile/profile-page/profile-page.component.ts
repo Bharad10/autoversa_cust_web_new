@@ -43,7 +43,7 @@ export class ProfilePageComponent implements OnInit {
 
   //logout Varaible
   logoutVar: boolean = true;
-
+  islogout = false;
   panelOpenState: boolean[] = [];
 
   selected_id_to_edit:any;
