@@ -83,4 +83,8 @@ export class BookingService {
     return this.http.post(environment.base_url + 'getbookingdetails_forcustomer' , data, {headers:this.reqHeader})
   }
 
+  updateBookingStatus(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/Update_status', data , {headers:this.reqHeader})
+  }
+
 }

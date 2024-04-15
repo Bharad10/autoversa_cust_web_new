@@ -128,7 +128,7 @@
                             <div class="mt-2" style="display: flex; gap: 1vw;">
                               <div>
                                 <button *ngIf="book.st_code !== 'HOLDC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
-                                <button *ngIf="book.st_code === 'HOLDC'" class="viewdetails_btn" >Unhold</button>
+                                <button *ngIf="book.st_code === 'HOLDC'" (click)="unholdBooking(book)" class="viewdetails_btn" >Unhold</button>
                               </div>
                               <div>
                                 <button class="viewdetails_btn" (click)="openaddModal()" >Cancel</button>
@@ -179,25 +179,25 @@
                         <div class="row">
                           <h2 class="bodyheading">Booking Status</h2>
                         </div>
-                        <div class="row" *ngFor="let eachdata of statusFlow" style=" margin-bottom: 2%; ">
+                        <div class="row" *ngFor="let eachdata of statusFlow" style=" margin-bottom: 2%; " >
                           <div class="col-md-4 d-flex justify-content-center align-items-center">
                             <div class="status_image_section">
-                              <img src="{{ eachdata.icon }}" style="width: 74px; height: 74px" />
+                              <img src="{{ eachdata?.icon }}" style="width: 74px; height: 74px" />
                             </div>
                           </div>
                           <div class="col-md-6">
-                            <p class="status-details">{{ eachdata.status }}</p>
+                            <p class="status-details">{{ eachdata?.status }}</p>
                             <p class="sub-status-details">
-                              {{ eachdata.dateandtime }}
+                              {{ eachdata?.dateandtime }}
                             </p>
                           </div>
                           <div class="col-md-2">
                             <button type="button" class="btn btn-info" (click)="onWorkcardSelection(1)"
-                              *ngIf="eachdata.code == 'WIPC'" mdbRipple>
+                              *ngIf="eachdata?.code == 'WIPC'" mdbRipple>
                               Workcard
                             </button>
                             <button type="button" class="btn btn-info" (click)="onWorkcardSelection(2)"
-                            *ngIf="eachdata.code == 'PIWC'" mdbRipple>
+                            *ngIf="eachdata?.code == 'PIWC'" mdbRipple>
                             Inspection
                           </button>
                             <!-- <button status="primary" (click)="onWorkcardSelection(1);" *ngIf="eachdata.code=='WIPC'">Workcard</button> -->

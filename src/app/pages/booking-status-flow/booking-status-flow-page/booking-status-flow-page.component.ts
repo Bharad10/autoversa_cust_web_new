@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { concat } from 'rxjs';
 import { BookingService } from 'src/app/services/booking.service';
 import { environment } from 'src/environments/environment.prod';
 
@@ -65,9 +66,10 @@ export class BookingStatusFlowPageComponent implements OnInit {
       if (rdata.ret_data == "success") {
         this.position = this.cust_status_master.indexOf(rdata.booking.cust_status.st_code);
         this.booking_details = rdata.booking;
+        console.log("Travis Scott", this.position)
         console.log("rdata.booking details--->", rdata.booking);
-        console.log("bookin details--->", this.booking_details.bk_consumcost);
-        const created_date: Date = new Date(this.booking_details.bk_created_on);
+        console.log("bookin details--->", this.booking_details);
+        const created_date: Date = new Date(this.booking_details.bk_created_on );
         const day: number = created_date.getDate();
         const month: number = created_date.getMonth() + 1;
         const year: number = created_date.getFullYear();
@@ -186,7 +188,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
             }
           }
           if (this.statusFlow.length > 0) {
-            let filterdstatusData = this.statusFlow.filter((data) => (data = data.code == stdata.code));
+            let filterdstatusData = this.statusFlow.filter((data) => (data = data.code === stdata.code));
 
             filterdstatusData.length > 0 ? "" : this.statusFlow.push(stdata);
           } else {
@@ -673,7 +675,7 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
         }
       });
     }
-    
+    // console.log("--------dvd---------",this.statusFlow);   
   }
   navigate(){
     this.router.navigateByUrl('rescheduleOrder/'+ btoa(this.booking_details.bk_id))
@@ -912,11 +914,22 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
    
   }
 
-  unholdBooking(bookId:any){
-    
-    let data = {
-
+  unholdBooking(details:any){
+  
+    let input_data = {
+      bookid:details.bk_id,
+      booking_version: this.booking_details.bk_version,
+      backendstatus:this.booking_details.back_status.st_code,
+      customerstatus:this.booking_details.cust_status.st_code,
+      unhold:true,
+      user_type: 0,
     }
+
+    this.booking_service.updateBookingStatus(input_data).subscribe((data:any)=>{
+      console.log(data)
+    })
+
+    this.navigateToStatusFlow(details.bk_id)
   }
 
   

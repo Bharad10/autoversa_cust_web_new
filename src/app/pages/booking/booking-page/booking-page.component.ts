@@ -1219,7 +1219,9 @@ export class BookingPageComponent {
 
       this.closeAddressModal();
       this.getCustomerAddresses()
+      
       this.toast.success('Adress added successfully');
+
     } else {
       this.toast.error('Service Only Available in Abu Dhabi');
     }

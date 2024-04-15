@@ -10,9 +10,9 @@
 
 export const environment = {
   production: false,
-  base_url:"https://autoversa.com/autoversa_api/",
+  // base_url:"https://autoversa.com/autoversa_api/",
   //base_url:"https://autoversa.com/maraghiapp_api/",
-  //base_url: "http://localhost:8080/",
+  base_url: "http://localhost:8080/",
   //base_url:"http://192.168.1.7:8080/",
   SOCKET_ENDPOINT: "http://localhost:3000/",
   nm_url: "http://nasermohsin.fortidyndns.com:35146/nm_spare_fetch/index.php/",

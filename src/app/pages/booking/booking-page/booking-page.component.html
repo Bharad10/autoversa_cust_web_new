@@ -44,9 +44,14 @@
                           <div class="col-xl-9">
                             <div class="vehicle_selection">
                               <div class="col-xl-12">
-                                <p class="package-heading" style="color: black">
-                                  Choose Vehicle
-                                </p>
+                                <div style="display: flex; justify-content: space-between;">
+                                  <div><p class="package-heading" style="color: black">
+                                    Choose Vehicle
+                                  </p></div>
+                                  <div *ngIf="tot_package_price"><span class="package-heading">Package Cost: </span>  <span style="font-size: 1.2rem; font-weight: bolder;" class="text-warning">{{tot_package_price}} AED</span> </div>  
+                                </div>
+                                
+
                                 <!-- <select class="form-select" aria-label="Default select example"
                                   [(ngModel)]="customerVehicleId" (change)="onvehicleSelectionChange(customerVehicleId)"
                                   selected="customerVehicleId">
@@ -208,8 +213,6 @@
                                 </div>
                               </div>
                               <br />
-                              <div *ngIf="tot_package_price"><span class="package-heading">Package Cost: </span>  <span style="font-size: 1.2rem; font-weight: bolder;" class="text-warning">{{tot_package_price}} AED</span> </div> <br>
-
                               <div class="mb-2 col-12">
                                 <p class="package-heading" style="color: black">
                                   Additional Queries
