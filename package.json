@@ -24,7 +24,7 @@
     "@mat-datetimepicker/core": "^13.0.1",
     "@material/form-field": "^15.0.0-canary.bc9ae6c9c.0",
     "@ng-select/ng-select": "^12.0.7",
-    "@stripe/stripe-js": "^3.0.6",
+    "@stripe/stripe-js": "^3.3.0",
     "@types/ffmpeg.js": "^3.1.6",
     "angular-calendar": "^0.31.0",
     "animate.css": "^4.1.1",

@@ -7,7 +7,7 @@
 // version code:0.0.4
 export const environment = {
   production: true,
-  // base_url:"https://autoversa.com/autoversa_api/",
+  //base_url:"https://autoversa.com/autoversa_api/",
   //base_url:"https://autoversa.com/maraghiapp_api/",
   base_url: "http://localhost:8080/",
   SOCKET_ENDPOINT: 'https://chat-server.autoversa.com/',

@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, Type, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { ToastrService } from 'ngx-toastr';
 import * as RecordRTC from 'recordrtc';
 
@@ -135,7 +136,8 @@ export class BookingPageComponent {
   audioFile: any;
   convertedAAC: any;
   
-
+  private stripePromise:any;
+  
   constructor(
     private domSanitizer: DomSanitizer,
     private router: Router,
@@ -146,6 +148,7 @@ export class BookingPageComponent {
     private adress_service: AddressService,
     public data:DataService
   ) {
+    this.stripePromise = loadStripe('pk_test_51OZ8DjFU0senaAZT6JcehylpmWrtZSTnYOlt9PX7FR7zd62QNFVFpfDT1WQGMOxtFKwTh0U82OzLdp57VAhz7k8Y00zknJQcxs');
     this.timeslots = [];
     this.booking_slot = 0;
     this.getpickupOptions();
@@ -178,7 +181,7 @@ export class BookingPageComponent {
       });
   }
   ngOnInit(): void {
-    this.invokeStripe();
+    // this.invokeStripe();
     this.custId = localStorage.getItem('id');
     //this.customerVehicleId = 0;
     this.getCustomerVehicleList();
@@ -733,7 +736,7 @@ export class BookingPageComponent {
       this.opentermsModal();
     }
   }
-   createBooking() {       
+  async createBooking() {       
     this.panelOpenState1 = false;
     this.panelOpenState2 = false;
     this.panelOpenState3 = true;
@@ -831,11 +834,27 @@ export class BookingPageComponent {
 
     // console.log('fffffffffmdata=----', formData);
 
-    this.booking_service.create_booking(bookingData).subscribe((rdata: any) => {
-      if (rdata.ret_data == 'success') {
-        this.router.navigateByUrl(
-          'booking-status-flow/' + btoa(rdata.booking_id)
-        );
+    this.booking_service.create_booking(bookingData).subscribe(async (rdata: any) => {
+      if (rdata.ret_data == 'success'|| rdata.ret_data == 'paylater') {
+        const stripe = await this.stripePromise;
+        try {
+          this.stripePromise.paymentSheet.setup({
+            payment_intent_client_secret: this.clientSecret,
+            // Optional configuration for appearance, billing address collection, etc.
+          })
+          .then((paymentSheet:any) => {
+            paymentSheet.open({
+              // Options specific to payment sheet presentation
+            });
+          })
+        } catch (error) {
+          console.error('Error presenting payment sheet:', error);
+        }
+
+
+        // this.router.navigateByUrl(
+        //   'booking-status-flow/' + btoa(rdata.booking_id)
+        // );
       }
     });
    
