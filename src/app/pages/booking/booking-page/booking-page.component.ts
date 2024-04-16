@@ -113,6 +113,8 @@ export class BookingPageComponent {
   dropAddressForSummary:any;
   timeDateForSummary:any;
 
+  paybuttondisable:boolean = false;
+
   @Input() placeholder = 'Search For Places';
   @ViewChild('inputField', { static: true })
   inputField!: ElementRef<HTMLInputElement>;
@@ -517,6 +519,7 @@ export class BookingPageComponent {
   }
 
   ondateSelection() {
+    this.booking_slot = 0;
     this.timeslots = [];
     const days = [
       'Sunday',
@@ -857,7 +860,8 @@ export class BookingPageComponent {
         // );
       }
     });
-   
+
+    this.paybuttondisable = true;
     
   }
 
@@ -1238,7 +1242,11 @@ export class BookingPageComponent {
 
       this.closeAddressModal();
       this.getCustomerAddresses()
-      
+      let number =this.pickup_address.length ;
+      this.pickup_addressId = this.pickup_address[number].cad_id
+      this.drop_addressId = this.pickup_address[number].cad_id
+      this.onSelectionChange(this.pickup_addressId)
+      console.log(this.pickup_addressId);
       this.toast.success('Adress added successfully');
 
     } else {
