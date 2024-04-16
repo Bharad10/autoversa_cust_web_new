@@ -159,6 +159,15 @@
     max-width: calc(50% - 10px); /* Adjust margin as needed */
     flex-grow: 0;
   }
+
+  .viewdetails_btn{
+    background-color: #31bbac;
+    border: none;
+    color:white;
+    padding: 0.6rem;
+    border-radius: 5px;
+}
+
   
   .mat-expansion-panel:last-child {
     margin-right: 0;

@@ -86,4 +86,8 @@ export class BookingListComponent {
     this.panelOpenState[index] = false;
   }
 
+  navigateToStatusFlow(bookingId:any){
+    this.router.navigateByUrl('booking-status-flow/'+ btoa(bookingId))
+  }
+
 }

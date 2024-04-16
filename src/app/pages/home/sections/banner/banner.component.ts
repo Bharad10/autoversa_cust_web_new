@@ -73,12 +73,13 @@ export class BannerComponent implements OnInit {
         return this.selectedCar == data.bk_vehicle_id;
       });
 
-      if(filterdArray){
+      if(filterdArray>0){
         if(filterdArray[0].custstatus != 'Delivery Completed' && filterdArray[0].custstatus != 'Booking Canceled'){
         this.toast.error('Booking already exists');
         // this.bookingSectionDisplay = false
         return;
         }
+        return;
       }
       else{
         this.router.navigateByUrl('booking/' + btoa(this.selectedService));

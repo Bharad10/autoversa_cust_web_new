@@ -875,7 +875,7 @@ export class BookingPageComponent {
 
       console.log("FIlterd Array",filterdArray);
 
-      if(filterdArray){
+      if(filterdArray.length > 0){
         if(filterdArray[0].custstatus != 'Delivery Completed' && filterdArray[0].custstatus != 'Booking Canceled'){
         this.toast.error('Booking already exists');
         this.bookingSectionDisplay = false

@@ -87,4 +87,8 @@ export class BookingService {
     return this.http.post(environment.base_url + 'Booking/BookingController/Update_status', data , {headers:this.reqHeader})
   }
 
+  getCustomerBookingJob(data:any): Observable<any>{
+    return this.http.post(environment.base_url + 'Booking/BookingController/getbookingjobs_forcustomer', data ,{headers:this.reqHeader})
+  }
+
 }

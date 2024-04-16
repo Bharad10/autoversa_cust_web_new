@@ -51,6 +51,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
   base_url = environment.aws_url;
   panelOpenState: boolean[] = [];
   initiallyOpenBookId: string = ''; 
+  bookingDetailsForHold:any;
   constructor(
     private router: Router, private activerouter: ActivatedRoute, private booking_service: BookingService,
     private toast:ToastrService
@@ -69,6 +70,8 @@ export class BookingStatusFlowPageComponent implements OnInit {
         console.log("Travis Scott", this.position)
         console.log("rdata.booking details--->", rdata.booking);
         console.log("bookin details--->", this.booking_details);
+        this.getCustomerBookings();
+        this.getCustomerBookingJobs();
         const created_date: Date = new Date(this.booking_details.bk_booking_date );
         const day: number = created_date.getDate();
         const month: number = created_date.getMonth() + 1;
@@ -186,7 +189,19 @@ export class BookingStatusFlowPageComponent implements OnInit {
               "icon": './assets/images/delivery_icon.png',
               "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
             }
-          }
+          } 
+          else if (element.bkt_code == "HOLDC" && element.bkt_task != "Unhold") {
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Delivery on Hold",
+              "code": element.bkt_code,
+              "icon": './assets/images/hold_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          } 
           if (this.statusFlow.length > 0) {
             let filterdstatusData = this.statusFlow.filter((data) => (data = data.code === stdata.code));
 
@@ -281,9 +296,23 @@ export class BookingStatusFlowPageComponent implements OnInit {
         }
       }
       console.log("st ssssss----->", this.statusFlow);
-
+     
     });
-    this.getCustomerBookings();
+
+    
+   
+  }
+
+  getCustomerBookingJobs(){
+    let data = {
+      "book_id": this.booking_id,
+      "backend_status":this.booking_details.back_status.st_id,
+      "customer_status":this.booking_details.cust_status.st_id
+    }
+
+    this.booking_service.getCustomerBookingJob(data).subscribe((data:any)=>{
+      this.bookingDetailsForHold = data
+    })
   }
 
   isPanelOpen(index: number): boolean {
@@ -647,8 +676,8 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
         "type": "HOLD",
         "backendstatus": "HOLDB",
         "customerstatus":"HOLDC",
-        "current_bstatus":"Booking Created",
-        "current_cstatus":"Booking Created",
+        "current_bstatus":this.booking_details.back_status.st_code,
+        "current_cstatus":this.booking_details.cust_status.st_code,
         "user_type": "0",
         "booking_version": this.booking_details.bk_version
       }
@@ -668,6 +697,7 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
           this.onWorkcardSelection(0);
         }
       });
+      this.router.navigateByUrl('/');
     }else if(changeFlag==2){
       this.booking_service.bookingReschedule(input_data).subscribe((rdata: any) => {
         if(rdata.ret_data=="success"){
@@ -692,6 +722,8 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
       if (rdata.ret_data == "success") {
         this.position = this.cust_status_master.indexOf(rdata.booking.cust_status.st_code);
         this.booking_details = rdata.booking;
+        this.getCustomerBookings();
+        this.getCustomerBookingJobs();
         console.log("rdata.booking details--->", rdata.booking);
         console.log("bookin details--->", this.booking_details.bk_consumcost);
         const created_date: Date = new Date(this.booking_details.bk_created_on);
@@ -907,6 +939,7 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
       }
       console.log("st ssssss----->", this.statusFlow);
       this.getCustomerBookings();
+      this.getCustomerBookingJobs();
         window.location.reload();
     });
     
@@ -915,12 +948,23 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
   }
 
   unholdBooking(details:any){
+
+    let StatusInfo = this.bookingDetailsForHold.booking.status_flow.filter((data:any) =>{
+      return data.bkt_code == 'HOLDC'
+    })
+
+    console.log("_____StatusInfo-------_____",StatusInfo);
+     
+    let unHoldStatusData = StatusInfo[0].bkt_url.split(',')
+
+    console.log("=========================Splited Data================================",unHoldStatusData );
+    
   
     let input_data = {
       bookid:details.bk_id,
       booking_version: this.booking_details.bk_version,
-      backendstatus:this.booking_details.back_status.st_code,
-      customerstatus:this.booking_details.cust_status.st_code,
+      backendstatus:unHoldStatusData[0],
+      customerstatus:unHoldStatusData[1],
       unhold:true,
       user_type: 0,
     }
@@ -931,7 +975,5 @@ if (rdata.pickup_odometers && rdata.pickup_odometers.length > 0) {
 
     this.navigateToStatusFlow(details.bk_id)
   }
-
-  
 
 }
