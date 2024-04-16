@@ -851,22 +851,23 @@ export class BookingPageComponent {
     if (custvehId) {
       console.log("Iam i empty?",this.custBookingList);
       let filterdArray = this.custBookingList.filter((data: any) => {
-        return Number(custvehId) == data.bk_vehicle_id;
+        return Number(custvehId) == data.bk_vehicle_id;   
       });
 
-      if (
-        (filterdArray.length > 0 &&
-          filterdArray[0].custstatus != 'Delivery Completed') ||
-        (filterdArray.length > 0 &&
-          filterdArray[0].custstatus != 'Booking Canceled')
-      ) {
-        console.log("Suspected Issue");
-        
+      console.log("FIlterd Array",filterdArray);
+
+      if(filterdArray){
+        if(filterdArray[0].custstatus != 'Delivery Completed' && filterdArray[0].custstatus != 'Booking Canceled'){
         this.toast.error('Booking already exists');
         this.bookingSectionDisplay = false
-        
-        return; // Exit the function if booking exists
+        return;
+        }
       }
+      
+      // if ((filterdArray.length > 0 && filterdArray[0].custstatus == 'Delivery Completed') ||  (filterdArray.length > 0 && filterdArray[0].custstatus == 'Booking Canceled') ) {
+        
+       // Exit the function if booking exists
+      // }
     }
     if (custvehId) {
       this.bookingSectionDisplay = true;
@@ -1218,16 +1219,52 @@ export class BookingPageComponent {
         cust_id: atob(this.custId),
       };
       this.auth_service.addAddress(data).subscribe((data) => {
-        console.log(data);
-      });
-
-      this.closeAddressModal();
+      console.log(data);
       this.getCustomerAddresses()
       let number =this.pickup_address.length ;
-      this.pickup_addressId = this.pickup_address[number].cad_id
-      this.drop_addressId = this.pickup_address[number].cad_id
-      this.onSelectionChange(this.pickup_addressId)
-      console.log(this.pickup_addressId);
+      this.pickup_addressId = this.pickup_address[number-1].cad_id
+      this.drop_addressId = this.pickup_address[number-1].cad_id
+      console.log("----------Selected Address Id:----------",this.pickup_addressId,this.drop_addressId);
+
+      let pickup_distance = this.pickup_address.find(
+        (address: { cad_id: string }) =>
+          address.cad_id === this.pickup_addressId.toString()
+      ).cad_distance;
+      let pickupAddressForSummaryTemp = this.pickup_address.filter((data:any)=>{
+        return data.cad_id == this.pickup_addressId
+      })
+      this.pickupAddressForSummary = pickupAddressForSummaryTemp;
+      console.log("-------PickupaddressForSummaryTemp-------", pickupAddressForSummaryTemp);
+      if (this.isChecked) {
+        this.total_distance = parseFloat(pickup_distance) * 2;
+        this.drop_addressId = this.pickup_addressId;
+        this.dropAddressForSummary = this.pickupAddressForSummary
+      } else if (this.drop_addressId != 0) {
+        let drop_distance = this.drop_address.find(
+          (address: { cad_id: string }) =>
+            address.cad_id === this.drop_addressId.toString()
+        ).cad_distance;
+        this.total_distance =
+          parseFloat(pickup_distance) + parseFloat(drop_distance);
+        let dropAddressForSummarytemp = this.drop_address.filter((data:any)=>{
+          return data.cad_id == this.drop_addressId
+        })
+        this.dropAddressForSummary = dropAddressForSummarytemp
+        console.log("---------DropAddress-----------",this.dropAddressForSummary);
+        
+      } else {
+        this.total_distance = 0;
+      }
+      this.getpickupOptions()
+      });
+
+      
+
+      this.closeAddressModal();
+    
+      
+      // this.onSelectionChange(this.pickup_addressId)
+      // console.log(this.pickup_addressId);
       this.toast.success('Adress added successfully');
 
     } else {

@@ -98,7 +98,7 @@
                         </div> -->
                         <mat-accordion>
                           <mat-expansion-panel  [ngStyle]="{ 'background-color': book.bgColor }"  *ngFor="let book of activeBookings let i = index" [expanded]="isPanelOpen(i)" (opened)="panelOpened(i)" (closed)="panelClosed(i)"  style="margin-bottom: 10px;">
-                            <mat-expansion-panel-header [collapsedHeight]="'15vh'" [expandedHeight]="'15vh'">
+                            <mat-expansion-panel-header *ngIf="book.custstatus !== 'Booking Canceled' " [collapsedHeight]="'15vh'" [expandedHeight]="'15vh'">
                                 <div class="row">
                                   <div style="display: flex; justify-content: center; align-items: cenetr;" class="col-4">
                                     <img src="./assets/icons/benz_icon.png" alt="" style="height: 10vh;">

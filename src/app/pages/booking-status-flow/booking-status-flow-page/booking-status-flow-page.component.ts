@@ -69,7 +69,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
         console.log("Travis Scott", this.position)
         console.log("rdata.booking details--->", rdata.booking);
         console.log("bookin details--->", this.booking_details);
-        const created_date: Date = new Date(this.booking_details.bk_created_on );
+        const created_date: Date = new Date(this.booking_details.bk_booking_date );
         const day: number = created_date.getDate();
         const month: number = created_date.getMonth() + 1;
         const year: number = created_date.getFullYear();
