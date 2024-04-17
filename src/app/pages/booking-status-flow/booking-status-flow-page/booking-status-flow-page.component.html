@@ -180,7 +180,7 @@
                           <h2 class="bodyheading">Booking Status</h2>
                         </div>
                         <div class="row" *ngFor="let eachdata of statusFlow" style=" margin-bottom: 2%; " >
-                          <div class="col-md-4 d-flex justify-content-center align-items-center">
+                          <div *ngIf="eachdata" class="col-md-4 d-flex justify-content-center align-items-center">
                             <div class="status_image_section">
                               <img src="{{ eachdata?.icon }}" style="width: 74px; height: 74px" />
                             </div>
@@ -207,7 +207,13 @@
                       </div>
                       <div class="col-xl-6" *ngIf="workcard_showFlag == 1">
                         <div class="row">
-                          <h2 class="bodyheading">Workcard</h2>
+                          <div class="col-6">
+                            <h2 class="bodyheading">Workcard</h2>
+                          </div>
+
+                          <div class="col-6">
+                            <h2 (click)="workcard_showFlag = 0">Back</h2>
+                          </div>
                         </div>
                         <div class="row">
                           <table id="package_table">
@@ -427,7 +433,12 @@
                       </div>
                       <div class="col-xl-6" *ngIf="workcard_showFlag == 2">
                         <div class="row">
-                          <h2 class="bodyheading">Workcard</h2>
+                          <div class="col-6">
+                            <h2 class="bodyheading">Workcard</h2>
+                          </div>
+                          <div class="col-6">
+                            <h2 (click)="workcard_showFlag=0">Back</h2>
+                          </div>
                         </div>
                         <div class="row" *ngIf="inspectionDetails">
                           <div class="col-md-12">

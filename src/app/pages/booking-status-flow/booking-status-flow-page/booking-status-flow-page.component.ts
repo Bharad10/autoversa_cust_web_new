@@ -29,6 +29,8 @@ export class BookingStatusFlowPageComponent implements OnInit {
   booking_slot: any;
   inspectionDetails:any;
   cust_status_master = [
+    'BAPC',
+    'HOLDC',
     'BKCC',
     'DRPC',
     'PIPC',
@@ -39,8 +41,6 @@ export class BookingStatusFlowPageComponent implements OnInit {
     'RFDC',
     'DEDC',
     'DLCC',
-    'BAPC',
-    'HOLDC',
   ];
   workcard_showFlag = 0;
   position: any;
@@ -190,16 +190,50 @@ export class BookingStatusFlowPageComponent implements OnInit {
               "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
             }
           } 
-         
-          console.log("SData", stdata);
-          
-          if (this.statusFlow.length > 0) {
-            let filterdstatusData = this.statusFlow.filter((data) => (data = data.code == stdata.code));
 
-            filterdstatusData.length > 0 ? "" : this.statusFlow.push(stdata);
+          else if(element.bkt_code == "HOLDC" && element.bkt_task !="Unhold"){
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Delivery on Hold",
+              "code": element.bkt_code,
+              "icon": './assets/images/hold_icon.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          }
+          else if(element.bkt_code == "BAPC"){
+            const created_date: Date = new Date(element.bkt_created_on);
+            const day: number = created_date.getDate();
+            const month: number = created_date.getMonth() + 1;
+            const year: number = created_date.getFullYear();
+            stdata = {
+              "status": "Awaiting Payment",
+              "code": element.bkt_code,
+              "icon": './assets/images/awaiting_payment.png',
+              "dateandtime": `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}, ${created_date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`
+            }
+          }
+          if (this.statusFlow.length > 0) {
+            let filterdstatusData = this.statusFlow.filter((data) => (data = data?.code == stdata.code));
+            if(filterdstatusData.length > 0 ){
+              console.log("Chumma",filterdstatusData);
+              let data =[];
+               data = this.statusFlow.filter((data:any)=>{
+                return new Date(data.dateandtime) < new Date(stdata.dateandtime)
+              })
+             data.length > 0 ? this.statusFlow.push(stdata): ''; 
+             console.log("jjkjkkdsdstfukhkj",data);
+            }else{
+              this.statusFlow.push(stdata)
+            }
           } else {
             stdata ? this.statusFlow.push(stdata) : "";
           }
+        
+          console.log("----------------ADaa Mwone------------------",this.statusFlow);
+          
         });
         for (let i = (this.position + 1); i < this.cust_status_master.length; i++) {
           let temp;
