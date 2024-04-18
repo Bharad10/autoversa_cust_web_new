@@ -48,6 +48,8 @@ export class ProfilePageComponent implements OnInit {
 
   selected_id_to_edit:any;
 
+  cancelReason:string = '';
+
 
   constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
 
@@ -325,6 +327,28 @@ export class ProfilePageComponent implements OnInit {
 
   navigateToStatusFlow(bookingId:any){
     this.router.navigateByUrl('booking-status-flow/'+ btoa(bookingId))
+  }
+
+  openReasonModal(book_id:any){
+    let filterdData = this.bookingHistoryList.filter((data:any)=>{
+      return data.bk_id == book_id
+    })
+
+    this.cancelReason = filterdData[0].bkt_content
+    .split(":")[1]
+    .trim()
+    const modelDiv = document.getElementById('reasonModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    } 
+  }
+
+  closeReasonModal(){
+    this.cancelReason = '';
+    const modelDiv = document.getElementById('reasonModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    } 
   }
 
   closeeditModal() {

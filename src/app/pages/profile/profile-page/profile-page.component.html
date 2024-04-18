@@ -242,7 +242,7 @@
                           <h2 class="heading">My Previous Bookings</h2>
                         </div>
                         <div class="col-xl-12">
-                          <div class="profile_card_booklist text-center">
+                          <div class="profile_card_booklist">
                             <ng-container
                               *ngIf="
                                 bookingHistoryList &&
@@ -250,7 +250,7 @@
                                 else noBookingsHistory
                               "
                             >
-                              <div
+                              <!-- <div
                                 class="row historylist"
                                 [style.border]="
                                   bookhistory.st_code === 'CANC'
@@ -309,6 +309,53 @@
                                     </p>
                                   </div>
                                 </div>
+                              </div> -->
+                              <div
+                                *ngFor="let bookhistory of bookingHistoryList"
+                                class="row  my-3 vehicleList "
+                                style="box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+                              border-radius: 10px;
+                              "
+                              >
+                               <div *ngIf="bookhistory.st_code == 'CANC'" style="display: flex; justify-content: center;  align-items: center;" class="p-4 col-xl-4">
+                                <img src="./assets/images/service_list_icon.png" alt="" height="90vh">
+                               </div> 
+
+                               <div *ngIf="bookhistory.st_code === 'CANC'" style="display: flex; justify-content: center; align-items: center;" class="col-xl-8 p-4">
+                                <div>
+                                  <div>
+                                <span style="font-weight: bold; font-size: 1rem">{{bookhistory.bk_number}}</span><br>
+                                  </div>
+                                  
+                                  <div class="">
+                                    <span><i class="fa-solid fa-car"></i></span> <span class="ms-2" style="font-weight: 700; font-size: 0.9">{{bookhistory.cv_make}} {{bookhistory.cv_model}}  {{ bookhistory.cv_variant }}
+                                      ({{ bookhistory.cv_year }})
+                                    </span><br>
+                                    <span style="font-size: 1.1rem;" class="me-2" >
+                                      <i class="fa-solid fa-clock"></i> </span>
+                                      <span style="">{{ bookhistory.formattedStartTime }} - {{ bookhistory.formattedEndTime }}</span><br> 
+                                      <span style="" class="me-2"><i class="fa-solid fa-calendar"></i> </span> {{bookhistory.formattedDate }}
+                                  </div> <br>
+                                  <span (click)="openReasonModal(bookhistory.bk_id)"  *ngIf="bookhistory.st_code === 'CANC'" 
+                                  style="  background-color: red;
+                                  color: white;
+                                  padding: 4px 8px;
+                                  text-align: center;
+                                  border-radius: 5px;
+                                  cursor: pointer;
+                                  "
+                                  
+                                  >Delivery Canceled</span>
+                                </div>
+                               </div>
+                               
+                               <!-- <div style="display: flex; align-items: center;" class="col-xl-2">
+                                <div style="display:flex; align-items: center; justify-content: center; gap: 0.6rem;" >
+                                  <div matTooltip="Click here to edit the vehicle" class="vehlist_btn" (click)="openeditModal(car.cv_id)"><i class="fa-solid fa-pen"></i></div>
+                                  <div matTooltip="Click here to delete the vehicle" class="vehlist_btn"><i class="fa-solid fa-trash"></i></div>
+                                </div>
+                               </div> -->
+
                               </div>
                             </ng-container>
                             <ng-template #noBookingsHistory>
@@ -632,4 +679,24 @@
       </div>
     </div>
   </div>
+
+  <div class="modal" tabindex="-1" id="reasonModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title">Reason</h1>
+          <button (click)="closeReasonModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <p>{{cancelReason}}</p>
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeReasonModal()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <!-- <button (click)="updateModal()" type="button" class="btn btn-warning">Update</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
