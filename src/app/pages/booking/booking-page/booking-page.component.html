@@ -476,6 +476,7 @@
                             [(ngModel)]="bookingDate"
                             #bookingDateRef="ngModel"
                             required
+                            (click)="picker.open()"
                           />
 
                           <mat-datepicker-toggle
@@ -710,6 +711,7 @@
                       </div>
                     </div>
 
+                    <hr>
                     <div
                       *ngIf="
                         allCoupons && !appliedCoupon && allCoupons.length > 0
@@ -901,9 +903,12 @@
                     </div>
                     <hr />
                     <div class="row">
-                      <p *ngIf="pickup_cost" class="packagedetailslist">
-                        Booking Summary
-                      </p>
+                      <div class="col-6">
+                        <p *ngIf="pickup_cost" class="packagedetailslist">
+                          Booking Summary
+                        </p>
+                      </div>
+                      
                     </div>
                     <br />
                     <div class="row label">

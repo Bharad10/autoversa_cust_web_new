@@ -127,7 +127,7 @@
                             </div>
                             <div class="mt-2" style="display: flex; gap: 1vw;">
                               <div>
-                                <button *ngIf="book.st_code !== 'HOLDC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
+                                <button *ngIf="book.st_code !== 'HOLDC' && book.st_code == 'BKCC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
                                 <button *ngIf="book.st_code === 'HOLDC'" (click)="unholdBooking(book)" class="viewdetails_btn" >Unhold</button>
                               </div>
                               <div>
@@ -158,6 +158,7 @@
                                     <img *ngIf="book.st_code === 'DEDC'" src="./assets/images/drop_enrouted.png" alt="" srcset="" style="height: 5vh;">
                                     <img *ngIf="book.st_code === 'DLCC'" src="./assets/images/delivery_icon.png" alt="" srcset="" style="height: 5vh; ">
                                     <img *ngIf="book.st_code === 'HOLDC'" src="./assets/images/hold_icon.png" alt="" srcset="" style="height: 5vh; ">
+                                    <img *ngIf="book.st_code === 'PIWC'" src="./assets/images/pickup_enroute_icon.png" alt="" srcset="" style="height: 5vh; ">
                                     <div>
                                       <p class="m-2">{{book.custstatus}}</p>
                                   </div>
@@ -212,7 +213,7 @@
                           </div>
 
                           <div class="col-6">
-                            <h2 (click)="workcard_showFlag = 0">Back</h2>
+                            <h2 style="cursor: pointer;" class="bodyheading text-end" (click)="workcard_showFlag = 0"><i class="fa-solid fa-backward"></i></h2>
                           </div>
                         </div>
                         <div class="row">
@@ -351,7 +352,7 @@
                             <div class="col-4" style=" text-align: center;">
                               <div style="display: inline-flex;">
                                 <strong>
-                                  <p>Grand Total <b style="font-size: .7vw;">(VAT Inclusive)</b> : </p>
+                                  <p>Grand Total:<b style="font-size: .7vw;">(VAT Inclusive)</b>  </p>
                                 </strong>
                                 <p>{{this.booking_details.grand_total | number: "1.2-2"}}</p>
                               </div>
@@ -363,7 +364,7 @@
                               </div>
                               <div style="display: inline-flex;">
                                 <strong>
-                                  <p>Balance Amount : </p>
+                                  <p>Balance : </p>
                                 </strong>
                                 <p>{{this.booking_details.grand_total*1+this.booking_details.paid_total*1 | number:
                                   "1.2-2"}}</p>
