@@ -427,13 +427,13 @@ export class BookingPageComponent {
           this.pickup_address = rdata.cust_address;
           this.drop_address = rdata.cust_address;
 
-          // let count = this.drop_address.length
-          //     count = (count - 1)
-          //     console.log("Count of the Address Array",count);
+          let count = this.drop_address.length
+              count = (count - 1)
+              console.log("Count of the Address Array",count);
 
-          // //Selecting The address Default
-          // this.pickup_addressId = rdata.cust_address[count].cad_id
-          // this.drop_addressId = rdata.cust_address[count].cad_id
+          //Selecting The address Default
+          this.pickup_addressId = rdata.cust_address[count].cad_id
+          this.drop_addressId = rdata.cust_address[count].cad_id
 
           console.log('----------drop adresses----->', this.drop_address);
         }
@@ -899,9 +899,9 @@ export class BookingPageComponent {
         }
 
 
-        // this.router.navigateByUrl(
-        //   'booking-status-flow/' + btoa(rdata.booking_id)
-        // );
+        this.router.navigateByUrl(
+          'booking-status-flow/' + btoa(rdata.booking_id)
+        );
       }
     });
 
