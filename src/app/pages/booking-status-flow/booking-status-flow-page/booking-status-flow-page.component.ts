@@ -698,11 +698,11 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   console.log("Checking wheather it is in temparray",this.temparray);
                   
                 }
-
                 
 
               } else {
                 stdata ? this.statusFlow.push(stdata) : "";
+                stdata ? this.temparray.push(stdata) : "";
                 console.log("StatusFLow After the filteration if length > 0 's else condition",this.statusFlow);
                 
               }
@@ -714,6 +714,11 @@ export class BookingStatusFlowPageComponent implements OnInit {
             }
           );
           console.log("SSSSSSSSSSS FLOW---------", this.statusFlow)
+
+          if(rdata.booking.cust_status.st_code == "WIPC"){
+            this.statusFlow = this.temparray
+          }
+          
           // if (this.statusFlow.length > 0) {
           //   console.log("StatusFlow before entering into loop",this.statusFlow);
             
