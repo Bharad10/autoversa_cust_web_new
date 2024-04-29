@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BookingService } from 'src/app/services/booking.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class RescheduleComponentComponent implements OnInit{
   bkVersion:any;
   custStatus:any;
 
-  constructor(private booking_service:BookingService,private activerouter: ActivatedRoute,private router: Router){
+  constructor(private booking_service:BookingService,private activerouter: ActivatedRoute,private router: Router,private toast:ToastrService){
     this.bookingId = this.activerouter.snapshot.paramMap.get('id')
   }
   ngOnInit(): void {
@@ -167,19 +168,40 @@ export class RescheduleComponentComponent implements OnInit{
   }
 
   bookingReschedule(){
-    let data = {
-      bookid:atob(this.bookingId),
-      bookingdate:this.formated_bookingdate,
-      slot:this.booking_slot,
-      scheduletype: this.custStatus == "BKCC"||"HOLDC" ? 5 : 4,
-      prebookingdate:this.previousBookingDate,
-      booking_version:this.bkVersion
+
+    if(this.booking_slot == '' && this.bookingDate == ''){
+      this.toast.error("Please Select Time and Date to Schedule")
+      return;
     }
-   this.booking_service.bookingReschedule(data).subscribe((data:any)=>{
-      if(data.ret_data=="success"){
-        this.router.navigateByUrl('');
+
+    if(this.booking_slot == ''){
+      this.toast.warning("Select a Time slot to Schedule")
+      return;
+    }
+    if(this.bookingDate == ''){
+      this.toast.warning("Select a Date to Schedule")
+      return;
+    }
+
+    if(this.booking_slot && this.bookingDate){
+      let data = {
+        bookid:atob(this.bookingId),
+        bookingdate:this.formated_bookingdate,
+        slot:this.booking_slot,
+        scheduletype: this.custStatus == "BKCC"||"HOLDC" ? 5 : 4,
+        prebookingdate:this.previousBookingDate,
+        booking_version:this.bkVersion
       }
-    console.log(data);
-   }) 
-  }
+     this.booking_service.bookingReschedule(data).subscribe((data:any)=>{
+        if(data.ret_data=="success"){
+          this.router.navigateByUrl('');
+        }
+      console.log(data);
+     }) 
+    }else{
+      this.toast.error("Please Select Time and Date to Schedule")
+      return;
+    }
+    }
+  
 }

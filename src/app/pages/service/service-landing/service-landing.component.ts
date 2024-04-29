@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookingService } from 'src/app/services/booking.service';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,14 +18,27 @@ export class ServiceLandingComponent implements OnInit {
 
   customerVehicleList: any;
 
+  refreshNumber:any;
+
+  refresh_number:any;
+
   constructor(
     private router: Router,
     private booking_service: BookingService,
-    private auth_service:AuthService
-  ) {}
+    private auth_service:AuthService,
+    private activerouter: ActivatedRoute
+  ) {
+    
+  }
 
 
   ngOnInit(): void {
+
+    this.refresh_number = localStorage.getItem('refresh_number')
+    this.refreshNumber = this.activerouter.snapshot.paramMap.get('num'); 
+
+    
+
     this.booking_service.allServicesListedForLandingPage().subscribe((data) => {
       this.packageList = data.data;
       
@@ -43,6 +56,17 @@ export class ServiceLandingComponent implements OnInit {
       this.auth_service.customerVehicleList(data).subscribe(data=>{
         this.customerVehicleList = data.vehList
       })
+    }
+
+    // if(this.refreshNumber == 1){
+    //   this.router.navigateByUrl('/services/0')  
+    // }
+
+    
+
+    if(this.refresh_number == 1 ){
+      localStorage.setItem('refresh_number',"0" )
+      window.location.reload();
     }
   }
 

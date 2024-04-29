@@ -320,8 +320,9 @@ export class ProfilePageComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    window.location.reload();
+    // localStorage.clear();
+    // window.location.reload();
+    localStorage.setItem("refresh_number", "1");
     this.router.navigateByUrl('/')
   }
 

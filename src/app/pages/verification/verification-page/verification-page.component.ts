@@ -110,7 +110,8 @@ export class VerificationPageComponent {
           this.router.navigateByUrl('/services')
           localStorage.setItem("cust_token", rdata.token )  
         localStorage.setItem("name", btoa(rdata.customer.name)) 
-        localStorage.setItem("id", btoa(rdata.customer.id))           
+        localStorage.setItem("id", btoa(rdata.customer.id)) 
+        localStorage.setItem('refresh_number','1')          
         }else if(rdata.customer.cust_type == "new"){
            this.router.navigateByUrl('signup/'+btoa(this.country_code)+'/'+btoa(this.mobileNumber));
            localStorage.setItem("cust_token", rdata.token )  

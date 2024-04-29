@@ -15,13 +15,22 @@ export class HomeComponent {
   // Booking List
   bookingList: any;
 
+  refresh_number:any;
+
   constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
 
   ngOnInit(): void {
+    this.refresh_number = localStorage.getItem('refresh_number')
     this.userId = localStorage.getItem('id');
     this.fetchBookingList();
     //location.reload();
+    if(this.refresh_number == 1){
+      localStorage.clear();
+      window.location.reload();
+    }
   }
+
+
 
   fetchBookingList() {
     let data = {

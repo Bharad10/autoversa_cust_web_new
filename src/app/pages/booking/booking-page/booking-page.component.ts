@@ -434,11 +434,43 @@ export class BookingPageComponent {
               count = (count - 1)
               console.log("Count of the Address Array",count);
 
-          //Selecting The address Default
+          // Selecting The address Default
           this.pickup_addressId = rdata.cust_address[count].cad_id
           this.drop_addressId = rdata.cust_address[count].cad_id
 
           console.log('----------drop adresses----->', this.drop_address);
+
+          
+      let pickup_distance = this.pickup_address.find(
+        (address: { cad_id: string }) =>
+          address.cad_id === this.pickup_addressId.toString()
+      ).cad_distance;
+      let pickupAddressForSummaryTemp = this.pickup_address.filter((data:any)=>{
+        return data.cad_id == this.pickup_addressId
+      })
+      this.pickupAddressForSummary = pickupAddressForSummaryTemp;
+      console.log("-------PickupaddressForSummaryTemp-------", pickupAddressForSummaryTemp);
+      if (this.isChecked) {
+        this.total_distance = parseFloat(pickup_distance) * 2;
+        this.drop_addressId = this.pickup_addressId;
+        this.dropAddressForSummary = this.pickupAddressForSummary
+      } else if (this.drop_addressId != 0) {
+        let drop_distance = this.drop_address.find(
+          (address: { cad_id: string }) =>
+            address.cad_id === this.drop_addressId.toString()
+        ).cad_distance;
+        this.total_distance =
+          parseFloat(pickup_distance) + parseFloat(drop_distance);
+        let dropAddressForSummarytemp = this.drop_address.filter((data:any)=>{
+          return data.cad_id == this.drop_addressId
+        })
+        this.dropAddressForSummary = dropAddressForSummarytemp
+        console.log("---------DropAddress-----------",this.dropAddressForSummary);
+        
+      } else {
+        this.total_distance = 0;
+      }
+      this.getpickupOptions()
         }
       });
   }
