@@ -464,6 +464,7 @@
                       <div class="col-xl-6">
                         <div class="pickuptype_label">Select Booking Date*</div>
                         <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                          <!-- <div (click)="picker.open()" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"> -->
                           <input
                             class="form-control"
                             matInput
@@ -477,6 +478,7 @@
                             #bookingDateRef="ngModel"
                             required
                             (click)="picker.open()"
+                            style="position: relative; z-index: 1; pointer-events: none;"
                           />
 
                           <mat-datepicker-toggle

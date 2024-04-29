@@ -131,10 +131,10 @@
                                 <button *ngIf="book.st_code === 'HOLDC'" (click)="unholdBooking(book)" class="viewdetails_btn" >Unhold</button>
                               </div>
                               <div>
-                                <button class="viewdetails_btn" (click)="openaddModal()" >Cancel</button>
+                                <button class="viewdetails_btn" *ngIf="book.st_code == 'BKCC'" (click)="openaddModal()" >Cancel</button>
                               </div>
                                 <div>
-                                  <button class="viewdetails_btn" (click)="navigate()">Reschedule</button> 
+                                  <button *ngIf="book.st_code == 'BKCC'" class="viewdetails_btn" (click)="navigate()">Reschedule</button> 
                                 </div>
                                     
                               <div>

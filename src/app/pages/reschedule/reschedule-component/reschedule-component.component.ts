@@ -66,6 +66,7 @@ export class RescheduleComponentComponent implements OnInit{
   }
 
   ondateSelection() {
+    this.booking_slot = '';
     this.timeslots = [];
     const days = [
       'Sunday',

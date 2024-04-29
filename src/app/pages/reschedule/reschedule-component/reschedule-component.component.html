@@ -33,6 +33,8 @@
                                 [matDatepicker]="picker"
                                 placeholder="Choose a booking date"
                                 [(ngModel)]="bookingDate" [min]="minSelectableDate" [max]="maxSelectableDate" (dateChange)="ondateSelection()"
+                                (click)="picker.open()"
+                                 style="position: relative; z-index: 1; pointer-events: none;"
                               />
                             </div>  
                              <div class="col-2">

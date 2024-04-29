@@ -188,6 +188,9 @@ export class BookingPageComponent {
     //this.customerVehicleId = 0;
     this.getCustomerVehicleList();
     this.getCustomerBookings();
+
+    this.pickup_addressId = 0;
+    this.drop_addressId = 0;
    
   }
 
