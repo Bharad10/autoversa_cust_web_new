@@ -354,9 +354,9 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   const month: number = created_date.getMonth() + 1;
                   const year: number = created_date.getFullYear();
                   stdata = {
-                    status: 'Booking created',
+                    status: 'Driver in route to pickup Location',
                     code: element.bkt_code,
-                    icon: './assets/images/booking_icon.png',
+                    icon: './assets/images/drop_enrouted.png',
                     dateandtime: `${day.toString().padStart(2, '0')}-${month
                       .toString()
                       .padStart(
@@ -636,9 +636,9 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   const month: number = created_date.getMonth() + 1;
                   const year: number = created_date.getFullYear();
                   stdata = {
-                    status: 'Booking created',
+                    status: 'Driver in route for Delivery',
                     code: element.bkt_code,
-                    icon: './assets/images/booking_icon.png',
+                    icon: './assets/images/drop_enrouted.png',
                     dateandtime: `${day.toString().padStart(2, '0')}-${month
                       .toString()
                       .padStart(
@@ -945,17 +945,12 @@ export class BookingStatusFlowPageComponent implements OnInit {
         .GetBookingJobDetails(input_data)
         .subscribe((rdata: any) => {
           if (rdata.ret_data == 'success') {
+            // console.log(rdata);
             this.booking_details = rdata.booking;
             this.booking_details.bk_consumcost =
               parseFloat(this.booking_details.bk_consumcost) +
               parseFloat(this.booking_details.bk_consumvat);
-            rdata.jobs.forEach(
-              (element: {
-                status: any;
-                bkj_status: any;
-                job_id: any;
-                bkj_id: any;
-              }) => {
+            rdata.jobs.forEach((element: {status: any; bkj_status: any; job_id: any; bkj_id: any;}) => {
                 element.status = element.bkj_status;
                 element.job_id = element.bkj_id;
                 if (element.bkj_status == 1) {

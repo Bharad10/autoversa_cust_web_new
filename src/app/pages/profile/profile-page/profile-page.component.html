@@ -317,11 +317,11 @@
                               border-radius: 10px;
                               "
                               >
-                               <div *ngIf="bookhistory.st_code == 'CANC'" style="display: flex; justify-content: center;  align-items: center;" class="p-4 col-xl-4">
+                               <div  style="display: flex; justify-content: center;  align-items: center;" class="p-4 col-xl-4">
                                 <img src="./assets/images/service_list_icon.png" alt="" height="90vh">
                                </div> 
 
-                               <div *ngIf="bookhistory.st_code === 'CANC'" style="display: flex; justify-content: center; align-items: center;" class="col-xl-8 p-4">
+                               <div  style="display: flex; justify-content: center; align-items: center;" class="col-xl-8 p-4">
                                 <div>
                                   <div>
                                 <span style="font-weight: bold; font-size: 1rem">{{bookhistory.bk_number}}</span><br>
@@ -346,6 +346,16 @@
                                   "
                                   
                                   >Delivery Canceled</span>
+                                  <span   *ngIf="bookhistory.st_code === 'DLCC'" 
+                                  style="  background-color: rgb(27, 196, 27);
+                                  color: white;
+                                  padding: 4px 8px;
+                                  text-align: center;
+                                  border-radius: 5px;
+                                  cursor: pointer;
+                                  "
+                                  
+                                  >Delivery Completed</span>
                                 </div>
                                </div>
                                

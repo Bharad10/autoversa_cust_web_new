@@ -91,4 +91,8 @@ export class BookingService {
     return this.http.post(environment.base_url + 'Booking/BookingController/getbookingjobs_forcustomer', data ,{headers:this.reqHeader})
   }
 
+  dummyAudioUpload(data:any):Observable<any>{
+    return this.http.post(environment.base_url + "dummy_audio", data, {headers:this.reqHeader})
+  }
+
 }

@@ -1421,4 +1421,19 @@ export class BookingPageComponent {
       modalDiv.style.display = 'none';
     }
   }
+
+  uploadAudio(){
+    if(this.url){
+      let data = {
+        bookingattachment:this.url
+      }
+      this.booking_service.dummyAudioUpload(data).subscribe((a)=>{
+        console.log(a);
+        
+      })
+    
+    }else{
+      this.toast.error("Its not it mate")
+    }
+ }
 }
