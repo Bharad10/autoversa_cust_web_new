@@ -90,6 +90,29 @@
 
 }
 
+.table-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  table {
+    width: 80%; /* Adjust width as needed */
+    border-collapse: collapse;
+    margin-top: 20px; /* Adjust margin as needed */
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #eee;
+    font-size: 1rem;
+  }
+
 .list-group-item:hover {
     text-decoration: underline;
 }

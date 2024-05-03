@@ -1013,12 +1013,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
           this.booking_details.total_cost + parseFloat(element.bkj_cust_cost);
       }
     });
-    this.booking_details.grand_total = parseFloat(
-      (
-        this.booking_details.total_cost +
-        parseFloat(this.booking_details.bk_pickup_cost)
-      ).toFixed(2)
-    );
+    
 
     if (this.booking_details.bk_consumcost != 0.0) {
       this.booking_details.total_cost =
@@ -1037,6 +1032,12 @@ export class BookingStatusFlowPageComponent implements OnInit {
     this.booking_details.grand_total =
       this.booking_details.grand_total -
       parseFloat(this.booking_details.bk_coupondiscount);
+      this.booking_details.grand_total = (
+        (
+          this.booking_details.total_cost +
+          parseFloat(this.booking_details.bk_pickup_cost)
+        ).toFixed(2)
+      );
     console.log('grand total---->', this.booking_details.grand_total);
   }
   Selectalljobs() {

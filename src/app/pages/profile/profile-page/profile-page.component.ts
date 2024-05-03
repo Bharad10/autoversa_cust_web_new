@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { BookingService } from 'src/app/services/booking.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -50,8 +51,12 @@ export class ProfilePageComponent implements OnInit {
 
   cancelReason:string = '';
 
+  //Delivery Completed WorkCard
+  booking_details:any;
+  booking_jobs:any;
 
-  constructor(private authService: AuthService, private router: Router, private toast: ToastrService) { }
+
+  constructor(private authService: AuthService, private router: Router, private toast: ToastrService, private booking_service: BookingService) { }
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('id');
@@ -409,4 +414,105 @@ export class ProfilePageComponent implements OnInit {
     this.selected_id_to_edit = cv_id;
     this.selected_model = filterdVehicleData[0].cv_model;
   }
+
+  closeWorkCard(){
+    const modelDiv = document.getElementById('workCard');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    }
+  }
+
+  openWorkCard(bookid:any){
+    let data = {
+      bookid:bookid
+    }
+    this.booking_service.GetBookingJobDetails(data).subscribe((rdata:any) =>{
+      this.booking_details = rdata.booking;
+      this.booking_details.bk_consumcost = parseFloat(this.booking_details.bk_consumcost) + parseFloat(this.booking_details.bk_consumvat);
+      console.log("First ConsumCost: ---->", this.booking_details.bk_consumcost);
+      
+
+     
+        rdata.jobs.forEach((element: {status: any; bkj_status: any; job_id: any; bkj_id: any;}) => {
+          element.status = element.bkj_status;
+          element.job_id = element.bkj_id;
+    
+        });
+      
+
+      this.booking_jobs = rdata.jobs;
+      this.claculateTotal();
+    })
+
+    const modelDiv = document.getElementById('workCard');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    } 
+  }
+
+  claculateTotal(){
+    this.booking_details.total_cost = 0.0;
+    this.booking_details.grand_total = 0.0;
+    console.log("when claculate Total fuction starts booking_details.total_cost",this.booking_details.total_cost);
+    console.log("when claculate Total fuction starts booking_details.grand_total",this.booking_details.grand_total);
+    
+
+    if(parseFloat(this.booking_details.booking_package.bkp_cust_amount)>0){
+      this.booking_details.total_cost = (
+      this.booking_details.total_cost + 
+      parseFloat(this.booking_details.booking_package.bkp_cust_amount) +
+      parseFloat(this.booking_details.booking_package.bkp_vat)
+      )
+      console.log("first if condition this.booking_details.booking_package.bkp_cust_amount > 0",this.booking_details.total_cost);
+      
+    }
+
+    console.log("The Booking Job Array", this.booking_jobs);
+    
+
+    
+      this.booking_jobs.forEach((element:any)=>{
+        element.bkj_vat = 0.0;
+        if(parseFloat(element.nkj_cust_cost)>0 && 
+          (element.bkj_status == '2' || element.bkj_status == '4')
+        ){
+          this.booking_details.total_cost = this.booking_details.total_cost + 
+          parseFloat(element.bkj_cust_cost);
+        }
+      })
+    
+
+    console.log("After ForEach Loop", this.booking_details.total_cost);
+    
+   
+
+    console.log("The Grand tot inc pickup cost", this.booking_details.grand_total);
+    
+
+    if(this.booking_details.bk_consumcost != 0.0){
+      this.booking_details.total_cost = 
+      this.booking_details.total_cost +
+      parseFloat(this.booking_details.bk_consumcost);
+      console.log("if booking_details total cost in consumcost != 0",this.booking_details.total_cost); 
+    }
+
+    console.log("discount bk_discount ",this.booking_details.bk_discount);
+    console.log("discount coupondiscount",this.booking_details.bk_coupondiscount);
+    
+    
+    
+   if(this.booking_details.bk_discount) {
+    this.booking_details.grand_total = this.booking_details.total_cost - parseFloat(this.booking_details.bk_discount);
+   }
+   
+   if(this.booking_details.bk_coupondiscount){
+   this.booking_details.grand_total = this.booking_details.grand_total - parseFloat(this.booking_details.bk_coupondiscount);
+   }
+
+   this.booking_details.grand_total = (parseFloat(this.booking_details.total_cost) + parseFloat((this.booking_details.bk_pickup_cost)))
+   
+   console.log('grand total: ---->',this.booking_details.grand_total);
+   
+  }
+
 }

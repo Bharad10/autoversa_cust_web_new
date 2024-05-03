@@ -345,8 +345,10 @@
                                   cursor: pointer;
                                   "
                                   
-                                  >Delivery Canceled</span>
-                                  <span   *ngIf="bookhistory.st_code === 'DLCC'" 
+                                  >Booking Canceled</span>
+                                  <span 
+                                  (click)="openWorkCard(bookhistory.bk_id)"
+                                    *ngIf="bookhistory.st_code === 'DLCC'" 
                                   style="  background-color: rgb(27, 196, 27);
                                   color: white;
                                   padding: 4px 8px;
@@ -704,6 +706,96 @@
         <div class="modal-footer">
           <button (click)="closeReasonModal()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           <!-- <button (click)="updateModal()" type="button" class="btn btn-warning">Update</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1"  id="workCard" >
+    <div class="modal-dialog modal-xl ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Work Card</h5>
+          <button (click)="closeWorkCard()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="table-container">
+          <table *ngIf="booking_details" class="text-center">
+
+            <thead>
+              <tr>
+                <th colspan="3" style="
+                      text-align: center;
+                      background-color: #eee;
+                      font-size: 1rem;
+                    ">
+                  Package & Additional Jobs
+                </th>
+              </tr>
+              <tr>
+                <th>No</th>
+                <th>Job Name</th>
+                <th>Amount.</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>
+                  {{booking_details.booking_package.pkg_name}}
+                </td>
+                <td>
+                  AED
+                                  {{
+                                  booking_details.booking_package
+                                  .bkp_cust_amount * 1 + booking_details.booking_package
+                                  .bkp_vat *1 | number: "1.2-2"
+                                   }}
+                </td>
+              </tr>
+
+              <tr>
+                <td>2</td>
+                <td>Pickup Cost</td>
+                <td>
+                  AED {{ booking_details.bk_pickup_cost }}
+                </td>
+              </tr>
+              <tr *ngFor="
+                                    let eachjob of booking_jobs;
+                                    let i = index
+                                  ">
+              <ng-container *ngIf="eachjob.bkj_status !=1">
+                <td *ngIf="
+                    booking_details &&
+                    booking_details.bk_consumcost != '0.00'
+                  ">
+                  {{ i + 4 }}
+                </td>
+                <td *ngIf="
+                    booking_details &&
+                    booking_details.bk_consumcost == '0.00'
+                  ">
+                  {{ i + 3 }}
+                </td>
+                <td>
+                  {{ eachjob.bkj_jobname | titlecase }}
+                </td>
+                <td>AED {{ eachjob.bkj_cust_cost }}</td>
+              </ng-container>
+                <tr>
+                  <td colspan="2" class="text-end"><b>Grand Total:</b></td>
+                  <td>AED {{ this.booking_details.grand_total | number: "1.2-2" }}</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>  
+        </div>
+        <div class="modal-footer">
+          <button (click)="closeWorkCard()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
         </div>
       </div>
     </div>

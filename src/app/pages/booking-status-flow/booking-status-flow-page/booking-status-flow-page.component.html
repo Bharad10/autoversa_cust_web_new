@@ -204,6 +204,7 @@
                             *ngIf="eachdata?.code == 'PIWC'" mdbRipple>
                             Inspection
                           </button>
+                          <button type="button" class="btn btn-success"  *ngIf="eachdata?.code == 'CDLC'">Drop Location</button>
                             <!-- <button status="primary" (click)="onWorkcardSelection(1);" *ngIf="eachdata.code=='WIPC'">Workcard</button> -->
                           </div>
                           <br />
@@ -388,8 +389,8 @@
                               </tr>
                               <tr>
                                 <th>
-                                  <input type="checkbox" [(ngModel)]="selectAll" (click)="Selectalljobs()"
-                                    name="select_alljobs">
+                                  <!-- <input type="checkbox" [(ngModel)]="selectAll" (click)="Selectalljobs()"
+                                    name="select_alljobs"> -->
                                 </th>
                                 <!-- <th>No</th> -->
                                 <th>Job Name</th>
