@@ -21,41 +21,16 @@
                               <div class="d-flex" style="gap: 15px">
                                 <div>
                                   <img
-                                    style="height: 152px"
+                                    style="height: 17vh"
                                     src="https://www.freepnglogos.com/uploads/mercedes-logo-png/mercedes-logo-mercedes-benz-logo-png-transparent-svg-vector-bie-13.png"
                                     alt=""
                                   />
                                 </div>
-                                <div style="display: flex; align-items: center">
+                                <div style="display: flex; align-items: center; justify-content: center;">
                                   <div class="booking_details">
-                                    <span
-                                      ><b
-                                        >{{
-                                          bookingData?.booking?.booking_package
-                                            ?.pkg_name
-                                        }}
-                                        ({{
-                                          bookingData?.booking?.bk_number
-                                        }})</b
-                                      ></span
-                                    >
-                                    <br />
-                                    <span>Booking Date : </span>
-                                    <span>{{
-                                      bookingData?.booking?.bk_booking_date
-                                    }}</span>
-                                    <br />
-                                    <span
-                                      >{{
-                                        bookingData?.booking?.vehicle?.cv_make
-                                      }}
-                                      {{
-                                        bookingData?.booking?.vehicle.cv_model
-                                      }}
-                                      {{
-                                        bookingData?.booking?.vehicle.cv_year
-                                      }}
-                                    </span>
+                                    <b><span>{{bookingData.booking?.vehicle?.cv_plate_number}}</span></b> <br>
+                                    <span>{{bookingData?.booking?.vehicle?.cv_make}} {{bookingData?.booking?.vehicle.cv_model}} </span> <br>
+                                    <span>{{bookingData?.booking?.vehicle.cv_variant}} ({{bookingData?.booking?.vehicle.cv_year}})</span> <br>   
                                   </div>
                                 </div>
                               </div>
@@ -63,6 +38,69 @@
                           </div>
                         </div>
                         <div class="col-xl-6 col-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="d-flex" style="gap: 15px">
+                                <div>
+                                  <img
+                                    style="height: 17vh"
+                                    src="./assets/images/service_list_icon.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                  <div class="booking_details">
+                                    <b><span>{{bookingData.booking?.bk_number}}</span></b> <br>
+                                    <span>{{bookingData?.booking?.booking_package?.pkg_name}}</span> <br> 
+                                    <span>{{bookingData?.booking?.bk_booking_date}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-6 mt-3">
+                          <div class="card">
+                            <div class="card-body p-4">
+                              <div class="row">
+                                <div class="col-9">
+                                  <div>
+                                    <h5 class="mb-4">Drop Type*</h5>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-8">
+                                      <label class="pickupdetails_list">
+                                        <input type="radio" />
+                                        Drive Drop
+                                      </label>
+                                    </div>
+                                    <div class="col-4">
+                                      <p class="pickupdetails_list">FREE</p>
+                                    </div>
+                                  </div>
+
+                                  <div class="row">
+                                    <div class="col-8">
+                                      <label class="pickupdetails_list">
+                                        <input type="radio" />
+                                        Open Recovery
+                                      </label>
+                                    </div>
+                                    <div class="col-4">
+                                      <p class="pickupdetails_list">456</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-xl-6 mt-3 col-12">
                           <div class="card">
                             <div class="card-body">
                               <div
@@ -99,61 +137,6 @@
 
                       <div class="row">
                         <div class="col-12 mt-3">
-                          <div class="card">
-                            <div class="card-body p-5">
-                              <div class="row">
-                                <div class="col-9">
-                                  <div>
-                                    <h5 class="mb-4">Drop Type*</h5>
-                                  </div>
-
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <label class="pickupdetails_list">
-                                        <input type="radio" />
-                                        Drive Drop
-                                      </label>
-                                    </div>
-                                    <div class="col-4">
-                                      <p class="pickupdetails_list">FREE</p>
-                                    </div>
-                                  </div>
-
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <label class="pickupdetails_list">
-                                        <input type="radio" />
-                                        Open Recovery
-                                      </label>
-                                    </div>
-                                    <div class="col-4">
-                                      <p class="pickupdetails_list">456</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="col-3">
-                                  <div>
-                                    <google-map
-                                      height="230px"
-                                      width="230px"
-                                      [zoom]="10"
-                                      [center]="position"
-                                    >
-                                      <map-marker
-                                        [position]="position"
-                                      ></map-marker>
-                                    </google-map>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-12 mt-3">
                           <div class="row">
                             <div class="col-xl-6 col-12">
                               <div class="card">
@@ -162,26 +145,32 @@
                                     <h5>Select Drop Date</h5>
                                   </div>
 
-                                  <div class="py-4">
+                                  <div class="py-3">
                                     <div>
-                                      <mat-form-field>
+                                      <div class="mt-1" style="display: flex; align-items: center; justify-content: center;">
+                                        <!-- <div (click)="picker.open()" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"> -->
                                         <input
+                                          class="form-control"
                                           matInput
                                           [matDatepicker]="picker"
                                           (dateChange)="ondateSelection()"
                                           placeholder="Choose a booking date"
-                                          [(ngModel)]="bookingDate"
+                                          name="bookingDate"
                                           [min]="minSelectableDate"
                                           [max]="maxSelectableDate"
+                                          [(ngModel)]="bookingDate"
+                                          #bookingDateRef="ngModel"
+                                          required
+                                          (click)="picker.open()"
+                                          style="position: relative; z-index: 1; pointer-events: none;"
                                         />
+              
                                         <mat-datepicker-toggle
                                           matSuffix
                                           [for]="picker"
                                         ></mat-datepicker-toggle>
-                                        <mat-datepicker
-                                          #picker
-                                        ></mat-datepicker>
-                                      </mat-form-field>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>

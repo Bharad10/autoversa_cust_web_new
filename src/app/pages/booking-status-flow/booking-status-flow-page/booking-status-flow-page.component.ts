@@ -871,6 +871,10 @@ export class BookingStatusFlowPageComponent implements OnInit {
       });
   }
 
+  navigateToDrop(){
+    this.router.navigateByUrl('/vehicleScheduleDrop/' + btoa(this.booking_details.bk_id));
+  }
+
   getCustomerBookingJobs() {
     let data = {
       book_id: this.booking_id,
@@ -918,7 +922,11 @@ export class BookingStatusFlowPageComponent implements OnInit {
               element.bgColor = '#e1e1e1';
             else element.bgColor = '';
           });
-          this.activeBookings = rdata.book_list;
+          let tempBookingData = rdata.book_list.filter((data:any)=>{
+            return data.custstatus != "Booking Canceled" 
+            // && data.custstatus != "Delivery Completed"
+          })
+          this.activeBookings = tempBookingData;
         }
       });
   }

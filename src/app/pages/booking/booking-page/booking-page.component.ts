@@ -46,7 +46,7 @@ export class BookingPageComponent {
   isChecked = true;
   bookingDate: any;
   timeslots: any;
-  booking_slot: any;
+  booking_slot = 0;
   stripe: any;
   clientSecret: any;
   elements: any;
@@ -114,6 +114,8 @@ export class BookingPageComponent {
   timeDateForSummary:any;
 
   paybuttondisable:boolean = false;
+
+  formattedDateForTheHistory:any;
 
   @Input() placeholder = 'Search For Places';
   @ViewChild('inputField', { static: true })
@@ -554,7 +556,7 @@ export class BookingPageComponent {
   }
 
   ondateSelection() {
-    this.booking_slot = 0;
+    
     this.timeslots = [];
     const days = [
       'Sunday',
@@ -572,13 +574,23 @@ export class BookingPageComponent {
 
     const formattedDate = `${day}-${month}-${year}`;
 
-    this.formattedDateForSummary = formattedDate
+    this.formattedDateForSummary = formattedDate;
+    this.formattedDateForTheHistory = `${year}-${month}-${day}`
+
+
     
     let inputData = {
       day: dayName,
       date: formattedDate,
       branch_id: 1,
     };
+
+    console.log("Formatted Date---->",formattedDate);
+    console.log("that day----->",dayName);
+    console.log("sum formtted Date",formattedDate);
+    
+    
+    
     this.booking_service
       .gettimeslotsbyDate(inputData)
       .subscribe((rdata: any) => {
@@ -670,6 +682,8 @@ export class BookingPageComponent {
           console.log(this.timeslots);
         }
       });
+
+     
   }
   preparePayment(id: any) {
     // const data: IPreparePyamentRequest = { via: 'stripe' };
@@ -844,7 +858,7 @@ export class BookingPageComponent {
         bkurl: '',
         pickupaddress: this.pickup_addressId,
         dropaddress: this.drop_addressId,
-        bookingdate: this.bookingDate,
+        bookingdate: this.formattedDateForTheHistory,
         operationlabourrate: 5,
         sub_packages: this.subpackages,
         services: this.services,
@@ -944,7 +958,19 @@ export class BookingPageComponent {
     
   }
 
+  valueReset(){
+    this.pickup_cost = '';
+    this.pickup_name = '';
+    this.bookingDate = '';
+    this.booking_slot = 0;
+    this.selectedPickupOption= '';
+    this.panelOpenState3 = false;
+    this.PaymentPanelDisplay = true;
+    this.pickupandDropPanelDisplay = true;
+  }
+
   onvehicleSelectionChange(custvehId: any) {
+    this.valueReset();
     this.serviceAvailable = true;
     if (custvehId) {
       console.log("Iam i empty?",this.custBookingList);
@@ -961,6 +987,8 @@ export class BookingPageComponent {
         return;
         }
       }
+
+      
       
       // if ((filterdArray.length > 0 && filterdArray[0].custstatus == 'Delivery Completed') ||  (filterdArray.length > 0 && filterdArray[0].custstatus == 'Booking Canceled') ) {
         
@@ -1190,6 +1218,7 @@ export class BookingPageComponent {
             this.tot_package_price = Math.round(this.tot_package_price);
             this.getCouponsForCustomer();
           }
+          
         });
     } else {
     }

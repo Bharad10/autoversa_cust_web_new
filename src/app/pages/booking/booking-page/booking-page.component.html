@@ -336,7 +336,7 @@
                               <ng-option
                                 *ngFor="let eachaddress of pickup_address"
                                 [value]="eachaddress.cad_id"
-                                >{{ eachaddress.cad_address }}</ng-option
+                                >{{eachaddress.cad_landmark}} {{ eachaddress.cad_address }}</ng-option
                               >
                             </ng-select>
                           </div>
@@ -374,7 +374,7 @@
                               <ng-option
                                 *ngFor="let eachaddress of drop_address"
                                 [value]="eachaddress.cad_id"
-                                >{{ eachaddress.cad_address }}</ng-option
+                                >{{eachaddress.cad_landmark}} {{ eachaddress.cad_address }}</ng-option
                               >
                             </ng-select>
                           </div>
@@ -515,7 +515,7 @@
                             (change)="onSelectionChange($event)"
                             selected="booking_slot"
                           >
-                            <ng-option [value]="0">Select Time slot</ng-option>
+                            <ng-option [value]= "0" > Select Time slot </ng-option>
                             <ng-option
                               *ngFor="let eachslot of timeslots"
                               [value]="eachslot.tm_id"

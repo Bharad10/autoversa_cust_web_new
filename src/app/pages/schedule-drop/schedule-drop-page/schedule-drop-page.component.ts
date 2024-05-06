@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AddressService } from 'src/app/services/address.service';
 import { BookingService } from 'src/app/services/booking.service';
 
@@ -25,13 +26,20 @@ export class ScheduleDropPageComponent implements OnInit {
 
   booking_slot:any;
 
-  constructor(private booking_service: BookingService){
+  booking_id:any;
+
+  constructor(private booking_service: BookingService, private activerouter: ActivatedRoute, ){
+    this.booking_id = this.activerouter.snapshot.paramMap.get('id');
 
   }
+
+
+
   ngOnInit(): void {
     this.getBookingDetails()
     this.getCustomerAddress()
     this.getBookingDetailsForDateConfirmation()
+
     
   }
 
@@ -60,7 +68,7 @@ export class ScheduleDropPageComponent implements OnInit {
 
   getBookingDetails(){
     let data = {
-      book_id :btoa("7"),
+      book_id :this.booking_id,
     }
     this.booking_service.GetbookingdetailsbyId(data).subscribe((data:any) =>{
       this.bookingData = data

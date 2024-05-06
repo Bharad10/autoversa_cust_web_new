@@ -194,7 +194,7 @@ export class RescheduleComponentComponent implements OnInit{
       }
      this.booking_service.bookingReschedule(data).subscribe((data:any)=>{
         if(data.ret_data=="success"){
-          this.router.navigateByUrl('');
+          this.router.navigateByUrl('booking-status-flow/'+ this.bookingId);
         }
       console.log(data);
      }) 
