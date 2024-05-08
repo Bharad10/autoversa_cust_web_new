@@ -546,6 +546,8 @@ export class BookingPageComponent {
           );
         }
         this.pickup_options = rdata.active_pickuptype_list;
+        console.log("vat",this.gs_vat);
+        
 
         console.log(
           '----------pickup pickup_options----->',

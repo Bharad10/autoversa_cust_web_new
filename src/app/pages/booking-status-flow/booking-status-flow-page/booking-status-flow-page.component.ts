@@ -323,25 +323,16 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 ) {
                   console.log("Enterd Delivery Scheduled on");
                   
-                  const created_date: Date = new Date(element.bkt_created_on);
+                  const created_date: Date = new Date(this.booking_details.bk_dropdate);
                   const day: number = created_date.getDate();
                   const month: number = created_date.getMonth() + 1;
                   const year: number = created_date.getFullYear();
+                  let time = this.convertTimeTo12HourFormat(this.booking_details.drop_timeslot.tm_start_time,this.booking_details.drop_timeslot.tm_end_time)
                   stdata = {
                     status: 'Delivery scheduled on',
                     code: element.bkt_code,
                     icon: './assets/images/drop_enrouted.png',
-                    dateandtime: `${day.toString().padStart(2, '0')}-${month
-                      .toString()
-                      .padStart(
-                        2,
-                        '0'
-                      )}-${year}, ${created_date.toLocaleTimeString('en-US', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                      hour12: true,
-                    })}`,
+                    dateandtime: `${day}-${month}-${year} on ${time}` ,
                   };
                 } else if (
                   element.bkt_code == 'DEDC' &&
@@ -1346,6 +1337,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
     let input_data = {
       book_id: btoa(this.booking_id),
     };
+    
     this.booking_service
     .GetbookingdetailsbyId(input_data)
     .subscribe((rdata: any) => {
@@ -1379,6 +1371,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
           }
         )}`;
         this.booking_details.bk_created_on = formatted_date;
+        console.log("rdata----------->",rdata.booking.status_flow);
         rdata.booking.status_flow.forEach(
           (element: {
             bkt_created_on: string | number | Date;
@@ -1388,9 +1381,9 @@ export class BookingStatusFlowPageComponent implements OnInit {
             let stdata: any;
             if (element.bkt_task != 'Unhold') {
               if (
-                element.bkt_code == 'BKCC' &&
-                element.bkt_task == 'Booking Created'
+                element.bkt_code == 'BKCC' 
               ) {
+                console.log("Enterd Booking CReated");
                 stdata = {
                   status: 'Booking created',
                   code: element.bkt_code,
@@ -1398,27 +1391,17 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   dateandtime: formatted_date,
                 };
               }
-              if (
-                element.bkt_code == 'BKCC' &&
-                element.bkt_task != 'Unhold'
-              ) {
-                stdata = {
-                  status: 'Booking created',
-                  code: element.bkt_code,
-                  icon: './assets/images/booking_icon.png',
-                  dateandtime: formatted_date,
-                };
-              }
-               else if (
+              else if (
                 element.bkt_code == 'HOLDC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Delivery On Hold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
                 const year: number = created_date.getFullYear();
                 stdata = {
-                  status: 'Delivery on Hold',
+                  status: 'Booking on Hold',
                   code: element.bkt_code,
                   icon: './assets/images/hold_icon.png',
                   dateandtime: `${day.toString().padStart(2, '0')}-${month
@@ -1437,6 +1420,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'BAPC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Awaiting Payment");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1461,6 +1445,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'DRPC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Booking driver in route");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1485,6 +1470,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'PIPC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Pickup in progress");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1509,6 +1495,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'PIWC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd route to workshop");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1533,6 +1520,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'VAWC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Vehicle at workshop");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1554,11 +1542,9 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   })}`,
                 };
               } else if (
-                element.bkt_code == 'WIPC' &&
-                element.bkt_task == 'Work in progress' ||
-                element.bkt_code == 'WIPC' &&
-                element.bkt_task != 'Unhold'
+                element.bkt_code == 'WIPC' 
               ) {
+                console.log("Enterd Work in progress");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1583,6 +1569,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'CDLC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Ready for delivery");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1607,38 +1594,33 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'RFDC' &&
                 element.bkt_task != 'Unhold'
               ) {
-                const created_date: Date = new Date(element.bkt_created_on);
+                console.log("Enterd Delivery Scheduled on");
+                
+                const created_date: Date = new Date(this.booking_details.bk_dropdate);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
                 const year: number = created_date.getFullYear();
+                let time = this.convertTimeTo12HourFormat(this.booking_details.drop_timeslot.tm_start_time,this.booking_details.drop_timeslot.tm_end_time)
                 stdata = {
                   status: 'Delivery scheduled on',
                   code: element.bkt_code,
                   icon: './assets/images/drop_enrouted.png',
-                  dateandtime: `${day.toString().padStart(2, '0')}-${month
-                    .toString()
-                    .padStart(
-                      2,
-                      '0'
-                    )}-${year}, ${created_date.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                  })}`,
+                  dateandtime: `${day}-${month}-${year} on ${time}` ,
                 };
               } else if (
                 element.bkt_code == 'DEDC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Booking Created");
+                
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
                 const year: number = created_date.getFullYear();
                 stdata = {
-                  status: 'Booking created',
+                  status: 'Driver in route to pickup Location',
                   code: element.bkt_code,
-                  icon: './assets/images/booking_icon.png',
+                  icon: './assets/images/drop_enrouted.png',
                   dateandtime: `${day.toString().padStart(2, '0')}-${month
                     .toString()
                     .padStart(
@@ -1655,6 +1637,8 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'DLCC' &&
                 element.bkt_task != 'Unhold'
               ) {
+                console.log("Enterd Delivery Completed");
+                
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1683,6 +1667,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'BKCC' 
                
               ) {
+                console.log("Enterd Booking Created on ==Unhold");
                 stdata = {
                   status: 'Booking created',
                   code: element.bkt_code,
@@ -1693,6 +1678,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 element.bkt_code == 'HOLDC' 
                 
               ) {
+                console.log("Enterd Delivery on Hold ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1716,6 +1702,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'BAPC'
               ) {
+                console.log("Enterd Awaiting Payment Awaiting Payment ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1739,6 +1726,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'DRPC' 
               ) {
+                console.log("Enterd Dri in location ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1762,6 +1750,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'PIPC' 
               ) {
+                console.log("Enterd pickup in Progress ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1785,6 +1774,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'PIWC' 
               ) {
+                console.log("Enterd in route to workshop ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1808,6 +1798,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'VAWC' 
               ) {
+                console.log("Enterd Vehicle at workshop ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1831,6 +1822,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'WIPC' 
               ) {
+                console.log("Enterd Work in Progress ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1854,6 +1846,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'CDLC' 
               ) {
+                console.log("Enterd Ready For Delivery ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1877,6 +1870,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'RFDC'
               ) {
+                console.log("Enterd Delivery SCheduled on ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1900,14 +1894,15 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'DEDC' 
               ) {
+                console.log("Booking Created ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
                 const year: number = created_date.getFullYear();
                 stdata = {
-                  status: 'Booking created',
+                  status: 'Driver in route for Delivery',
                   code: element.bkt_code,
-                  icon: './assets/images/booking_icon.png',
+                  icon: './assets/images/drop_enrouted.png',
                   dateandtime: `${day.toString().padStart(2, '0')}-${month
                     .toString()
                     .padStart(
@@ -1923,6 +1918,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               } else if (
                 element.bkt_code == 'DLCC' 
               ) {
+                console.log("Enterd Delivery Completed ==Unhold");
                 const created_date: Date = new Date(element.bkt_created_on);
                 const day: number = created_date.getDate();
                 const month: number = created_date.getMonth() + 1;
@@ -1948,25 +1944,31 @@ export class BookingStatusFlowPageComponent implements OnInit {
             
 
             if (this.statusFlow.length > 0) {
-              console.log("StData is here================================================================",stdata);
+              console.log("StData is here====================================",stdata);
               
-             
-              let filterdstatusData = this.statusFlow.filter((data:any) => {
-                console.log("Enterd Here with wipc",data.code, stdata.code);
-                return data.code == stdata.code});
-               // Logging after filter
-               console.log("After filter, filterdstatusData:", filterdstatusData);
-              console.log("Checking If stdata is still valid in WIPC", stdata);  
-              console.log("Filterd Log after the if conditions are", filterdstatusData);
-              console.log("Checking If stdata is still valid in WIPC",stdata);
+              let filterdstatusData = this.statusFlow.filter((data) => {return data.code === stdata.code});
+
+              console.log("Filterd Log after the if conditions are=1===>>>", stdata);
+              // console.log("StatusFLow After the filteration if length > 0",this.statusFlow);
+
+              if(filterdstatusData.length==0){
+
+                console.log("Iam entering this block with stdata",stdata);
+               
+                this.statusFlow.push(stdata)
+
+                this.temparray.push(stdata)
+
+                console.log("Checking wheather it is in temparray",this.temparray);
+                
+              }
               
-              filterdstatusData.length > 0 ? "" : this.statusFlow.push(stdata);
-              console.log("StatusFLow After the filteration if length > 0",this.statusFlow);
 
             } else {
-              console.log("If stdata is presrent",stdata);
               stdata ? this.statusFlow.push(stdata) : "";
-              console.log("StatusFLow After the filteration if length > 0 's else condition",stdata);
+              stdata ? this.temparray.push(stdata) : "";
+              console.log("StatusFLow After the filteration if length > 0 's else condition",this.statusFlow);
+              
             }
 
             console.log(
@@ -1975,7 +1977,12 @@ export class BookingStatusFlowPageComponent implements OnInit {
             );
           }
         );
+        console.log("SSSSSSSSSSS FLOW---------", this.statusFlow)
 
+        if(rdata.booking.cust_status.st_code == "WIPC"){
+          this.statusFlow = this.temparray
+        }
+        
         // if (this.statusFlow.length > 0) {
         //   console.log("StatusFlow before entering into loop",this.statusFlow);
           
@@ -2031,8 +2038,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
           
 
           
-        // }
-        
+        // }   
         for (let i = (this.position + 1); i < this.cust_status_master.length; i++) {
           let temp;
           if (this.cust_status_master[i] == "DRPC") {
@@ -2534,4 +2540,39 @@ export class BookingStatusFlowPageComponent implements OnInit {
 
     
   }
+
+  convertTimeTo12HourFormat(tmStartTime:any,tmEndTime:any) {
+    let time
+    // Convert start time
+    let startTimeArray = tmStartTime.split(':');
+    let startHour = parseInt(startTimeArray[0]);
+    let startMinutes = parseInt(startTimeArray[1]);
+    let ampm = startHour >= 12 ? 'PM' : 'AM';
+    startHour = startHour % 12;
+    startHour = startHour ? startHour : 12; // Handle midnight (0:00)
+    let convertedStartTime = `${startHour}:${startMinutes < 10 ? '0' + startMinutes : startMinutes} ${ampm}`;
+
+    // Convert end time
+    let endTimeArray = tmEndTime.split(':');
+    let endHour = parseInt(endTimeArray[0]);
+    let endMinutes = parseInt(endTimeArray[1]);
+    ampm = endHour >= 12 ? 'PM' : 'AM';
+    endHour = endHour % 12;
+    endHour = endHour ? endHour : 12; // Handle midnight (0:00)
+    let convertedEndTime = `${endHour}:${endMinutes < 10 ? '0' + endMinutes : endMinutes} ${ampm}`;
+
+    if (convertedEndTime && convertedStartTime){
+       time = `${convertedStartTime} - ${convertedEndTime}`
+    }
+    
+    return time
+  }
+
+  navigateToWorkFlow(){
+    this.workcard_showFlag = 0;
+    // window.location.reload();
+  }
+
 }
+
+

@@ -130,14 +130,14 @@
                             </div>
                             <div class="mt-2" style="display: flex; gap: 1vw;">
                               <div>
-                                <button *ngIf="book.st_code !== 'HOLDC' && book.st_code == 'BKCC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
+                                <button *ngIf="book.st_code !== 'HOLDC' && book.st_code == 'BKCC' || book.st_code !== 'HOLDC' && book.st_code == 'CDLC'" class="viewdetails_btn" (click)="openholdModal();">Hold</button>
                                 <button *ngIf="book.st_code === 'HOLDC'" (click)="unholdBooking(book)" class="viewdetails_btn" >Unhold</button>
                               </div>
                               <div>
                                 <button class="viewdetails_btn" *ngIf="book.st_code == 'BKCC'" (click)="openaddModal()" >Cancel</button>
                               </div>
                                 <div>
-                                  <button *ngIf="book.st_code == 'BKCC'" class="viewdetails_btn" (click)="navigate()">Reschedule</button> 
+                                  <button *ngIf="book.st_code == 'BKCC' || book.st_code == 'CDLC'" class="viewdetails_btn" (click)="navigate()">Reschedule</button> 
                                 </div>
                                     
                               <div>
@@ -204,7 +204,7 @@
                             *ngIf="eachdata?.code == 'PIWC'" mdbRipple>
                             Inspection
                           </button>
-                          <button type="button"  class="viewdetails_btn"  *ngIf="eachdata?.code == 'CDLC'" (click)="navigateToDrop()" >Drop Location</button>
+                          <button type="button"  class="viewdetails_btn"  *ngIf="booking_details?.cust_status?.st_code == 'CDLC'&& eachdata?.code == 'CDLC' " (click)="navigateToDrop()" >Drop Location</button>
                             <!-- <button status="primary" (click)="onWorkcardSelection(1);" *ngIf="eachdata.code=='WIPC'">Workcard</button> -->
                           </div>
                           <br />
@@ -217,7 +217,7 @@
                           </div>
 
                           <div class="col-6">
-                            <h2 style="cursor: pointer;" class="bodyheading text-end" (click)="workcard_showFlag = 0"><i class="fa-solid fa-backward"></i></h2>
+                            <h2 style="cursor: pointer;" class="bodyheading text-end" (click)="navigateToWorkFlow()"><i class="fa-solid fa-backward"></i></h2>
                           </div>
                         </div>
                         <div class="row">

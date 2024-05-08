@@ -95,4 +95,8 @@ export class BookingService {
     return this.http.post(environment.base_url + "dummy_audio", data, {headers:this.reqHeader})
   }
 
+  cofirmDropLocationWithoutPayment(data:any):Observable<any>{
+    return this.http.post(environment.base_url + "Booking/BookingController/confirm_payment_for_drop",data,{headers:this.reqHeader})
+  }
+
 }

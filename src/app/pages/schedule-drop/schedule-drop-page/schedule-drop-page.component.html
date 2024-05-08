@@ -62,44 +62,6 @@
                       </div>
 
                       <div class="row">
-                        <div class="col-6 mt-3">
-                          <div class="card">
-                            <div class="card-body p-4">
-                              <div class="row">
-                                <div class="col-9">
-                                  <div>
-                                    <h5 class="mb-4">Drop Type*</h5>
-                                  </div>
-
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <label class="pickupdetails_list">
-                                        <input type="radio" />
-                                        Drive Drop
-                                      </label>
-                                    </div>
-                                    <div class="col-4">
-                                      <p class="pickupdetails_list">FREE</p>
-                                    </div>
-                                  </div>
-
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <label class="pickupdetails_list">
-                                        <input type="radio" />
-                                        Open Recovery
-                                      </label>
-                                    </div>
-                                    <div class="col-4">
-                                      <p class="pickupdetails_list">456</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
                         <div class="col-xl-6 mt-3 col-12">
                           <div class="card">
                             <div class="card-body">
@@ -127,12 +89,46 @@
                                 <ng-select [(ngModel)]="dropAddressId" (change)="selectAddress()">
                               <ng-option value="0" >Select Pickup Address</ng-option>
                               <ng-option *ngFor="let eachaddress of custAdresses"
-                                [value]="eachaddress.cad_id">{{eachaddress.cad_address}}</ng-option>
+                                [value]="eachaddress.cad_id">{{eachaddress.cad_landmark}} {{eachaddress.cad_address}}</ng-option>
                             </ng-select>
                               </div>
                             </div>
                           </div>
+                        </div> 
+
+                        <div class="col-6 mt-3">
+                          <div class="card">
+                            <div class="card-body p-4">
+                              <div class="row">
+                                <div class="col-9">
+                                  <div>
+                                    <h5 class="mb-4">Drop Type*</h5>
+                                  </div>
+
+                                  <div *ngFor="let dropType of DropTypes" class="row">
+                                    <div class="col-8">
+                                      <label  class="pickupdetails_list">
+                                        <input
+                                         [value]="dropType.pk_id"
+                                         type="radio" 
+                                        (click)="DropOptionSelection(dropType)"
+                                        [(ngModel)]="selectedDropOption"/>
+                                        {{dropType.pk_name}}
+                                      </label>
+                                    </div>
+                                    <div class="col-4">
+                                      <p style="color: #26c20e" *ngIf="dropType.pk_freeFlag == 1" class="pickupdetails_list">FREE</p>
+                                      <p style="color: #f7941e" class="pickupdetails_list" *ngIf="dropType.pk_freeFlag == 0 && dropCost!=0">{{dropCost}}</p>
+                                      <p style="color: #f7941e" class="pickupdetails_list" *ngIf="dropType.pk_freeFlag == 0 && dropCost==0">PAID</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+
+                        
                       </div>
 
                       <div class="row">
@@ -195,6 +191,7 @@
                                       <ng-option
                                         *ngFor="let eachslot of timeslots"
                                         [value]="eachslot.tm_id"
+                                        (click) = 'timeselect(eachslot)'
                                         [disabled]="eachslot.isTimeSlotFilled"
                                       >
                                         <div
@@ -225,7 +222,8 @@
                       </div>
 
                       <div class="pay_btn mt-3">
-                        <button>Schedule</button>
+                        <button (click)="noPaymentReschedule()" *ngIf="dropCost == 0">Schedule</button>
+                        <button *ngIf="dropCost !=0">PAY</button>
                       </div>
                     </div>
                   </div>

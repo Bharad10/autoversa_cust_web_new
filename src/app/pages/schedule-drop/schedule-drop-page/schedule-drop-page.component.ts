@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AddressService } from 'src/app/services/address.service';
 import { BookingService } from 'src/app/services/booking.service';
 
@@ -28,7 +28,32 @@ export class ScheduleDropPageComponent implements OnInit {
 
   booking_id:any;
 
-  constructor(private booking_service: BookingService, private activerouter: ActivatedRoute, ){
+  currentDropAddressDetails:any;
+
+  currentDropType:any;
+
+  DropTypes: any;
+
+  selectedDropOption:any;
+
+  selectedDropDetails:any;
+
+  data:any;
+
+  intialDropValue:any;
+
+  dropValueAfterAddressCahnge:any;
+
+  dropCost:number= 0;
+
+  selectedDate:any;
+
+  custID:any;
+
+  selectedtimeSlot:any;
+
+
+  constructor(private booking_service: BookingService, private activerouter: ActivatedRoute, private router:Router){
     this.booking_id = this.activerouter.snapshot.paramMap.get('id');
 
   }
@@ -36,11 +61,37 @@ export class ScheduleDropPageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getBookingDetails()
+    this.custID = (localStorage.getItem('id'))
     this.getCustomerAddress()
-    this.getBookingDetailsForDateConfirmation()
+    this.getPickupOptions()
+    this.getBookingDetails()
+    this.getBookingDetailsForDateConfirmation()   
+  }
 
-    
+  dropCostCalculation(){
+    this.selectedDropDetails = this.DropTypes.find((data:any)=>{
+      return data.pk_id == this.selectedDropOption 
+    })
+   let paidAmount = 0;
+   let vatTotal =0;
+   if(this.selectedDropDetails.pk_freeFlag != 1){
+    paidAmount = parseFloat(this.currentDropAddressDetails.cad_distance) * parseFloat(this.selectedDropDetails.pk_cost)
+    console.log("paidAmount",paidAmount);
+    console.log("cad_distance",this.currentDropAddressDetails.cad_distance);
+    console.log("pk_cost",this.selectedDropDetails.pk_cost);
+    if(this.data.settings.gs_isvat == 1 ){
+      let vat = parseFloat(this.data.settings.gs_vat)
+      vatTotal = vat/100
+      console.log("Prime vat",vatTotal);
+      vatTotal = vatTotal * paidAmount
+      console.log("vat",vatTotal);
+      paidAmount = paidAmount + vatTotal;
+      paidAmount <= this.selectedDropDetails.pk_min_cost ? paidAmount = parseFloat(this.selectedDropDetails.pk_min_cost) : paidAmount = paidAmount;
+    } 
+   }else{
+    paidAmount = 0;
+   }
+   return paidAmount;
   }
 
   getBookingDetailsForDateConfirmation() {
@@ -51,6 +102,13 @@ export class ScheduleDropPageComponent implements OnInit {
       );
       this.calculateTheSelectedDates();
     });
+  }
+
+  getPickupOptions(){
+    this.booking_service.getpickupOptions().subscribe((data:any)=>{
+     this.DropTypes = data.active_pickuptype_list; 
+     this.data = data 
+    })
   }
 
   calculateTheSelectedDates() {
@@ -73,7 +131,16 @@ export class ScheduleDropPageComponent implements OnInit {
     this.booking_service.GetbookingdetailsbyId(data).subscribe((data:any) =>{
       this.bookingData = data
       this.dropAddressId = data.booking.drop_address.cad_id
+      this.currentDropAddressDetails = data.booking.drop_address
+      this.selectedDropOption = data.booking.pickup_type.pk_id;
+      this.selectedDropDetails = this.DropTypes.find((data:any)=>{
+        return data.pk_id == this.selectedDropOption 
+      })
+     this.intialDropValue = this.dropCostCalculation(); 
+     
     })
+    console.log("intialDropValue",this.intialDropValue);
+    
   }
 
   getCustomerAddress(){
@@ -85,7 +152,34 @@ export class ScheduleDropPageComponent implements OnInit {
   }
 
   selectAddress(){
+    this.currentDropAddressDetails = this.custAdresses.find((data:any)=>{
+      return data.cad_id == this.dropAddressId;
+    })
+    console.log("newely sleceted address dets----->",this.currentDropAddressDetails);
     
+    this.selectedDropDetails = this.DropTypes.find((data:any)=>{
+      return data.pk_id == this.selectedDropOption 
+    })
+
+    this.dropValueAfterAddressCahnge = this.dropCostCalculation();
+
+    if( this.dropValueAfterAddressCahnge > this.intialDropValue ) {
+      console.log("Enterd Here drpval >");  
+      this.dropCost = this.dropValueAfterAddressCahnge - this.intialDropValue
+    }
+    if(this.dropValueAfterAddressCahnge == this.intialDropValue){
+      console.log("Enterd Here drpval == intialval");
+      this.dropCost = 0
+    }
+    if(this.dropValueAfterAddressCahnge < this.intialDropValue){
+      console.log("Enterd Here drpval <");
+      this.dropCost = 0
+    }
+
+  }
+
+  DropOptionSelection(dropDetails:any){
+    this.selectedDropDetails = dropDetails
   }
 
   ondateSelection() {
@@ -105,6 +199,7 @@ export class ScheduleDropPageComponent implements OnInit {
     const year = this.bookingDate.getFullYear();
 
     const formattedDate = `${day}-${month}-${year}`;
+    this.selectedDate = `${year}-${month}-${day}`
     let inputData = {
       day: dayName,
       date: formattedDate,
@@ -185,6 +280,36 @@ export class ScheduleDropPageComponent implements OnInit {
           
         }
       });
+  }
+
+  timeselect(details:any){
+    this.selectedtimeSlot = `${details.startTime} - ${details.endTime}`
+  }
+
+  noPaymentReschedule(){
+    console.log(this.booking_slot);
+    
+    let data = {
+      drop_location_id : this.dropAddressId,
+      booking_id : atob(this.booking_id),
+      selected_date : this.selectedDate,
+      selected_timeid: this.booking_slot,
+      selected_timeslot: this.selectedtimeSlot,
+      custId : atob(this.custID),
+      tot_amount: this.dropValueAfterAddressCahnge ? this.dropValueAfterAddressCahnge : this.intialDropValue,
+      trxn_id:1234 
+    }
+
+    this.booking_service.cofirmDropLocationWithoutPayment(data).subscribe(data=>{
+      console.log(data);
+    })
+
+    this.router.navigateByUrl('/booking-status-flow/'+ this.booking_id)
+
+  }
+
+  paymentReschedule(){
+
   }
 
 }
