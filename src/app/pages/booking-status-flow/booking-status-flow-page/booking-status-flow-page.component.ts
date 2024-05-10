@@ -24,6 +24,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
   pendingJobs_flag = false;
   cancelReason: any;
   holdReason: any;
+  holdReasonForModal:any
   timeslots: any[] = [];
   booking_slot: any;
   inspectionDetails: any;
@@ -38,7 +39,6 @@ export class BookingStatusFlowPageComponent implements OnInit {
     'RFDC',
     'DEDC',
     'DLCC',
-    'HOLDC',
   ];
   workcard_showFlag = 0;
   position: any;
@@ -104,6 +104,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
               bkt_created_on: string | number | Date;
               bkt_code: string;
               bkt_task: string;
+              bkt_content:string;
             }) => {
               let stdata: any;
               if (element.bkt_task != 'Unhold') {
@@ -130,6 +131,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   stdata = {
                     status: 'Booking on Hold',
                     code: element.bkt_code,
+                    reason:element.bkt_content.split(':')[1],
                     icon: './assets/images/hold_icon.png',
                     dateandtime: `${day.toString().padStart(2, '0')}-${month
                       .toString()
@@ -345,7 +347,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   const month: number = created_date.getMonth() + 1;
                   const year: number = created_date.getFullYear();
                   stdata = {
-                    status: 'Driver in route to pickup Location',
+                    status: 'Driver in route to drop Location',
                     code: element.bkt_code,
                     icon: './assets/images/drop_enrouted.png',
                     dateandtime: `${day.toString().padStart(2, '0')}-${month
@@ -399,15 +401,30 @@ export class BookingStatusFlowPageComponent implements OnInit {
                   };
                   console.log("Itratted data from booking Unhold =",stdata);
               }
-              
-                  console.log("Iam entering this block with stdata",stdata);
-                 
+
+              if(this.statusFlow.length > 0){
+                let duplicate = this.statusFlow.find((data:any) =>{
+                  return data.code == stdata.code
+                })
+                
+                if(duplicate){
+                  if(stdata.status == 'Booking Unholded'|| stdata.status == 'Booking on Hold'){
+                    this.statusFlow.push(stdata)
+                  }
+                }else{
                   this.statusFlow.push(stdata)
+                }
+                }
+              else{
+                this.statusFlow.push(stdata)
+              }
+                  
             }
           );
           console.log("SSSSSSSSSSS FLOW---------", this.statusFlow)
-          
-          for (let i = (this.statusFlow.length); i < this.cust_status_master.length; i++) {
+
+          if(this.position != -1){
+          for (let i = (this.position + 1); i < this.cust_status_master.length; i++) {
             let temp;
             if (this.cust_status_master[i] == "DRPC") {
               temp = {
@@ -416,7 +433,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/driver_enrouted_inactive.png',
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp)
             }
             if (this.cust_status_master[i] == "PIPC") {
               temp = {
@@ -425,7 +442,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/pickup_icon_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "PIWC") {
               temp = {
@@ -434,7 +451,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/pickup_enroute_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "VAWC") {
               temp = {
@@ -443,7 +460,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/vehicle_wrkshp_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "WIPC") {
               temp = {
@@ -452,7 +469,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/work_in_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "CDLC") {
               temp = {
@@ -461,7 +478,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/ready_delivery_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "RFDC") {
               temp = {
@@ -470,7 +487,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/confirm_drop_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "DEDC") {
               temp = {
@@ -479,7 +496,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/drop_enrouted_inactive.png'
               };
-              this.statusFlow[i] = temp;
+              this.statusFlow.push(temp);
             }
             if (this.cust_status_master[i] == "DLCC") {
               temp = {
@@ -488,10 +505,13 @@ export class BookingStatusFlowPageComponent implements OnInit {
                 "code": "",
                 "icon": './assets/images/delivery_inactive.png'
               };
-              this.statusFlow[i] = temp ;
+              this.statusFlow.push(temp);
             }
           }
         }
+        
+        }
+      
 
         // if(rdata.booking.cust_status.st_code !='HOLDC'){
         //   this.statusFlow = this.statusFlow.filter((data:any)=>{
@@ -2208,6 +2228,22 @@ export class BookingStatusFlowPageComponent implements OnInit {
   navigateToWorkFlow(){
     this.workcard_showFlag = 0;
     // window.location.reload();
+  }
+
+  openReasonModal(reason:any){
+    this.holdReasonForModal = reason
+    const modelDiv = document.getElementById('reasonModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    } 
+  }
+
+  closeReasonModal(){
+    this.holdReasonForModal = '';
+    const modelDiv = document.getElementById('reasonModal');
+    if (modelDiv != null) {
+      modelDiv.style.display = 'none';
+    } 
   }
 
 }
