@@ -521,6 +521,11 @@ export class BookingPageComponent {
     this.booking_service.getpickupOptions().subscribe((rdata: any) => {
       if (rdata.ret_data == 'success') {
         if (this.total_distance != 0) {
+          if(rdata.settings.gs_isvat == '1'){
+            this.gs_vat = rdata.settings.gs_vat
+          }else{
+            this.gs_vat = 0;
+          }
           rdata.active_pickuptype_list.forEach(
             (element: {
               pk_freeFlag: any;
@@ -535,15 +540,18 @@ export class BookingPageComponent {
               if (element.pk_freeFlag !== '1') {
                 element.cost =
                   parseFloat(element.pk_cost) * parseFloat(this.total_distance);
-                if (this.gs_vat)
+                if (this.gs_vat){
                   element.vat =
-                    parseFloat(element.cost) * parseFloat(this.gs_vat);
-                else element.vat = 0;
+                    parseFloat(element.cost) * (parseFloat(this.gs_vat)/100);
+                    element.cost = Math.round(parseFloat(element.vat ) + parseFloat(element.cost));
+                }  
+                else{
+                  element.vat = 0;
+                } 
               } else {
                 element.cost = 0;
               }
-            }
-          );
+            });
         }
         this.pickup_options = rdata.active_pickuptype_list;
         console.log("vat",this.gs_vat);
@@ -1064,19 +1072,17 @@ export class BookingPageComponent {
             rdata.services.forEach((element: any) => {
               if (element.pse_billexclusion == '0') {
                 if (element.sevm_cost != '' && element.sevm_cost != null) {
-                  if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat)
-                    element.sevm_vat = (
-                      (parseFloat(element.sevm_cost) *
-                        parseFloat(rdata.settings.gs_vat)) /
-                      100
-                    ).toFixed(2);
-                  else element.sevm_vat = 0.0;
-                  element.sevm_price = (
-                    parseFloat(element.sevm_cost) + parseFloat(element.sevm_vat)
-                  ).toFixed(2);
+                  if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat){
+                    element.sevm_vat = ( (parseFloat(element.sevm_cost) * parseFloat(rdata.settings.gs_vat)) /100 ).toFixed(2);
+                    console.log("element.sevm_vat",element.sevm_vat);
+                  }
+                  else{
+                    element.sevm_vat = 0.0;
+                  } 
+                  element.sevm_price = (parseFloat(element.sevm_cost) + parseFloat(element.sevm_vat)).toFixed(2);
                   element.tot_cost = parseFloat(element.sevm_cost).toFixed(2);
-                  this.tot_package_price =
-                    this.tot_package_price + parseFloat(element.sevm_cost);
+                  this.tot_package_price = this.tot_package_price + parseFloat(element.sevm_cost);
+                  console.log("this.tot_package_price",this.tot_package_price);
                 } else {
                   element.tot_cost = 0.0;
                   element.sevm_cost = 0.0;
@@ -1085,7 +1091,7 @@ export class BookingPageComponent {
                 }
               } else {
                 element.tot_cost =
-                  element.sevm_cost != null ? 'cost excluded flag false' : 0.0;
+                element.sevm_cost != null ? 'cost excluded flag false' : 0.0;
                 element.sevm_cost = 0.0;
                 element.sevm_vat = 0.0;
                 element.sevm_price = 0.0;
@@ -1094,75 +1100,41 @@ export class BookingPageComponent {
             rdata.sub_packages.forEach((element: any) => {
               let pack_cost = 0;
               element.operations.forEach((element2: any) => {
-                if (
-                  element2.opvm_billexclusion == '0' &&
-                  element2.spo_billexclusion == '0'
+                if (element2.opvm_billexclusion == '0' && element2.spo_billexclusion == '0'
                 ) {
                   if (
-                    element2.opvm_pack_timeunit != null &&
-                    element2.opvm_pack_timeunit != ''
+                    element2.opvm_pack_timeunit != null && element2.opvm_pack_timeunit != ''
                   ) {
                     element2.op_cost = (
-                      parseFloat(rdata.veh_group.vgm_labour_rate) *
-                      parseFloat(element2.opvm_pack_timeunit)
-                    ).toFixed(2);
+                      parseFloat(rdata.veh_group.vgm_labour_rate) * parseFloat(element2.opvm_pack_timeunit)).toFixed(2);
                     if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat)
                       element2.op_vat = (
-                        (parseFloat(element2.op_cost) *
-                          parseFloat(rdata.settings.gs_vat)) /
-                        100
-                      ).toFixed(2);
+                        (parseFloat(element2.op_cost) * parseFloat(rdata.settings.gs_vat)) / 100 ).toFixed(2);
                     else element2.op_vat = 0.0;
-                    element2.op_total = (
-                      parseFloat(element2.op_cost) + parseFloat(element2.op_vat)
-                    ).toFixed(2);
-                    pack_cost =
-                      pack_cost +
-                      parseFloat(rdata.veh_group.vgm_labour_rate) *
-                        parseFloat(element2.opvm_pack_timeunit);
+                    element2.op_total = (parseFloat(element2.op_cost) + parseFloat(element2.op_vat)).toFixed(2);
+                    pack_cost = pack_cost + parseFloat(rdata.veh_group.vgm_labour_rate) * parseFloat(element2.opvm_pack_timeunit);
                   } else {
                     element2.op_cost = 0.0;
                     element2.op_vat = 0.0;
                     element2.op_total = 0.0;
                   }
                 } else {
-                  element2.op_cost =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
-                  element2.op_vat =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
-                  element2.op_total =
-                    element2.opvm_pack_timeunit != null
-                      ? 'cost excluded flag false'
-                      : '0.00';
+                  element2.op_cost = element2.opvm_pack_timeunit != null ? 'cost excluded flag false' : '0.00';
+                  element2.op_vat = element2.opvm_pack_timeunit != null ? 'cost excluded flag false' : '0.00';
+                  element2.op_total = element2.opvm_pack_timeunit != null ? 'cost excluded flag false' : '0.00';
                 }
               });
               element.spares.forEach((element3: any) => {
                 let spare_cost = 0;
                 if (element3.spp_billexclusion == '0') {
                   element3.spares_used.forEach((element4: any) => {
-                    if (
-                      element4.scvm_price != '' &&
-                      element4.scvm_price != null
-                    ) {
-                      spare_cost =
-                        spare_cost +
-                        parseFloat(element4.scvm_price) *
-                          parseFloat(element4.scvm_quantity);
+                    if (element4.scvm_price != '' && element4.scvm_price != null ) {
+                      spare_cost = spare_cost + parseFloat(element4.scvm_price) *  parseFloat(element4.scvm_quantity);
                     }
                   });
                   element3.sp_price = spare_cost.toFixed(2);
-                  element3.sp_vat = (
-                    (parseFloat(element3.sp_price) *
-                      parseFloat(rdata.settings.gs_vat)) /
-                    100
-                  ).toFixed(2);
-                  element3.sp_cost = (
-                    parseFloat(element3.sp_price) + parseFloat(element3.sp_vat)
-                  ).toFixed(2);
+                  element3.sp_vat = ((parseFloat(element3.sp_price) *  parseFloat(rdata.settings.gs_vat)) / 100 ).toFixed(2);
+                  element3.sp_cost = (parseFloat(element3.sp_price) + parseFloat(element3.sp_vat) ).toFixed(2);
                   pack_cost = pack_cost + spare_cost;
                 } else {
                   element3.sp_price = 'cost excluded flag false';
@@ -1170,24 +1142,15 @@ export class BookingPageComponent {
                   element3.sp_cost = 'cost excluded flag false';
                 }
               });
-              element.pack_cost = pack_cost.toFixed(2);
-              this.tot_package_price = this.tot_package_price + pack_cost;
+              element.pack_cost = parseFloat(pack_cost.toFixed(2));
+              this.tot_package_price = parseFloat(this.tot_package_price + pack_cost);
             });
             rdata.pack_extra_details.forEach((element4: any) => {
               if (element4.pe_cost != null && element4.pe_cost != '') {
-                this.tot_package_price =
-                  this.tot_package_price + parseFloat(element4.pe_cost);
+                this.tot_package_price = this.tot_package_price + parseFloat(element4.pe_cost);
                 element4.pe_price = element4.pe_cost;
-                element4.pe_vat = (
-                  (parseFloat(element4.pe_cost) *
-                    parseFloat(rdata.settings.gs_vat)) /
-                  100
-                ).toFixed(2);
-                element4.pe_cost =
-                  parseFloat(element4.pe_cost) +
-                  (parseFloat(element4.pe_cost) *
-                    parseFloat(rdata.settings.gs_vat)) /
-                    100;
+                element4.pe_vat = ( (parseFloat(element4.pe_cost) * parseFloat(rdata.settings.gs_vat)) / 100 ).toFixed(2);
+                element4.pe_cost =  parseFloat(element4.pe_cost) + (parseFloat(element4.pe_cost) * parseFloat(rdata.settings.gs_vat)) / 100;
                 element4.pe_cost = element4.pe_cost.toFixed(2);
               } else {
                 element4.pe_price = 0.0;
@@ -1200,9 +1163,7 @@ export class BookingPageComponent {
             // }
 
             if (rdata.settings.gs_isvat == '1' && rdata.settings.gs_vat) {
-              this.tot_package_vat =
-                (this.tot_package_price * parseFloat(rdata.settings.gs_vat)) /
-                100;
+              this.tot_package_vat = (this.tot_package_price * parseFloat(rdata.settings.gs_vat)) / 100;
             }
 
             // this.detailedPackage = {
@@ -1217,7 +1178,7 @@ export class BookingPageComponent {
             //   "service_vehgroup":rdata.service_veh_group,
             //   "gs_vat":rdata.settings.gs_vat
             // }
-            this.tot_package_price = Math.round(this.tot_package_price);
+            this.tot_package_price = Math.round(this.tot_package_price + this.tot_package_vat);
             this.getCouponsForCustomer();
           }
           

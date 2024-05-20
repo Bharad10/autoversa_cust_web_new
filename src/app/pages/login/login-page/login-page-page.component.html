@@ -42,7 +42,7 @@
                       <div class="col-xl-2 col-2"></div>
                       <div class="col-xl-8 col-8">
                         <div class="book_now_btn">
-                          <button (click)="signin()" [disabled]="loading">
+                          <button (click)="signin()" [disabled]="loading||phone_number.errors?.['pattern']">
                             <span *ngIf="!loading">Sign In</span>
                             <span *ngIf="loading">Loading...</span>
                           </button>

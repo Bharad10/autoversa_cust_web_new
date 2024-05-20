@@ -575,7 +575,7 @@ export class BookingStatusFlowPageComponent implements OnInit {
           });
           let tempBookingData = rdata.book_list.filter((data:any)=>{
             return data.custstatus != "Booking Canceled" 
-            // && data.custstatus != "Delivery Completed"
+            && data.custstatus != "Delivery Completed"
           })
           this.activeBookings = tempBookingData;
         }
