@@ -141,6 +141,19 @@ export class BookingPageComponent {
   convertedAAC: any;
   
   private stripePromise:any;
+
+  //Vehicle List
+  vehData: any
+  vehicleList: any;
+  selected_brand: any;
+  vehicle_models: any;
+  vehicleBrand: any;
+  selected_model: any;
+  vehicle_years: any;
+  vehicle_variants: any;
+  selected_variant: any;
+  selected_year: any;
+  vehicle_plate_number: any;
   
   constructor(
     private domSanitizer: DomSanitizer,
@@ -193,6 +206,11 @@ export class BookingPageComponent {
 
     this.pickup_addressId = 0;
     this.drop_addressId = 0;
+
+    this.auth_service.vehicleBrands().subscribe((data) => {
+      this.vehicleBrand = data.brands;
+      console.log(this.vehicleBrand);
+    });
    
   }
 
@@ -1428,4 +1446,99 @@ export class BookingPageComponent {
       this.toast.error("Its not it mate")
     }
  }
+
+ openaddModal() {
+  const modelDiv = document.getElementById('addModal');
+  if (modelDiv != null) {
+    modelDiv.style.display = 'block';
+  }
+}
+
+closeaddModal() {
+  const modelDiv = document.getElementById('addModal');
+  if (modelDiv != null) {
+    modelDiv.style.display = 'none';
+  }
+}
+
+setVehicleBrand(event: any) {
+  this.selected_brand = event.target.value;
+  let brandData = {
+    brand: this.selected_brand,
+  };
+  this.auth_service.vehicleModels(brandData).subscribe((data) => {
+    this.vehicle_models = data.models;
+    console.log('Vehicle Models', data.models);
+  });
+}
+
+setVehicleModel(event: any) {
+  this.selected_model = event.target.value;
+  this.vehicle_years = [];
+  let variantData = {
+    brand: this.selected_brand,
+    model: event.target.value,
+  };
+  console.log('variant data-------------------->', variantData);
+  this.auth_service.vehicleVariants(variantData).subscribe((response) => {
+    this.vehicle_variants = response.variants;
+    console.log('hereeeeeeeee--->', this.vehicle_variants);
+  });
+}
+
+setVehicleVarient(event: any) {
+  this.selected_variant = event.target.value;
+  this.vehicle_years = [];
+  let variantData = {
+    brand: this.selected_brand,
+    model: this.selected_model,
+    varient:this.selected_variant
+  };
+  this.auth_service.vehicleYear(variantData).subscribe((data) => {
+    let startDate = data.years[0].from_year;
+    let endDate = data.years[0].to_year 
+    if ( endDate == '9999') {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+
+      for (let year = startDate; year <= currentYear; year++) {
+        this.vehicle_years.push(year);
+      }
+    }
+    else{
+      for (let year = startDate; year <= endDate; year++) {
+        this.vehicle_years.push(year);
+      }
+    }
+    console.log(data);
+  });
+}
+
+setVehicleYear(event: any) {
+  this.selected_year = event.target.value;
+}
+
+createModel() {
+  let car_info = {
+    cv_make: this.selected_brand,
+    cv_variant: this.selected_variant,
+    cv_year: this.selected_year,
+    cv_platenumber: this.vehicle_plate_number,
+    custId: atob(this.custId),
+    cv_model: this.selected_model,
+  };
+  this.auth_service.createCarModel(car_info).subscribe((data) => {
+    console.log(data);
+  });
+
+  this.vehicle_plate_number = '';
+
+  // this.fetchCarModels();
+  this.getCustomerVehicleList();
+
+  this.toast.success("Vehicle Added Sucessfully!")
+
+  this.closeaddModal();
+}
+
 }

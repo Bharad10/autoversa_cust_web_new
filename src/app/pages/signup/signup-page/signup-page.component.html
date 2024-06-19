@@ -121,7 +121,8 @@
                         <div class="col-xl-2 col-2"></div>
                         <div class="col-xl-8 col-8">
                           <div class="book_now_btn">
-                            <button (click)="customer_signup()">Sign Up</button>
+                            <button *ngIf="!loadFlag" (click)="customer_signup()">Sign Up</button>
+                            <button *ngIf="loadFlag">LOADING...</button>
                           </div>
                         </div>
                         <div class="col-xl-2 col-2"></div>

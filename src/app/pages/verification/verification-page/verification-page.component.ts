@@ -24,6 +24,7 @@ export class VerificationPageComponent {
   inputnumberfour: any;
   otpNumber: any;
   resendOtpTime:any;
+  loadFlag: boolean = false;
   constructor(
     private router: Router,private auth_service:AuthService,private activerouter: ActivatedRoute,
     private toast: ToastrService
@@ -92,6 +93,7 @@ export class VerificationPageComponent {
   }
 
   verify(){
+    this.loadFlag = true;
     if(this.otpNumber == null || this.otpNumber == '' ){
       this.toast.warning("Please enter OTP")
       return;
@@ -104,7 +106,8 @@ export class VerificationPageComponent {
     this.auth_service.verifysignin_otp(input_data).subscribe((rdata: any) => {
       // localStorage.setItem("cust_token", rdata.token )  
       // localStorage.setItem("name", btoa(rdata.customer.name)) 
-      // localStorage.setItem("id", btoa(rdata.customer.id))           
+      // localStorage.setItem("id", btoa(rdata.customer.id)) 
+
       if(rdata.ret_data=="success"){
         if(rdata.customer.cust_type=="old"){
           this.router.navigateByUrl('/services')
@@ -124,16 +127,18 @@ export class VerificationPageComponent {
         else {
           this.toast.error(rdata.message)
         }
-        
+        this.loadFlag = false;
       }
       else if(rdata.ret_data=='MaxAttempt'){
         this.toast.error("Maximum attempt reached. Please try again later.");
         this.displayTimer=false
+        this.loadFlag = false
       }
       else{
        this.toast.error(rdata.message)
+       this.loadFlag=false
       }
-  
+      
   });
     //this.router.navigateByUrl('signup');
   }

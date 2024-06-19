@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -15,10 +16,12 @@ export class SignupPageComponent implements OnInit {
   cust_email: any;
   country_code: any;
   cust_token:any;
+  loadFlag:boolean = false;
   constructor(
     private router: Router,
     private auth_service: AuthService,
-    private activerouter: ActivatedRoute
+    private activerouter: ActivatedRoute,
+    private toast: ToastrService
   ) {
     this.country_code = this.activerouter.snapshot.paramMap.get('country_code');
     this.mobileNumber = this.activerouter.snapshot.paramMap.get('phone');
@@ -40,6 +43,7 @@ export class SignupPageComponent implements OnInit {
     this.cust_token = localStorage.getItem('cust_token')
   }
   customer_signup() {
+    this.loadFlag = true;
     let input_data = {
       emiratesId: this.emiratesId,
       fullname: this.cust_name,
@@ -55,8 +59,12 @@ export class SignupPageComponent implements OnInit {
           'customerdata',
           btoa(btoa(JSON.stringify(rdata.cust_info)))
         );
+        localStorage.setItem('refresh_number','1')          
         localStorage.setItem('cust_name', btoa(btoa(rdata.cust_info.name)));
         this.router.navigateByUrl('/services');
+        this.loadFlag = false;
+      }else{
+        this.toast.error("Something went wrong")
       }
     });
   }

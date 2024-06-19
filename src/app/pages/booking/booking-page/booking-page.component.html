@@ -60,7 +60,9 @@
                                     {{eachveh.cv_make}} {{eachveh.cv_model}} {{eachveh.cv_variant}}
                                     ({{eachveh.cv_plate_number}})</option>
                                 </select> -->
-                                <ng-select
+                                <div style="display: flex; justify-content: space-between;">
+                                 <div style="width: 55vw;">
+                                  <ng-select 
                                   class="mt-2"
                                   [(ngModel)]="customerVehicleId"
                                   (change)="
@@ -76,11 +78,18 @@
                                     [value]="eachveh.cv_id"
                                     >{{ eachveh.cv_make }}
                                     {{ eachveh.cv_model }}
-                                    {{ eachveh.cv_variant }} ({{
+                                    {{ eachveh.cv_variant }}
+                                    {{eachveh.cv_year}}
+                                     ({{
                                       eachveh.cv_plate_number
                                     }})</ng-option
                                   >
                                 </ng-select>
+                                 </div>
+                                 <div style="display: flex; align-items: center;" >
+                                  <p (click)="openaddModal()" class="mt-2"><i class="fa-solid fa-circle-plus"></i></p>
+                                 </div> 
+                              </div>
                               </div>
                             </div>
                             <div
@@ -1308,5 +1317,46 @@
         </div>
       </div>
     </div>
+
+    <div class="modal" tabindex="-1" id="addModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title"
+              style="font-family: 'Montserrat-Semibold', sans-serif; font-size: 24px; text-align: center;">Add Vehicle</h1>
+            <button (click)="closeaddModal()" type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <select (change)="setVehicleBrand($event)" class="form-select" aria-label="Default select example">
+                <option selected>Make</option>
+                <option *ngFor="let i of vehicleBrand" [value]="i.veh_brand">{{i.veh_brand}}</option>
+              </select>
+              <select (change)="setVehicleModel($event)" class="form-select" aria-label="Default select example">
+                <option selected>Model</option>
+                <option *ngFor="let i of vehicle_models" [value]="i.veh_model">{{i.veh_model}}</option>
+              </select>
+              <select (change)="setVehicleVarient($event)" class="form-select" aria-label="Default select example">
+                <option selected>Varient</option>
+                <option *ngFor="let eachvariant of vehicle_variants;" [value]="eachvariant.veh_variant">
+                  {{eachvariant.veh_variant}}</option>
+              </select>
+              <select (change)="setVehicleYear($event)" class="form-select" aria-label="Default select example">
+                <option selected>Year</option>
+                <option *ngFor="let eachYear of vehicle_years" [value]="eachYear">{{eachYear}}</option>
+              </select>
+              <input [(ngModel)]="vehicle_plate_number" class="form-control" type="text" placeholder="Plate Number"
+                aria-label="Plate Number">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeaddModal()">Close</button>
+            <button type="button" (click)="createModel()" class="btn btn-warning">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

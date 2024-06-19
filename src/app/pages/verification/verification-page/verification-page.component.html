@@ -56,7 +56,8 @@
                                             <div class="col-xl-2 col-2"></div>
                                             <div class="col-xl-8 col-8">
                                                 <div class="verify_me_btn">
-                                                    <button (click)="verify()">Verify Me</button>
+                                                    <button *ngIf="!loadFlag" (click)="verify()">Verify Me</button>
+                                                    <button *ngIf="loadFlag">LOADING...</button>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-2"></div>

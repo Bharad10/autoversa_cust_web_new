@@ -29,6 +29,16 @@ export class LoginPagePageComponent implements OnInit {
 
   signin() {
     this.loading = true;
+    if(this.mobileNumber==null){
+      this.toastr.error('Please enter mobile number')
+      this.loading = false;
+      return
+    }
+    if(this.mobileNumber.length == 10){
+      this.toastr.error('Please enter a valid mobile number')
+      this.loading = false;
+      return
+    }
     this.auth_service.sendsignin_otp({ phone: this.auth_phone, country_code: "+91" }).subscribe((rdata: any) => {
       if (rdata.ret_data == "success") {
         this.router.navigateByUrl('verification/' + btoa('+91') + '/' + btoa(this.auth_phone) + '/' + btoa(rdata.timer.gs_reotp_time));

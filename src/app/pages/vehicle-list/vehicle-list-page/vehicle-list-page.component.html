@@ -23,6 +23,9 @@
                       </div>
                     </div>
                   </div>
+                  <div style="display: flex; justify-content: center;" class="mt-5" *ngIf="data.length == 0">
+                    <p>No Vehicles Added</p>
+                  </div>
                   <div class="vehicle_list">
                     <div class="card" *ngFor="let item of data ">
                       <div class="card-body">
@@ -40,7 +43,7 @@
                           <div style="display: flex; flex-direction: column; gap: 5px; justify-content: center;"
                             class="card_buttons">
                             <div class="d-flex" style="gap: 5px;">
-                              <button class="btn btn-danger">Delete</button>
+                              <button (click)="deleteVehicle(item.cv_id)" class="btn btn-danger">Delete</button>
                               <button (click)="openeditModal(item.cv_id)" class="btn btn-primary">Edit</button>
                             </div>
                           </div>

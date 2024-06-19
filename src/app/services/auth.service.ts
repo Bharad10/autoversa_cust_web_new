@@ -133,4 +133,9 @@ export class AuthService {
       { headers: this.reqHeader1 }
     );
   }
+
+  deleteVehicle(data:any):Observable<any>{
+    return this.http.delete(environment.base_url + 'Customer/CustomerVehicleController/delete',{headers:this.reqHeader1, params:data})
+  }
+
 }

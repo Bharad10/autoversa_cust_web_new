@@ -98,5 +98,9 @@ export class BookingService {
   cofirmDropLocationWithoutPayment(data:any):Observable<any>{
     return this.http.post(environment.base_url + "Booking/BookingController/confirm_payment_for_drop",data,{headers:this.reqHeader})
   }
+  
+  deleteVehicle(data:any):Observable<any>{
+    return this.http.delete(environment.base_url + 'Customer/CustomerVehicleController/delete',{headers:this.reqHeader, params:data})
+  }
 
 }

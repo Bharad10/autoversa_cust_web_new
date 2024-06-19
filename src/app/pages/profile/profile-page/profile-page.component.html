@@ -222,7 +222,7 @@
                                <div style="display: flex; align-items: center;" class="col-xl-2">
                                 <div style="display:flex; align-items: center; justify-content: center; gap: 0.6rem;" >
                                   <div matTooltip="Click here to edit the vehicle" class="vehlist_btn" (click)="openeditModal(car.cv_id)"><i class="fa-solid fa-pen"></i></div>
-                                  <div matTooltip="Click here to delete the vehicle" class="vehlist_btn"><i class="fa-solid fa-trash"></i></div>
+                                  <div matTooltip="Click here to delete the vehicle" (click)="deleteVehicle(car.cv_id)" class="vehlist_btn"><i class="fa-solid fa-trash"></i></div>
                                 </div>
                                </div>
 

@@ -92,6 +92,10 @@ export class BannerComponent implements OnInit {
   }
 
   signin() {
+    if(this.mobileNumber == null){
+      this.toast.warning("Please Enter your phone number")
+      return;
+    }
     if(this.mobileNumber <= 10){
       return;
     }

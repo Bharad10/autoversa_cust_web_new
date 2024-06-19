@@ -515,4 +515,20 @@ export class ProfilePageComponent implements OnInit {
    
   }
 
+  deleteVehicle(id:any){
+    let outData = {
+       cv_id: id
+     } 
+    
+    this.authService.deleteVehicle(outData).subscribe((data:any)=>{
+     if(data.ret_data == 'fail2' ){
+       this.toast.warning('Vehicle already used in a Booking')
+     }
+     else if (data.ret_data == 'success'){
+       this.toast.success('Vehicle deleted successfully')
+     }
+     this.fetchCarModels();
+    })
+   }
+
 }
