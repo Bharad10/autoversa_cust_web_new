@@ -2,7 +2,7 @@
     background-image: url('^assets/images/Vector.png');
     padding-top: 80px;
     padding-bottom: 120px;
-    z-index: 100;
+    z-index: 1;
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;

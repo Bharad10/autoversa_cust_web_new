@@ -32,6 +32,8 @@ export class AddressPageComponent implements OnInit {
 
   editModalMapPos: any;
 
+  geolocation:any;
+
   @Input() placeholder = 'Search For Places';
 
   @ViewChild('inputField', { static: true })
@@ -102,6 +104,10 @@ export class AddressPageComponent implements OnInit {
       );
       this.autocomplete.addListener('place_changed', () => {
         const place = this.autocomplete?.getPlace();
+        this.position = {
+          lat: place?.geometry?.location?.lat(),
+          lng: place?.geometry?.location?.lng(),
+        };
         if (place && place.address_components) {
           let city, area, sublocality, country;
 
@@ -138,11 +144,6 @@ export class AddressPageComponent implements OnInit {
             };
           }
         }
-        this.position = {
-          lat: place?.geometry?.location?.lat(),
-          lng: place?.geometry?.location?.lng(),
-        };
-
         console.log(place);
         this.custAddressData =
           this.placeDetails.city +
@@ -155,6 +156,8 @@ export class AddressPageComponent implements OnInit {
     } else {
       console.error('Google Maps API not available');
     }
+
+    this.geolocation = new google.maps.Geocoder();
   }
 
   clickEvent(event: google.maps.MapMouseEvent) {
@@ -168,7 +171,56 @@ export class AddressPageComponent implements OnInit {
       // Update marker on the map
       this.updateMarker();
     }
+    this.geolocation.geocode({location:this.position},(results:any,status:any)=>{
+      this.inputField.nativeElement.value = results[0].formatted_address;
+      console.log("location",results[0]);
+      let place = results[0]
+      if (place && place.address_components) {
+        let city, area, sublocality, country;
+
+        for (let component of place.address_components) {
+          if (component.types.includes('locality')) {
+            city = component.long_name;
+          } else if (component.types.includes('sublocality_level_1')) {
+            sublocality = component.long_name;
+          } else if (
+            component.types.includes('administrative_area_level_1')
+          ) {
+            area = component.long_name;
+          } else if (component.types.includes('country')) {
+            country = component.long_name;
+          }
+        }
+        console.log('City:', city);
+        console.log('Area:', area);
+        console.log('country:', country);
+
+        if (sublocality) {
+          this.placeDetails = {
+            city: sublocality,
+            area: area,
+            country: country,
+            verificationCity: city,
+          };
+        } else {
+          this.placeDetails = {
+            city: city,
+            area: area,
+            country: country,
+            verificationCity: city,
+          };
+        }
+      }
+      this.custAddressData =
+          this.placeDetails.city +
+          ' ' +
+          this.placeDetails.area +
+          ' ' +
+          this.placeDetails.country;
+    })
   }
+
+  
 
   updateMarker() {
     // Remove previous marker if exists
@@ -180,6 +232,8 @@ export class AddressPageComponent implements OnInit {
       position: this.position,
       map: this.map,
     });
+    console.log("Current Position", this.position);
+   
   }
 
   getCurrentLocation() {
